@@ -1,0 +1,560 @@
+openapi: "3.0.0"
+info:
+  description: "Cette APi permet de créer / recupérer les tickets de type Malfacon déposés par l'OI sur le SI de l'OC"
+  version: "0.1.0"
+  title: "Malfacon OI -> OC"
+tags:
+  - name: "Malfacon"
+paths:
+  /malfacons:
+    post:
+      tags:
+        - "Malfacon"
+      operationId: "malfaconCreate"
+      summary: "Creation d'une malfaçon"
+      requestBody:
+        required: true
+        content:
+          application/json;charset=utf-8:
+            schema:
+              $ref: "#/components/schemas/MalfaconPostRequest"
+      responses:
+        "201":
+          description: "Created"
+          headers:
+            Location:
+              schema:
+                type: "string"
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/MalfaconResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /malfacon/{malfaconId}:
+    get:
+      tags:
+        - "Malfacon"
+      operationId: "malfaconGet"
+      summary: "Recupérer une malfaçon"
+      parameters:
+        - name: "malfaconId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/MalfaconResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+servers:
+  - url: "/v1"
+components:
+  schemas:
+    AbstractAdresse:
+      required:
+
+        - "nomVoie"
+        - "codePostal"
+        - "commune"
+        - "localisation"
+      type: "object"
+      properties:
+        '@type':
+          type: "string"
+        nomVoie:
+          type: "string"
+        codePostal:
+          type: "string"
+        commune:
+          type: "string"
+        localisation:
+          $ref: "#/components/schemas/CoordonnesXY"
+
+      discriminator:
+        propertyName: "@type"
+        mapping:
+          adresse: '#/components/schemas/Adresse'
+          adresse-interne: '#/components/schemas/AdresseInterne'
+    Adresse:
+      type: "object"
+      allOf:
+        - $ref: "#/components/schemas/AbstractAdresse"
+    AdresseInterne:
+      allOf:
+        - $ref: "#/components/schemas/AbstractAdresse"
+      required:
+        - "numeroVoieImmeuble"
+      type: "object"
+      properties:
+        numeroVoieImmeuble:
+          type: "string"
+        etage:
+          type: "string"
+        batiment:
+          type: "string"
+        escalier:
+          type: "string"
+
+    CoordonnesXY:
+      required:
+        - "x"
+        - "y"
+        - "type"
+      type: "object"
+      properties:
+        x:
+          type: "string"
+        "y":
+          type: "string"
+        type:
+          $ref: "#/components/schemas/CoordonnesXYType"
+    CoordonnesXYType:
+      type: "string"
+      enum:
+        - "GPS"
+        - "PROJECTION"
+    DefautAmontPmType:
+      type: "string"
+      enum:
+        - "brassage OC non conforme"
+        - "tiroir OI dégradé"
+        - "bouchon absent"
+        - "cheminement câble OC/OI non conforme"
+        - "implantation tiroir OC/OI ou étiquetage non conforme"
+        - "brassage OC non conforme"
+        - "passage de câble non conforme"
+    DefautCcfCableType:
+      type: "string"
+      enum:
+        - "étiquetage non conforme aux STAS"
+        - "caractéristiques non conformes aux STAS"
+        - "cheminement non conforme surplomb domaine privé,…"
+        - "rebouchage non effectué"
+        - "type de pose/fixation non conforme aux préconisations OI"
+        - "absence protection obligatoire gaine fendue, demi-lune,…"
+        - "dégradation"
+        - "nettoyage chantier"
+        - "non conforme aux STAS"
+    DefautCcfPtoType:
+      type: "string"
+      enum:
+        - "caractéristiques non conformes aux STAS"
+        - "pose non conforme implantation ou fixation"
+        - "PTO mal ou non étiquetée"
+    DefautPboType:
+      type: "string"
+      enum:
+        - "lovage fibre non conforme aux STAS"
+        - "épissure non conforme dénudage, protection de soudure"
+        - "boîtier PBO non/mal refermé, non/mal refixé,…"
+        - "dégradation"
+        - "dégradation du support PBO poteau.."
+        - "nettoyage chantier"
+        - "lovage câble en chambre ou poteau non conforme aux STAS"
+        - "Reprise sauvage Route Optique par casse soudure au PBO"
+        - "Raccordement de site non déployé dans IPE"
+        - "Non respect Route Optique communiquée"
+    DefautPmPboType:
+      type: "string"
+      enum:
+        - "dégradation"
+        - "Absence de gaine demi-lune pour protéger câble PBO aérien, poteau ou faç\
+        ade"
+    DefautPmType:
+      type: "string"
+      enum:
+        - "mauvaise fixation ou fermeture dégradée"
+        - "bouchon absent"
+        - "cheminement non conforme aux STAS"
+        - "brassage existant encombrant le cheminement"
+        - "cordon non conforme aux STAS caractéristiques techniques"
+        - "présence de cordons non conformes"
+        - "présence de cordons à zéro non retirés"
+        - "Caractéristiques tiroir non conforme aux STAS"
+        - "implantation ou étiquetage non conforme aux STAS"
+        - "mauvaise fixation"
+        - "bouchon absent"
+        - "dégradation majeure"
+        - "Dégradations serrure, porte, tiroir cassé, tambours …"
+        - "Environnement nettoyage déchets, fermeture"
+        - "Etiquetage du PM non conforme hors échec de production"
+        - "Non respect Route Optique communiquée"
+    DetailLocalisationAmontPmType:
+      type: "string"
+      enum:
+        - "COLLECTE LIEN PM-PRDM"
+        - "ADDUCTION OC"
+        - "AMONT PM INSTALLATION"
+    DetailLocalisationCcfCableType:
+      type: "string"
+      enum:
+        - "CABLE CARACTERISTIQUE"
+        - "CABLE INSTALLATION"
+        - "ENTREE DE CABLE PBO"
+    DetailLocalisationCcfPtoType:
+      type: "string"
+      enum:
+        - "PTO CARACTERISTIQUE"
+        - "PTO INSTALLATION"
+    DetailLocalisationPboType:
+      type: "string"
+      enum:
+        - "CASSETTE"
+        - "BOITIER"
+        - "PBO ENVIRONNEMENT"
+        - "ROUTE OPTIQUE"
+    DetailLocalisationPmPboType:
+      type: "string"
+      enum:
+        - "PM-PBO INSTALLATION"
+    DetailLocalisationPmType:
+      type: "string"
+      enum:
+        - "TIROIR  ZAPM"
+        - "CONNECTEUR TIROIR ZAPM"
+        - "BRASSAGE OC"
+        - "TIROIR OC"
+        - "ARMOIRE"
+        - "ROUTE OPTIQUE"
+    Equipement:
+      required:
+        - "identifiant"
+        - "adresse"
+        - "type"
+      type: "object"
+      properties:
+        identificant:
+          type: "string"
+        adresse:
+          $ref: "#/components/schemas/AbstractAdresse"
+        type:
+          $ref: "#/components/schemas/EquipementType"
+    EquipementType:
+      type: "string"
+      enum:
+        - "PM"
+        - "PBO"
+        - "PTO"
+
+
+    MalfaconAmontPm:
+      required:
+          - "detailLocalisation"
+          - "defaut"
+          - "pm"
+      type: "object"
+      properties:
+        detailLocalisation:
+          $ref: "#/components/schemas/DetailLocalisationAmontPmType"
+        defaut:
+          $ref: "#/components/schemas/DefautAmontPmType"
+        pm:
+          $ref: "#/components/schemas/Equipement"
+    MalfaconCcfCable:
+      required:
+          - "detailLocalisation"
+          - "defaut"
+          - "pbo"
+          - "pto"
+      type: "object"
+      properties:
+        referenceCommande:
+          type: "string"
+        detailLocalisation:
+          $ref: "#/components/schemas/DetailLocalisationCcfCableType"
+        defaut:
+          $ref: "#/components/schemas/DefautCcfCableType"
+        pbo:
+          $ref: "#/components/schemas/Equipement"
+        pto:
+          $ref: "#/components/schemas/Equipement"
+        localisationGpsDefaut:
+          $ref: '#/components/schemas/CoordonnesXY'
+    MalfaconCcfPto:
+      required:
+        - "detailLocalisation"
+        - "defaut"
+        - "pto"
+      type: "object"
+      properties:
+        detailLocalisation:
+          $ref: "#/components/schemas/DetailLocalisationCcfPtoType"
+        defaut:
+          $ref: "#/components/schemas/DefautCcfPtoType"
+        pto:
+          $ref: "#/components/schemas/Equipement"
+        localisationGpsDefaut:
+          $ref: '#/components/schemas/CoordonnesXY'
+    MalfaconPbo:
+      required:
+        - "detailLocalisation"
+        - "defaut"
+        - "pbo"
+      type: "object"
+      properties:
+        detailLocalisation:
+          $ref: "#/components/schemas/DetailLocalisationPboType"
+        defaut:
+          $ref: "#/components/schemas/DefautPboType"
+        pbo:
+          $ref: "#/components/schemas/Equipement"
+    MalfaconPm:
+      required:
+            - "detailLocalisation"
+            - "defaut"
+            - "pm"
+      type: "object"
+      properties:
+        detailLocalisation:
+          $ref: "#/components/schemas/DetailLocalisationPmType"
+        defaut:
+          $ref: "#/components/schemas/DefautPmType"
+        pm:
+          $ref: "#/components/schemas/Equipement"
+    MalfaconPmPbo:
+      required:
+            - "detailLocalisation"
+            - "defaut"
+            - "pm"
+            - "pbo"
+      type: "object"
+      properties:
+        detailLocalisation:
+          $ref: "#/components/schemas/DetailLocalisationPmPboType"
+        defaut:
+          $ref: "#/components/schemas/DefautPmPboType"
+        pm:
+          $ref: "#/components/schemas/Equipement"
+        pbo:
+          $ref: "#/components/schemas/Equipement"
+
+    MalfaconPostRequest:
+      type: object
+      required:
+        - "volumetrie"
+        - "detailLocalisation"
+        - "defaut"
+        -  '@type'
+      properties:
+        '@type':
+          type: 'string'
+        volumetrie:
+          type: "integer"
+          format: "int32"
+          description:  "nombre d’occurrences dans le type de la malfaçon (e.g. nombre de jarretières pour mauvais cheminement, en précisant que la quantité indiquée par l’OI sert à la fois à dimensionner le travail de l’OC tout en étant cohérent avec les conditions contractuelles, notamment la facturation). Cette donnée restera numérique (pas de format contraignant type plage) et fournie suivant les conditions contractuelles des OI"
+        detailLocalisation:
+          type: "string"
+        defaut:
+          type: "string"
+
+      discriminator:
+        propertyName: "@type"
+        mapping:
+          amont-pm: "#/components/schemas/MalfaconAmontPmPostRequest"
+          pm: "#/components/schemas/MalfaconPmPostRequest"
+          pm-pbo: "#/components/schemas/MalfaconPmPboPostRequest"
+          pbo: "#/components/schemas/MalfaconPboPostRequest"
+          ccf-cable: "#/components/schemas/MalfaconCcfCablePostRequest"
+          ccf-pto: "#/components/schemas/MalfaconCcfPtoPostRequest"
+
+    MalfaconAmontPmPostRequest:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconPostRequest'
+        - $ref: '#/components/schemas/MalfaconAmontPm'
+
+    MalfaconPmPostRequest:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconPostRequest'
+        - $ref: '#/components/schemas/MalfaconPm'
+
+    MalfaconPmPboPostRequest:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconPostRequest'
+        - $ref: '#/components/schemas/MalfaconPmPbo'
+
+    MalfaconPboPostRequest:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconPostRequest'
+        - $ref: '#/components/schemas/MalfaconPbo'
+    MalfaconCcfCablePostRequest:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconPostRequest'
+        - $ref: '#/components/schemas/MalfaconCcfCable'
+    MalfaconCcfPtoPostRequest:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconPostRequest'
+        - $ref: '#/components/schemas/MalfaconCcfPto'
+
+    MalfaconResponse:
+      type: object
+      required:
+        - id
+        - href
+        - "volumetrie"
+        - "detailLocalisation"
+        - "defaut"
+      properties:
+        id:
+          type: string
+        href:
+          type: string
+        volumetrie:
+          type: "integer"
+          format: "int32"
+        detailLocalisation:
+          type: "string"
+        defaut:
+          type: "string"
+        '@type':
+          type: 'string'
+      discriminator:
+        propertyName: "@type"
+        mapping:
+          amont-pm: "#/components/schemas/MalfaconAmontPmResponse"
+          pm: "#/components/schemas/MalfaconPmResponse"
+          pm-pbo: "#/components/schemas/MalfaconPmPboResponse"
+          pbo: "#/components/schemas/MalfaconPboResponse"
+          ccf-cable: "#/components/schemas/MalfaconCcfCableResponse"
+          ccf-pto: "#/components/schemas/MalfaconCcfPtoResponse"
+
+
+    MalfaconAmontPmResponse:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconResponse'
+        - $ref: '#/components/schemas/MalfaconAmontPm'
+
+    MalfaconPmResponse:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconResponse'
+        - $ref: '#/components/schemas/MalfaconPm'
+
+    MalfaconPmPboResponse:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconResponse'
+        - $ref: '#/components/schemas/MalfaconPmPbo'
+
+    MalfaconPboResponse:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconResponse'
+        - $ref: '#/components/schemas/MalfaconPbo'
+    MalfaconCcfCableResponse:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconResponse'
+        - $ref: '#/components/schemas/MalfaconCcfCable'
+    MalfaconCcfPtoResponse:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconResponse'
+        - $ref: '#/components/schemas/MalfaconCcfPto'
+
+    Error:
+      description: Used when an API throws an Error, typically with a HTTP error
+        response-code (3xx, 4xx, 5xx)
+      type: object
+      required:
+        - code
+        - reason
+      properties:
+        code:
+          type: string
+          description: Application relevant detail, defined in the API or a common list.
+        reason:
+          type: string
+          description: Explanation of the reason for the error which can be shown to a
+            client user.
+        message:
+          type: string
+          description: More details and corrective actions related to the error which can
+            be shown to a client user.
+        status:
+          type: string
+          description: HTTP Error code extension
+        referenceError:
+          type: string
+          format: uri
+          description: URI of documentation describing the error.
+        "@baseType":
+          type: string
+          description: When sub-classing, this defines the super-class.
+        "@schemaLocation":
+          type: string
+          format: uri
+          description: A URI to a JSON-Schema file that defines additional attributes and
+            relationships
+        "@type":
+          type: string
+          description: When sub-classing, this defines the sub-class entity name.
