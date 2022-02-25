@@ -98,8 +98,6 @@ components:
     AdresseInterne:
       allOf:
         - $ref: "#/components/schemas/AbstractAdresse"
-      required:
-        - "numeroVoieImmeuble"
       type: "object"
       properties:
         numeroVoieImmeuble:
