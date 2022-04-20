@@ -61,7 +61,62 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
+  /malfacon:
+    post:
+      tags:
+        - "Malfacon"
+      operationId: "malfaconPost"
+      summary: "Création d'une malfaçon"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MalfaconCreate"
+        description: Malfaçon a créé
+        required: true
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/MalfaconResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 servers:
   - url: "/v1"
 components:
@@ -374,6 +429,35 @@ components:
           ccf-cable: "#/components/schemas/MalfaconCcfCableResponse"
           ccf-pto: "#/components/schemas/MalfaconCcfPtoResponse"
 
+    MalfaconCreate:
+      type: object
+      required:
+
+        - href
+        - "volumetrie"
+        - "detailLocalisation"
+        - "defaut"
+      properties:
+        href:
+          type: string
+        volumetrie:
+          type: "integer"
+          format: "int32"
+        detailLocalisation:
+          type: "string"
+        defaut:
+          type: "string"
+        '@type':
+          type: 'string'
+      discriminator:
+        propertyName: "@type"
+        mapping:
+          amont-pm: "#/components/schemas/MalfaconAmontPmCreate"
+          pm: "#/components/schemas/MalfaconPmCreate"
+          pm-pbo: "#/components/schemas/MalfaconPmPboCreate"
+          pbo: "#/components/schemas/MalfaconPboCreate"
+          ccf-cable: "#/components/schemas/MalfaconCcfCableCreate"
+          ccf-pto: "#/components/schemas/MalfaconCcfPtoCreate"
 
     MalfaconAmontPmResponse:
       allOf:
@@ -403,6 +487,33 @@ components:
         - $ref: '#/components/schemas/MalfaconResponse'
         - $ref: '#/components/schemas/MalfaconCcfPto'
 
+    MalfaconAmontPmCreate:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconCreate'
+        - $ref: '#/components/schemas/MalfaconAmontPm'
+
+    MalfaconPmCreate:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconCreate'
+        - $ref: '#/components/schemas/MalfaconPm'
+
+    MalfaconPmPboCreate:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconCreate'
+        - $ref: '#/components/schemas/MalfaconPmPbo'
+
+    MalfaconPboCreate:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconCreate'
+        - $ref: '#/components/schemas/MalfaconPbo'
+    MalfaconCcfCableCreate:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconCreate'
+        - $ref: '#/components/schemas/MalfaconCcfCable'
+    MalfaconCcfPtoCreate:
+      allOf:
+        - $ref: '#/components/schemas/MalfaconCreate'
+        - $ref: '#/components/schemas/MalfaconCcfPto'
     Error:
       description: Used when an API throws an Error, typically with a HTTP error
         response-code (3xx, 4xx, 5xx)
