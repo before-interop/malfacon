@@ -432,14 +432,10 @@ components:
     MalfaconCreate:
       type: object
       required:
-
-        - href
         - "volumetrie"
         - "detailLocalisation"
         - "defaut"
       properties:
-        href:
-          type: string
         volumetrie:
           type: "integer"
           format: "int32"
