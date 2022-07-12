@@ -6,4 +6,4 @@ La documentation de l'API est disponible sur https://redocly.github.io/redoc/?ur
 ## Diagramme de séquence
 //TODO
 ### sous titre 1
-![](diagrammes-sequence/cas1%20nominal.png)
+![](images/cas1%20nominal.png)
