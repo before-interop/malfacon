@@ -17,3 +17,7 @@ La documentation de l'API est disponible sur https://redocly.github.io/redoc/?ur
 ![](images/cas6%20tickets%20liés.png)
 ### demande d'information complémentaire de l'OI à l'OC
 ![](images/cas7%20information%20complémentaire.png)
+### cas information complémentaire demandée par l'OC à l'OI
+![](images/UC8_infoOIversOC.png)
+### refus de la résolution par l'OI
+![](images/UC9_refusResolution.png)
