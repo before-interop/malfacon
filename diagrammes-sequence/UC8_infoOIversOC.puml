@@ -1,0 +1,81 @@
+@startuml
+
+skinparam ParticipantFontColor automatic
+
+title: CAS 8 demande d'information complémentaire de l'OC à l'OI
+
+autonumber
+
+participant OC #Blue
+participant OI #Green
+
+OI->OI: je dépose la pièce jointe
+OI->OI: HTTP 201 indentifiant de la pj.
+OI->OI: je crée la malfaçon \n POST /malfaçon
+OI->OI: HTTP 201 indentifiant de la malfaçon
+OI->OI: je crée le trouble ticket malfaçon \n POST /troubleTicket {\n"ticketType": "malfaçon",\n"description": "<description ici>",\n"relatedEntity":[{"href":"<référence de la malfaçon chez l'OI>","id":"<idMalfacon>"}],\n"priority": "High",\n"requestedResolutionDate": "<horodatage>",\n"severity": "normal"}, \n"attachment":";{"href":"<référence de la pièce jointe chez l'OI>","id":"<idPJ>"}"
+
+OI->OI: contrôles de surface
+
+OI->OI: acquitement technique du dépot de ticket \n http201"troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "Status":"acknoledged"}
+
+OI->OI: [ALT] abonnement aux notifications TT (n'est pas nécessaire à chaque ticket) \n POST https:\//myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/hub?Accept:application/json,{"callback":"http://OI.in.listner.com"}
+
+OI->OI: acquitement de la souscription (avec son ID) \n http201:"Created, Content-Type: application/json, Location: /troubleTicket/hub/42{"id":"42","callback":"http://OI.in.listner.com","query":null}"
+
+
+OI->OI: contrôler l'accessibilité de la pj. et la recevabilité du ticket
+
+OI->OI: acquitement fonctionnel du dépot de ticket (inProgress) \n { "eventId":"00002", "eventTime":"<horodatage>", "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"inProgress"}\n} \n}
+
+OI->OI: rechercher les id de tickets encours pour cet OC sur ce PM (seront ajoutés en référence à ce ticket)
+OI->OI: pour chaque ticket identifié, ajouter la référence de ce ticket au troubleTicketRelationship[1] des tickets identifiés
+OI->OI: pour ce ticket, ajouter les références des tickets en troubleTicketRelationship[1,n]
+
+OI->OI: j'identifie l'OC responsable
+
+OI->OC: je crée un trouble ticket malfaçon chez l'OC en lien avec le ticket OI \n POST /troubleTicket {\n"ticketType": "malfaçon",\n"description": "<description ici>",\n"externalId": "100",\n"href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100",\n"id":"100",\n"priority": "High",\n"requestedResolutionDate":"<date>",\n"severity": "normal",\n"relatedEntity":[{"href":"référence de la malfaçon chez l'OI","id":"<idMafaçon>"};{"href":"référence de la pièce jointe chez l'OI","id":"<idPJ>"}]
+
+OC->OC: contrôles de surface
+
+OC->OI: acquitement technique du dépot de ticket \n http201"troubleTicket": \n{"ID":"1000", "href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/1000", "Status":"acknoledged"}
+
+OI->OC: [ALT] abonnement aux notifications TT (n'est pas nécessaire à chaque ticket) \n POST https:\//myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/hub?Accept:application/json,{"callback":"http://OI.in.listner.com"}
+
+OC->OI: acquitement de la souscription (avec son ID) \n http201:"Created, Content-Type: application/json, Location: /troubleTicket/hub/42{"id":"42","callback":"http://OC.in.listner.com","query":null}"
+
+
+OC->OI: contrôler l'accessibilité de la pj. et la recevabilité du ticket
+
+OC->OI: acquitement fonctionnel du dépot de ticket (inProgress) \n { "eventId":"00002", "eventTime":"<horodatage>", "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"1000", "href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/1000", "troubleTicketTicketStatusType":"inProgress"}\n} \n}
+
+OC->OC: demande d'information complémentaire à l'OI PATCH /troubleTicket {\n"ID":"1000",\n"troubleTicketTicketStatusType":"pending",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"<demande d'information complémentaire>", "note":{"string":"explication de la demande d'information"}}
+
+OC->OI: notification de demande d'information complémentaire \n { "eventId":<eventId>, "eventTime":<horodatage>, "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"1000", "href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/1000", "troubleTicketTicketStatusType":"pending", "note":"{"string":"explication de la demande d'information"}}\n} \n}
+
+OI->OI: prendre en compte la demande d'information \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"pending",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"demande d'information complémentaire","note":"{"string":"explication de la demande d'information"}}
+
+OI->OC: notification de prise en compte d'information complémentaire \n { "eventId":<eventId>, "eventTime":<horodatage>, "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"pending", "note":"{"string":"prise en compte de la demande d'information"}}\n} \n}
+
+OI->OI: fournir l'information complémentaire \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"inProgress",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"fournir l'information complémentaire","note":"{"string":"voici l'information complémentaire"}}
+
+OI->OC: notification de la fourniture de l'information \n { "eventId":<eventId>, "eventTime":<horodatage>, "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"inProgress", "note":"{"string":"voici l'information complémentaire"}}\n} \n}
+
+OC->OC: PATCH /troubleTicket {\n"ID":"1000",\n"troubleTicketTicketStatusType":"inProgress",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"<information complémentaire fournie>", "note":{"string":"voici l'information complémentaire"}}
+
+
+
+OI->OI: suite du cas nominal
+
+
+
+@enduml
+
+
+
+
+
+
+
+
+

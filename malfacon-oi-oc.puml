@@ -1,0 +1,306 @@
+@startuml
+'https://plantuml.com/class-diagram
+hide empty methods
+hide circle
+class Equipement
+abstract class AbstractAdresse
+class Malfacon
+
+AbstractAdresse <|-- AdresseInterne
+AbstractAdresse <|-- Adresse
+
+AbstractAdresse *-- CoordonnesXY
+Equipement *-- AbstractAdresse
+
+
+
+
+package MalfaconPck{
+
+
+
+    enum DetailLocalisationAmontPmType
+    class MalfaconAmontPm
+
+    enum DetailLocalisationPmType
+    class MalfaconPm
+
+    enum DetailLocalisationPmPboType
+    class MalfaconPmPbo
+
+    enum DetailLocalisationPboType
+    class MalfaconPbo
+
+
+    class MalfaconCcfPto
+    enum DetailLocalisationCcfPtoType
+
+    class MalfaconCcfCable
+    enum DetailLocalisationCcfCableType
+
+        enum DefautAmontPmType
+        enum DefautPmType
+        enum DefautPmPboType
+        enum DefautPboType
+        enum DefautCcfCableType
+        enum DefautCcfPtoType
+}
+
+Malfacon <|-u- MalfaconAmontPm
+Malfacon <|-u- MalfaconPm
+Malfacon <|-u- MalfaconPmPbo
+Malfacon <|-r- MalfaconPbo
+Malfacon <|-d- MalfaconCcfPto
+Malfacon <|-d- MalfaconCcfCable
+
+
+
+DetailLocalisationCcfPtoType -[hidden]l-> MalfaconCcfPto
+MalfaconCcfPto -[hidden]u-> MalfaconCcfCable
+
+DetailLocalisationCcfCableType -[hidden]l-> MalfaconCcfCable
+MalfaconCcfCable -[hidden]u-> MalfaconPbo
+
+DetailLocalisationPboType -[hidden]l->  MalfaconPbo
+MalfaconPbo -[hidden]u-> MalfaconPmPbo
+
+DetailLocalisationPmPboType -[hidden]l-> MalfaconPmPbo
+MalfaconPmPbo -[hidden]u-> MalfaconPm
+
+
+DetailLocalisationPmType  -[hidden]l-> MalfaconPm
+
+MalfaconPm  -[hidden]u-> MalfaconAmontPm
+DetailLocalisationAmontPmType  -[hidden]l-> MalfaconAmontPm
+
+DetailLocalisationCcfPtoType -[hidden]r-> DefautCcfPtoType
+DetailLocalisationCcfCableType -[hidden]r-> DefautCcfCableType
+DetailLocalisationPboType -[hidden]r->  DefautPboType
+DetailLocalisationPmPboType -[hidden]r-> DefautPmPboType
+DetailLocalisationPmType  -[hidden]r-> DefautPmType
+DetailLocalisationAmontPmType  -[hidden]r-> DefautAmontPmType
+
+MalfaconPm o-d-  Equipement
+MalfaconAmontPm o-d-  Equipement
+MalfaconPmPbo o--  Equipement
+MalfaconPmPbo o--  Equipement
+MalfaconPbo o-r-  Equipement
+MalfaconCcfCable o-u-  Equipement
+MalfaconCcfCable o-u-  Equipement
+MalfaconCcfPto o-u-  Equipement
+Equipement -[hidden]> EquitementType
+CoordonnesXY -[hidden]> CoordonnesXYType
+
+
+
+
+class Equipement
+{
+    identifiant: string
+    adresse: Adresse
+    type: EquitementType
+
+}
+
+
+class CoordonnesXY
+{
+x: float
+y: float
+type: CoordonnesXYType
+}
+class MalfaconAmontPm
+class AbstractAdresse{
+    nomVoie: string
+    codePostal: string
+    commune: string
+    localisation: CoordonnesXY
+}
+class AdresseInterne{
+    numeroVoieImmeuble: string
+    etage: string
+    batiment: string
+    escalider: string
+}
+enum EquitementType <<Enumeration>> #e6f5f7
+{
+PM
+PBO
+PTO
+}
+class MalfaconAmontPm
+{
+    detailLocalisation: DetailLocalisationAmontPmType
+    localisation: "AmontPm"
+    defaut: DefautAmontPmType
+    pm: Equipement
+}
+class MalfaconPm
+{
+    detailLocalisation: DetailLocalisationPmType
+     defaut: DefautPmType
+     pm: Equipement
+}
+class MalfaconPmPbo
+{
+    detailLocalisation: DetailLocalisationPmPboType
+     defaut: DefautPmPboType
+     pm: Equipement
+     pbo: Equipement
+}
+class MalfaconPbo
+{
+    detailLocalisation: DetailLocalisationPboType
+     defaut: DefautPboType
+      pbo: Equipement
+}
+class MalfaconCcfPto
+{
+   detailLocalisation: DetailLocalisationCcfPtoType
+   defaut: DefautCcfPtoType
+   pto: Equipement
+   localisationGpsDefaut: CoordonnesXY
+}
+class MalfaconCcfCable
+{
+    detailLocalisation: DetailLocalisationCcfCableType
+    defaut: DefautCcfCableType
+    referenceCommande: string
+    pbo: Equipement
+    pto: Equipement
+    localisationGpsDefaut: CoordonnesXY
+
+}
+class Malfacon #FFFFFF
+{
+    volumetrie: int
+    @type: string
+}
+enum DetailLocalisationAmontPmType <<Enumeration>> #e6f5f7
+{
+COLLECTE LIEN PM-PRDM
+ADDUCTION OC
+AMONT PM INSTALLATION
+
+}
+enum DetailLocalisationPmType <<Enumeration>> #e6f5f7
+{
+TIROIR  ZAPM
+CONNECTEUR TIROIR ZAPM
+BRASSAGE OC
+TIROIR OC
+ARMOIRE
+ROUTE OPTIQUE
+
+}
+enum DetailLocalisationPmPboType <<Enumeration>> #e6f5f7
+{
+PM-PBO INSTALLATION
+}
+
+enum DetailLocalisationPboType <<Enumeration>> #e6f5f7
+{
+CASSETTE
+BOITIER
+PBO ENVIRONNEMENT
+ROUTE OPTIQUE
+}
+
+enum DetailLocalisationCcfPtoType <<Enumeration>> #e6f5f7
+{
+PTO CARACTERISTIQUE
+PTO INSTALLATION
+
+}
+enum DetailLocalisationCcfCableType <<Enumeration>> #e6f5f7
+{
+CABLE CARACTERISTIQUE
+CABLE INSTALLATION
+ENTREE DE CABLE PBO
+}
+enum CoordonnesXYType <<Enumeration>> #e6f5f7
+{
+GPS
+PROJECTION
+}
+
+
+enum DefautAmontPmType <<Enumeration>> #e6f5f7
+{
+brassage OC non conforme
+tiroir OI dégradé
+bouchon absent
+cheminement câble OC/OI non conforme
+implantation tiroir OC/OI ou étiquetage non conforme
+brassage OC non conforme
+passage de câble non conforme
+}
+
+enum DefautPmType <<Enumeration>> #e6f5f7
+{
+mauvaise fixation ou fermeture dégradée
+bouchon absent
+cheminement non conforme aux STAS
+brassage existant encombrant le cheminement
+cordon non conforme aux STAS caractéristiques techniques
+présence de cordons non conformes
+présence de cordons à zéro non retirés
+Caractéristiques tiroir non conforme aux STAS
+implantation ou étiquetage non conforme aux STAS
+mauvaise fixation
+bouchon absent
+dégradation majeure
+Dégradations serrure, porte, tiroir cassé, tambours …
+Environnement nettoyage déchets, fermeture
+Etiquetage du PM non conforme hors échec de production
+Non respect Route Optique communiquée
+}
+enum DefautPmPboType <<Enumeration>> #e6f5f7
+{
+Absence de gaine demi-lune pour protéger câble PBO aérien, poteau ou façade
+dégradation
+
+}
+
+
+enum  DefautPboType <<Enumeration>> #e6f5f7
+{
+lovage fibre non conforme aux STAS
+épissure non conforme dénudage, protection de soudure
+boîtier PBO non/mal refermé, non/mal refixé,…
+dégradation
+boîtier PBO non /mal étiqueté hors échec production
+localisation non conforme aux données OI commande accès hors échec production
+dégradation du support PBO poteau..
+nettoyage chantier
+lovage câble en chambre ou poteau non conforme aux STAS
+Reprise sauvage Route Optique par casse soudure au PBO
+Raccordement de site non déployé dans IPE
+Non respect Route Optique communiquée
+
+}
+
+enum DefautCcfCableType <<Enumeration>> #e6f5f7
+{
+étiquetage non conforme aux STAS
+caractéristiques non conformes aux STAS
+cheminement non conforme surplomb domaine privé,…
+rebouchage non effectué
+type de pose/fixation non conforme aux préconisations OI
+absence protection obligatoire gaine fendue, demi-lune,…
+non utilisable risque de surplomb, sécurisé
+non utilisable pas d'autorisation de cheminement
+bilan optique non conforme aux STAS
+dégradation
+nettoyage chantier
+non conforme aux STAS
+
+}
+
+enum DefautCcfPtoType <<Enumeration>> #e6f5f7
+{
+caractéristiques non conformes aux STAS
+pose non conforme implantation ou fixation
+PTO mal ou non étiquetée
+}
+@enduml
