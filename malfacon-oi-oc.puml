@@ -175,6 +175,8 @@ class Malfacon #FFFFFF
 {
     volumetrie: int
     @type: string
+    quotetPart: float ([0..1])
+    operateurConcerne: string < siren|siret>
 }
 enum DetailLocalisationAmontPmType <<Enumeration>> #e6f5f7
 {
