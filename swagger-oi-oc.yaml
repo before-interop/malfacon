@@ -405,6 +405,8 @@ components:
         - "volumetrie"
         - "detailLocalisation"
         - "defaut"
+        - quotePart
+        - operateurConcerne
       properties:
         id:
           type: string
@@ -419,6 +421,15 @@ components:
           type: "string"
         '@type':
           type: 'string'
+        quotePart:
+          type: "number"
+          format: "float"
+          maximum: 1
+          minimum: 0
+          description: "la quotePart imputable à l'opérateur concerné"
+        operateurConcerne:
+          type: "string"
+          description: "l'identifiant de l'opérateur concerné"
       discriminator:
         propertyName: "@type"
         mapping:
@@ -435,10 +446,21 @@ components:
         - "volumetrie"
         - "detailLocalisation"
         - "defaut"
+        - quotePart
+        - operateurConcerne
       properties:
         volumetrie:
           type: "integer"
           format: "int32"
+        quotePart:
+          type: "number"
+          format: "float"
+          maximum: 1
+          minimum: 0
+          description: "la quotePart imputable à l'opérateur concerné"
+        operateurConcerne:
+          type: "string"
+          description: "l'identifiant de l'opérateur concerné"
         detailLocalisation:
           type: "string"
         defaut:
