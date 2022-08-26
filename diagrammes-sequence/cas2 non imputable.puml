@@ -11,9 +11,15 @@ participant OI #Green
 
 OI->OI: je dépose la pièce jointe
 OI->OI: HTTP 201 indentifiant de la pj.
-OI->OI: je crée la malfaçon \n POST /malfaçon
+
+loop nombre d'opérateurs concernés
+group 1 malfaçon par opérateur concerné
+OI->OI: je crée une malfaçon par opérateur concerné et j'indique sa quote part \n POST /malfaçon
 OI->OI: HTTP 201 indentifiant de la malfaçon
-OI->OI: je crée le trouble ticket malfaçon \n POST /troubleTicket {\n"ticketType": "malfaçon",\n"description": "<description ici>",\n"relatedEntitie":[{"href":"[référence de la malfaçon chez l'OI]","id":"{idMalfaçon"}],\n"priority": "High",\n"requestedResolutionDate": "<horodatage>",\n"severity": "normal"}, \n"attachment":";[{"href":"[référence de la pièce jointe chez l'OI]","id":"<idPJ>"}"]
+end
+
+group 1 ticket OI par malfaçon
+OI->OI: je crée un trouble ticket malfaçon \n POST /troubleTicket {\n"ticketType": "malfaçon",\n"description": "<description ici>",\n"relatedEntitie":[{"href":"[référence de la malfaçon chez l'OI]","id":"{idMalfaçon"}],\n"priority": "High",\n"requestedResolutionDate": "<horodatage>",\n"severity": "normal"}, \n"attachment":";[{"href":"[référence de la pièce jointe chez l'OI]","id":"<idPJ>"}"]
 
 OI->OI: contrôles de surface
 
@@ -31,15 +37,18 @@ OI->OI: acquitement fonctionnel du dépot de ticket (inProgress) \n { "eventId":
 OI->OI: rechercher les id de tickets encours pour cet OC sur ce PM (seront ajoutés en référence à ce ticket)
 OI->OI: pour chaque ticket identifié, ajouter la référence de ce ticket au troubleTicketRelationship[1] des tickets identifiés
 OI->OI: pour ce ticket, ajouter les références des tickets en troubleTicketRelationship[1,n]
+end
 
-OI->OI: j'identifie les OCs présents au PM
-
+group création d'1 ticket OC par ticket OI
 OI->OC: Pour chaque OC, je crée un trouble ticket malfaçon chez l'OC en lien avec le ticket OI \n POST /troubleTicket {\n"ticketType": "malfaçon",\n"description": "<description ici>",\n"externalId": "100",\n"href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100",\n"id":"100",\n"priority": "High",\n"requestedResolutionDate": <horodatage>,\n"severity": "normal",\n"relatedEntitie":[{"href":"[référence de la malfaçon chez l'OI]","id":"<idMalfaçon>"};{"href":"[référence de la pièce jointe chez l'OI]","id":"<idPJ>"}]
 
 OC->OC: contrôles de surface
 
 OC->OI: acquitement technique du dépot de ticket \n http201"troubleTicket": \n{"ID":"1000", "href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/1000", "Status":"acknoledged"}
+end
+end
 
+group séquence pour chaque ticket OC
 OI->OC: [ALT] abonnement aux notifications TT (n'est pas nécessaire à chaque ticket) \n POST https:\//myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/hub?Accept:application/json,{"callback":"http://OI.in.listner.com"}
 
 OC->OI: acquitement de la souscription (avec son ID) \n http201:"Created, Content-Type: application/json, Location: /troubleTicket/hub/42{"id":"42","callback":"http://OC.in.listner.com","query":null}"
@@ -54,28 +63,21 @@ OC->OI: notification de passage à inProgress puis held dans la foulée car non 
 OC->OC: passage à held car anomalie non imputable\n PATCH /troubleTicket {\n"ID":"1000",\n"troubleTicketTicketStatusType":"held",\n"statusChangeDate":<horodatage>,\n"statusChangeReason":"<anomalie non imputable>"}
 
 OC->OI: notification de passage à inProgress puis held dans la foulée car non imputable \n { "eventId":"00003", "eventTime":<horodatage>, "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"1000", "href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/1000", "troubleTicketTicketStatusType":"held"}\n} \n}
+end
 
-
+group séquence pour chaque ticket OI
 OI->OI: soumission de résolution \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"resolved",\n"statusChangeDate":<horodatage>,\n"statusChangeReason":"résolution soumise"}
 OI->OC: notification de résolution: \n { "eventId":"00003", "eventTime":<horodatage>, "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"resolved"}\n} \n}
 OI->OI: contrôle de la résolution
 OI->OI: clore, défaut corrigé \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"closed",\n"statusChangeDate":<horodatage>,\n"statusChangeReason":"<résolue par l'OI(non imputable), cloture ok>"} // matérialiser la charge de la preuve (photo en pj.)
-
 OI->OC: notification de cloture: \n { "eventId":"00004", "eventTime":<horodatage>, "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"closed"}\n} \n}
+end 
 
+group séquence pour chaque ticket OC
 OC->OC: clore, défaut corrigé \n PATCH /troubleTicket {\n"ID":"1000",\n"troubleTicketTicketStatusType":"closed",\n"statusChangeDate":<horodatage>,\n"statusChangeReason":"<cloture ok>"}
 
 OC->OI: notification de cloture: \n { "eventId":"00003", "eventTime":<horodatage>, "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"1000", "href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/1000", "troubleTicketTicketStatusType":"closed"}\n} \n}
-
+end
 
 
 @enduml
-
-
-
-
-
-
-
-
-
