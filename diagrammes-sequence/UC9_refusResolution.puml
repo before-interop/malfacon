@@ -66,17 +66,9 @@ OC->OC: prendre en compte le refus de la résolution  \n PATCH /troubleTicket {\
 
 OC->OI: notification d'acquitement de refus de cloture : \n { "eventId":<eventId>, "eventTime":"<horodatage>", "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"1000", "href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/1000", "troubleTicketTicketStatusType":"held"}\n} \n}
 
-OC->OI: // suite du cas métier à décrire
+OC->OI: // suite du cas métier selon le contexte:\n -cf. dépassement de délai \n ou \n -cf. complément information OC->OI
+
 
 
 
 @enduml
-
-
-
-
-
-
-
-
-
