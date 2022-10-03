@@ -72,7 +72,7 @@ OI->OC: notification de résolution: \n { "eventId":"00003", "eventTime":"2022-1
 OI->OI: soumission de résolution \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"resolved",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"résolution soumise"}
 OI->OC: notification de résolution: \n { "eventId":"00003", "eventTime":"<horodatage>", "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"resolved"}\n} \n}
 OI->OI: contrôle de la résolution
-OI->OI: clore, défaut corrigé \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"closed",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"<résolution par l'OC, cloture contradictoire ok>"}
+OI->OI: clore, défaut corrigé \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"closed",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"<résolution par l'OI>"}
 
 OI->OC: notification de cloture: \n { "eventId":"00003", "eventTime":"<horodatage>", "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"closed"}\n} \n}
 
@@ -83,12 +83,3 @@ OC->OI: notification de cloture: \n { "eventId":"00003", "eventTime":"<horodatag
 
 
 @enduml
-
-
-
-
-
-
-
-
-
