@@ -292,8 +292,9 @@ components:
         - "type"
       type: "object"
       properties:
-        identificant:
+        identifiant:
           type: "string"
+          description: "champ IPE"
         adresse:
           $ref: "#/components/schemas/AbstractAdresse"
         type:
