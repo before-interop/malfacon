@@ -1,0 +1,1005 @@
+openapi: 3.1.0
+
+info:
+  title: Malfacon API
+  version: 2.0.0
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+    identifier: Apache-2.0
+  description: |
+    Cet outil permet la déclaration et le traitement d’une malfaçon grâce à des flux normalisés.
+
+    ## Lexique
+
+    #### OI
+
+    Opérateur d’immeuble:
+    Toute personne chargée de l’établissement ou de la gestion d’une ou plusieurs lignes dans un immeuble bâti,
+    notamment dans le cadre d’une convention d’installation, d’entretien, de remplacement ou de gestion
+    des lignes signée avec le propriétaire ou le syndicat de copropriétaires,
+    en application de l’article L. 33-6 du code des postes et des communications électroniques ;
+    l’opérateur d’immeuble n’est pas nécessairement un opérateur au sens de l’article L. 33-1 du même code.
+
+    #### OC
+
+    Opérateur Commercial
+    Opérateur choisi par le client final pour la fourniture d'un service de télécommunications
+    ou par un fournisseur d’accès au service pour la fourniture d’un service de télécommunications
+    à son propre client final.
+
+    #### Malfaçon
+
+    Une malfaçon est une non-conformité issue de travaux menés dans le cadre
+    d'une prestation de production ou de SAV sur un accès (PM/PBO/PTO),
+    confiée à un intervenant selon un cahier des charges (STAS et règles de l'art).
+
+    ## Processus
+
+    1. La signalisation de malfaçons peut être faite par un OI vers OC comme par un OC vers un OI.
+
+    2. Certaines malfaçons sont détectables aussi bien par un OI que par un OC,
+        d’autres sont vues comme détectables uniquement par un OI ou uniquement par un OC.
+
+    3. La signalisation de malfaçon par un OI vers un OC est une notification
+        appelant action de la part de l’OC destinataire ou informant ce dernier
+        d’une malfaçon n’appelant pas action de sa part.
+
+        Cette notification suppose que l’OC pourra intervenir pour traiter la malfaçon:
+
+        * Si les conditions font que c’est impossible et plus particulièrement sur un PM devenu inexploitable,
+          alors l’OI doit procéder par une Remise En Conformité (REC)
+        * Si l’OC constate lors de son intervention que l’état du PM ne lui permet pas de traiter la malfaçon,
+          alors il aura la possibilité de le signaler en retour à l’OI.
+
+    4. La signalisation de malfaçon par un OC vers un OI est une remontée d’information
+        qui n’implique pas d’engagement de l’OC sur son niveau de précision:
+        cette signalisation constitue une information complémentaire pour l’OI
+        dans le cadre de l’exploitation de son réseau.
+
+    5. De par sa définition, la Malfaçon se distingue de la notion de « Dysfonctionnement »
+        dont est ici rappelée la définition Interop’Fibre:
+
+            «
+              Un dysfonctionnement est une problématique qui rend impossible
+              l’adduction du réseau d’un OC au PM mis à disposition par un OI
+            »
+
+    6. A noter que les notions de « Dommages »,
+        qui peuvent apparaître dans les contrats des OI, ne sont pas normalisées.
+        Dans tous les cas, il est important que ces définitions contractuelles
+        ne viennent pas recouvrir le périmètre de la Malfaçon.
+
+    ## Dépendances
+
+    Cette API utilise une architecture proxyfié pour la gestion des dépendances.
+
+    ![Proxyfied architecture schema](https://raw.githubusercontent.com/before-interop/common/main/schema/architecture.drawio.svg)
+
+    * [TroubleTicket](https://ggrebert.github.io/before-interop-common/?urls.primaryName=TroubleTicket)
+    * [Attachment](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Attachment)
+    * [Note](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Note)
+    * [Event](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Event)
+
+servers:
+  - url: "{protocol}://{host}:{port}{basePath}/malfacon"
+    variables:
+      protocol:
+        enum:
+          - https
+          - http
+        default: https
+      host:
+        default: localhost
+      port:
+        default: "8080"
+      basePath:
+        default: /api
+
+tags:
+  - name: TroubleTicket
+    description: TroubleTicket management
+  - name: Note
+    description: Note management
+  - name: Attachment
+    description: Attachment management
+  - name: Event
+    description: Event management
+  - name: OI
+    description: OI endpoints
+  - name: OC
+    description: OC endpoints
+
+paths:
+  /:
+    get:
+      tags:
+        - TroubleTicket
+        - OI
+      summary: Get all trouble tickets
+      description: Get all trouble tickets
+      operationId: getTroubleTickets
+      parameters: &searchAndPaginateParameters
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/limit
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/offset
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/sort
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/fields.openapi.yaml#/components/parameters/fields
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        "200":
+          description: The list of trouble tickets
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+            X-Result-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MalfaconAny"
+        "400": &response400
+          description: |
+            **Bad Request**
+
+            This error occurs when a query parameter or the body is invalid.
+
+            * The `reason` field of the error response can contain information about the error.
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+    head:
+      tags:
+        - TroubleTicket
+        - OI
+      summary: Count the number of trouble tickets
+      description: Count the number of trouble tickets matching the given criteria.
+      operationId: countTroubleTickets
+      parameters:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        "200":
+          description: The number of trouble tickets.
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+        "400": *response400
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Error.openapi.yaml#/components/schemas/Error
+
+    post:
+      tags:
+        - TroubleTicket
+        - OI
+      summary: Create a trouble ticket
+      description: Create a trouble ticket
+      operationId: createTroubleTicket
+      requestBody:
+        description: The malfacon to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MalfaconOne"
+      responses:
+        "201": &troubleTicket201
+          description: The created malfacon
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MalfaconOne"
+          headers:
+            ETag:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag
+        "400": *response400
+        "403": &response403
+          description: |
+            **Forbidden**
+
+            Le serveur a compris la requête, mais refuse de l'exécuter car le client n'a pas respecté le processus de création ou de mise à jour.
+
+            Exemple: passage du status `ACKNOWLEDGED` à `RESOLVED` sans passer par le status `IN_PROGRESS`.
+
+            * Le champ `reason` de la réponse d'erreur doit contenir la liste des tickets en conflit séparés par des virgules.
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Error.openapi.yaml#/components/schemas/Error
+
+  /{malfaconId}:
+    parameters:
+      - $ref: "#/components/parameters/malfaconId"
+
+    get:
+      tags:
+        - TroubleTicket
+        - OI
+      summary: Get a trouble ticket
+      description: Get a trouble ticket
+      operationId: getTroubleTicket
+      parameters:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/fields.openapi.yaml#/components/parameters/fields
+      responses:
+        "200":
+          description: The malfacon
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MalfaconOne"
+          headers:
+            ETag:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag
+        "404": &response404
+          description: |
+            **Not Found**
+
+            This error occurs when the resource does not exist or is not visible by the user.
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Error.openapi.yaml#/components/schemas/Error
+
+    put:
+      tags:
+        - TroubleTicket
+        - OI
+      summary: Update a trouble ticket
+      description: Update a trouble ticket
+      operationId: updateTroubleTicket
+      requestBody:
+        description: The trouble ticket to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MalfaconOne"
+      parameters:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/parameters/If-Match
+      responses:
+        "200": *troubleTicket201
+        "400": *response400
+        "403": *response403
+        "404": *response404
+        "412":
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-412
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+    patch:
+      tags:
+        - TroubleTicket
+        - OI
+      summary: Partially update a trouble ticket
+      description: Partially update a trouble ticket
+      operationId: patchTroubleTicket
+      requestBody:
+        description: The data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MalfaconOne"
+      parameters:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/parameters/If-Match
+      responses:
+        "200": *troubleTicket201
+        "400": *response400
+        "403": *response403
+        "404": *response404
+        "412":
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-412
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+  /{malfaconId}/note:
+    parameters:
+      - $ref: "#/components/parameters/malfaconId"
+
+    get:
+      tags:
+        - Note
+        - OI
+      summary: Get all notes of a trouble ticket
+      description: Get all notes of a trouble ticket
+      operationId: getNotes
+      parameters: *searchAndPaginateParameters
+      responses:
+        "200":
+          description: The list of notes
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+            X-Result-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Note"
+        "400": *response400
+        "404": *response404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+    head:
+      tags:
+        - Note
+        - OI
+      summary: Count the number of notes of a trouble ticket
+      description: Count the number of notes of a trouble ticket matching the given criteria.
+      operationId: countNotes
+      parameters:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        "200":
+          description: The number of notes
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+        "400": *response400
+        "404": *response404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+    post:
+      tags:
+        - Note
+        - OI
+      summary: Create a note
+      description: This method allows to create a note.
+      operationId: createNote
+      requestBody:
+        description: The note to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Note"
+      responses:
+        "201":
+          description: The created note
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+          headers:
+            ETag:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag
+        "400": *response400
+        "404": *response404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+  /{malfaconId}/attachment:
+    parameters:
+      - $ref: "#/components/parameters/malfaconId"
+
+    get:
+      tags:
+        - Attachment
+        - OI
+      summary: List attachments
+      description: Get all attachments of a trouble ticket
+      operationId: getAttachments
+      parameters: *searchAndPaginateParameters
+      responses:
+        "200":
+          description: The list of attachments
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+            X-Result-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Attachment"
+        "400": *response400
+        "404": *response404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+    head:
+      tags:
+        - Attachment
+        - OI
+      summary: Get the number of attachments
+      description: This method returns the number of attachments matching the criteria.
+      operationId: countAttachments
+      parameters:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        "200":
+          description: The number of attachments
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+        "400": *response400
+        "404": *response404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+    post:
+      tags:
+        - Attachment
+        - OI
+      summary: Create a attachment
+      description: This method allows to create a attachment.
+      operationId: createAttachment
+      requestBody:
+        description: The attachment to create
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AttachmentFormData"
+      responses:
+        "201":
+          description: The created attachment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Attachment"
+          headers:
+            ETag:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag
+        "400": *response400
+        "404": *response404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+  /{malfaconId}/attachment/{attachmentId}/content:
+    parameters:
+      - $ref: "#/components/parameters/malfaconId"
+      - $ref: "#/components/parameters/attachmentId"
+
+    get:
+      tags:
+        - Attachment
+        - OI
+      summary: Download the content of an attachment
+      description: This method allows to download the content of an attachment.
+      operationId: downloadAttachment
+      parameters:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Match
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/tools/attachment/attachment.openapi.yaml#/components/parameters/If-None-Match
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Modified-Since
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Unmodified-Since
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/tools/attachment/attachment.openapi.yaml#/components/parameters/Range
+      responses:
+        "200":
+          description: The content of the attachment
+          content:
+            application/octet-stream: {}
+        "404": *response404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+        "412":
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-412
+
+  /event:
+    get:
+      tags:
+        - Event
+        - OI
+      summary: Get all events of all trouble tickets
+      description: Get all events of all trouble tickets
+      parameters: *searchAndPaginateParameters
+      responses:
+        "200":
+          description: The list of events
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+            X-Result-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+        "400": *response400
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+    head:
+      tags:
+        - Event
+        - OI
+      summary: Count the number of events of all trouble tickets
+      description: Count the number of events of all trouble tickets matching the given criteria.
+      parameters:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        "200":
+          description: The number of events
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+        "400": *response400
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+    post:
+      tags:
+        - Event
+        - OC
+      summary: Receive an event for a trouble ticket
+      description: Receive an event for a trouble ticket
+      requestBody:
+        description: The event to receive
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Event"
+      responses:
+        default:
+          description: |
+            L'événement a été reçu avec succès.
+
+            La réponse n'a pas l'obligation de contenir un body.
+            Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
+        4xx:
+          description: |
+            Erreur lors de la réception de l'événement.
+
+            L'OI ne doit pas retransmettre l'événement à l'OC.
+
+            La réponse n'a pas l'obligation de contenir un body.
+            Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
+        5xx:
+          description: |
+            Erreur lors de la réception de l'événement.
+
+            L'OI peut retransmettre l'événement à l'OC.
+
+            La réponse n'a pas l'obligation de contenir un body.
+            Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
+
+components:
+  schemas:
+    MalfaconAny:
+      anyOf:
+        - $ref: "#/components/schemas/MalfaconPm"
+        - $ref: "#/components/schemas/MalfaconAmontPm"
+        - $ref: "#/components/schemas/MalfaconPmPbo"
+        - $ref: "#/components/schemas/MalfaconPbo"
+        - $ref: "#/components/schemas/MalfaconCcfCable"
+        - $ref: "#/components/schemas/MalfaconCcfPto"
+
+    MalfaconOne:
+      oneOf:
+        - $ref: "#/components/schemas/MalfaconPm"
+        - $ref: "#/components/schemas/MalfaconAmontPm"
+        - $ref: "#/components/schemas/MalfaconPmPbo"
+        - $ref: "#/components/schemas/MalfaconPbo"
+        - $ref: "#/components/schemas/MalfaconCcfCable"
+        - $ref: "#/components/schemas/MalfaconCcfPto"
+
+    MalfaconBase:
+      allOf:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
+      properties:
+        "@type":
+          default: Malfacon
+          example: Malfacon
+          readOnly: false
+        "@baseType":
+          default: Malfacon
+          example: Malfacon
+          enum:
+            - Malfacon
+        severity:
+          description: |
+            The severity of the malfacon
+
+            Allowed values are:
+
+            * `CRITICAL`
+
+              Si la malfaçon représente un danger grave est imminent pour les personnes,
+              l'OI se réserve le droit d'effectuer la reprise ou à minima sécurise les lieux
+              et demande à l'OC d'intervenir.
+
+              De son côté, l'OC se doit de signaler à l'OI toute malfaçon
+              représentant un danger grave et imminent pour les personnes.
+
+            * `MAJOR`
+
+              La malfaçon signifie une détérioration du site technique ou un risque d'intéruption
+              massive de service (dérangement collectif) ou un empêchement à produire
+              de nouveaux client (depuis le passage de commande jusqu'au raccordement).
+
+              Exemples:
+
+              * défaut d'étanchéité sur PB
+              * PM ouvert
+              * site insalubre
+              * brassage encombrant
+              * données de localisation erronées
+
+            * `MINOR`
+
+              Les autres non conformités à corriger.
+          enum:
+            - CRITICAL
+            - MAJOR
+            - MINOR
+        volumetry:
+          description: The volumetrie of the malfacon
+          type: integer
+          example: 1
+        quotePart:
+          description: |
+            The quote part of the malfacon
+
+            TODO: should be replaced by `share` or `part` or `quota`
+          type: number
+          minimum: 0
+          maximum: 1
+        localizationDetails:
+          type: string
+        faultDetails:
+          type: string
+
+    MalfaconPm:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconBase"
+      properties:
+        "@type":
+          example: Pm
+          enum:
+            - Pm
+        localizationDetails:
+          enum:
+            - TIROIR ZAPM
+            - CONNECTEUR TIROIR ZAPM
+            - BRASSAGE OC
+            - TIROIR OC
+            - ARMOIRE
+            - ROUTE OPTIQUE
+        faultDetails:
+          enum:
+            - mauvaise fixation ou fermeture dégradée
+            - bouchon absent
+            - cheminement non conforme aux STAS
+            - brassage existant encombrant le cheminement
+            - cordon non conforme aux STAS caractéristiques techniques
+            - présence de cordons non conformes
+            - présence de cordons à zéro non retirés
+            - Caractéristiques tiroir non conforme aux STAS
+            - implantation ou étiquetage non conforme aux STAS
+            - mauvaise fixation
+            - bouchon absent
+            - dégradation majeure
+            - Dégradations serrure, porte, tiroir cassé, tambours …
+            - Environnement nettoyage déchets, fermeture
+            - Etiquetage du PM non conforme hors échec de production
+            - Non respect Route Optique communiquée
+        pm:
+          allOf:
+            - $ref: "#/components/schemas/Equipment"
+          properties:
+            "@type":
+              example: PM
+              enum:
+                - PM
+
+    MalfaconAmontPm:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconBase"
+      properties:
+        "@type":
+          example: AmontPm
+          enum:
+            - AmontPM
+        localizationDetails:
+          enum:
+            - COLLECTE LIEN PM-PRDM
+            - ADDUCTION OC
+            - AMONT PM INSTALLATION
+        faultDetails:
+          enum:
+            - brassage OC non conforme
+            - tiroir OI dégradé
+            - bouchon absent
+            - cheminement câble OC/OI non conforme
+            - implantation tiroir OC/OI ou étiquetage non conforme
+            - brassage OC non conforme
+            - passage de câble non conforme
+        pm:
+          allOf:
+            - $ref: "#/components/schemas/Equipment"
+          properties:
+            "@type":
+              example: PM
+              enum:
+                - PM
+
+    MalfaconPmPbo:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconBase"
+      properties:
+        "@type":
+          example: PmPbo
+          enum:
+            - PmPbo
+        localizationDetails:
+          enum:
+            - PM-PBO INSTALLATION
+        faultDetails:
+          enum:
+            - Absence de gaine demi-lune pour protéger câble PBO aérien, poteau ou façade
+            - dégradation
+        pm:
+          allOf:
+            - $ref: "#/components/schemas/Equipment"
+          properties:
+            "@type":
+              example: PM
+              enum:
+                - PM
+        pbo:
+          allOf:
+            - $ref: "#/components/schemas/Equipment"
+          properties:
+            "@type":
+              example: PBO
+              enum:
+                - PBO
+
+    MalfaconPbo:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconBase"
+      properties:
+        "@type":
+          example: Pbo
+          enum:
+            - Pbo
+        localizationDetails:
+          enum:
+            - CASSETTE
+            - BOITIER
+            - PBO ENVIRONNEMENT
+            - ROUTE OPTIQUE
+        faultDetails:
+          enum:
+            - lovage fibre non conforme aux STAS
+            - épissure non conforme dénudage, protection de soudure
+            - boîtier PBO non/mal refermé, non/mal refixé,…
+            - dégradation
+            - boîtier PBO non /mal étiqueté hors échec production
+            - localisation non conforme aux données OI commande accès hors échec production
+            - dégradation du support PBO poteau
+            - nettoyage chantier
+            - lovage câble en chambre ou poteau non conforme aux STAS
+            - Reprise sauvage Route Optique par casse soudure au PBO
+            - Raccordement de site non déployé dans IPE
+            - Non respect Route Optique communiquée
+        pbo:
+          allOf:
+            - $ref: "#/components/schemas/Equipment"
+          properties:
+            "@type":
+              example: PBO
+              enum:
+                - PBO
+
+    MalfaconCcfCable:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconBase"
+      properties:
+        "@type":
+          example: CcfCable
+          enum:
+            - CcfCable
+        localizationDetails:
+          enum:
+            - CABLE CARACTERISTIQUE
+            - CABLE INSTALLATION
+            - ENTREE DE CABLE PBO
+        faultDetails:
+          enum:
+            - étiquetage non conforme aux STAS
+            - caractéristiques non conformes aux STAS
+            - cheminement non conforme surplomb domaine privé,…
+            - rebouchage non effectué
+            - type de pose/fixation non conforme aux préconisations OI
+            - absence protection obligatoire gaine fendue, demi-lune,…
+            - non utilisable risque de surplomb, sécurisé
+            - non utilisable pas d'autorisation de cheminement
+            - bilan optique non conforme aux STAS
+            - dégradation
+            - nettoyage chantier
+            - non conforme aux STAS
+        refOrder:
+          description: Référence de la commande
+          type: string
+        localization:
+          description: Localisation GPS du câble
+          $ref: "#/components/schemas/Localization"
+        pbo:
+          allOf:
+            - $ref: "#/components/schemas/Equipment"
+          properties:
+            "@type":
+              example: PBO
+              enum:
+                - PBO
+        pto:
+          allOf:
+            - $ref: "#/components/schemas/Equipment"
+          properties:
+            "@type":
+              example: PTO
+              enum:
+                - PTO
+
+    MalfaconCcfPto:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconBase"
+      properties:
+        "@type":
+          example: CcfPto
+          enum:
+            - CcfPto
+        localizationDetails:
+          enum:
+            - PTO CARACTERISTIQUE
+            - PTO INSTALLATION
+        faultDetails:
+          enum:
+            - caractéristiques non conformes aux STAS
+            - pose non conforme implantation ou fixation
+            - PTO mal ou non étiquetée
+        localization:
+          description: Localisation GPS de la PTO
+          $ref: "#/components/schemas/Localization"
+        pto:
+          allOf:
+            - $ref: "#/components/schemas/Equipment"
+          properties:
+            "@type":
+              example: PTO
+              enum:
+                - PTO
+
+    Address:
+      type: object
+      properties:
+        streetNumber:
+          description: The street number
+          type: string
+          example: 1
+        streetName:
+          description: The street name
+          type: string
+          example: Rue de la Paix
+        postalCode:
+          description: The postal code
+          type: string
+          example: 75000
+        city:
+          description: The city
+          type: string
+          example: Paris
+        country:
+          description: The country
+          type: string
+          example: France
+          default: France
+        floor:
+          description: The floor
+          type: string
+          example: 1
+        building:
+          description: The building
+          type: string
+          example: A
+
+    Localization:
+      type: object
+      properties:
+        latitude:
+          description: The latitude
+          type: number
+          example: 48.8566
+        longitude:
+          description: The longitude
+          type: number
+          example: 2.3522
+
+    Equipment:
+      description: |
+        An equipment is a physical entity that is part of the network.
+        It can be a PM, a PBO, a PTO, a cable, a splice, a connector, etc.
+
+        The equipment is identified by its ARCEP reference.
+      allOf:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Entity.openapi.yaml#/components/schemas/Entity
+      type: object
+      properties:
+        id:
+          readOnly: false
+          description: The ARCEP reference of the equipement
+        "@type":
+          type: string
+          readOnly: false
+        "@baseType":
+          type: string
+          readOnly: true
+          default: Equipement
+          example: Equipement
+        address:
+          description: The address of the equipement
+          $ref: "#/components/schemas/Address"
+
+    Attachment:
+      allOf:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
+      properties:
+        relatedEntity:
+          description: Reference to the malfacon
+          minItems: 1
+          maxItems: 1
+
+    AttachmentFormData:
+      allOf:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData
+      properties:
+        attachment:
+          $ref: "#/components/schemas/Attachment"
+
+    Note:
+      allOf:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
+      properties:
+        relatedEntity:
+          description: Reference to the malfacon
+          minItems: 1
+          maxItems: 1
+
+    Event:
+      allOf:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/CloudEvent.openapi.yaml#/components/schemas/CloudEvent
+      required:
+        - time
+        - subject
+      properties:
+        subject:
+          description: Identifiant unique de la malfaçon.
+          type: string
+          format: uuid
+        type:
+          enum:
+            - fr.interop.malfacon.update
+            - fr.interop.malfacon.note.create
+            - fr.interop.malfacon.attachment.create
+        datacontenttype:
+          const: application/json
+        data:
+          oneOf:
+            - $ref: "#/components/schemas/MalfaconOne"
+            - $ref: "#/components/schemas/Note"
+            - $ref: "#/components/schemas/Attachment"
+
+  parameters:
+    malfaconId:
+      name: malfaconId
+      in: path
+      description: The malfacon id
+      required: true
+      schema:
+        type: string
+
+    attachmentId:
+      name: attachmentId
+      in: path
+      description: The attachment id
+      required: true
+      schema:
+        type: string
