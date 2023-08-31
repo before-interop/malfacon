@@ -1,26 +1,37 @@
+# Protocole Interop Malfaçon
+
 # Table des matières
 1. [Introduction](#apimalfaçon)
-11. -----------------------Malfaçon signalée par l'OI ------------
-2. [Cycle de vie](#cycle-de-vie-dune-malfaçon-oc-vers-oi)
-3. [Cas d'utilisation](#cas-dutilisation-signalisation-oi)
-4. Modèle de données
-41. -----------------------Malfaçon signalée par l'OC ------------
-5. [Cycle de vie](#cycle-de-vie-dune-malfaçon-oc-vers-oi)
-6. [Cas d'utilisation](#cas-dutilisation-signalisation-oc)
-7. Modèle de données
+     #### Malfaçon signalée par l'OI vers l'OC
+2. [Cycle de vie et règles de transition entre états](#cycle-de-vie-dune-malfaçon-oi-vers-oc)
+3. [Gestion des compteurs](#liste-des-différents-compteurs-utilisés-dans-le-process-malfaçons)
+4. [Diagramme de séquence des 13 Cas d'utilisation](#cas-dutilisation-signalisation-oi)
+5. [Modèle de données](#modèle-de-données-signalisation-oi-vers-oc)
+     #### Malfaçon signalée par l'OI vers l'OC
+6. [Cycle de vie](#cycle-de-vie-dune-malfaçon-oc-vers-oi)
+7. [Diagramme de séquence du cas d'utilisation](#cas-dutilisation-signalisation-oc)
+8. [Modèle de données](#modèle-de-données-signalisation-oc-vers-oi)
+     #### Requêtes / Consultation / KPI sur les malfaçons
+9. [Données Consultables](#requetes--kpi)
 
 
 # APIMalfaçon
 Cette API permet la déclaration et le traitement d’une malfaçon grâce à des flux normalisés.
 
-Une malfaçon est une non-conformité par rapport aux STAS (Spécification Technique d’Accès aux Services) ou règles de l’art, issue de travaux menés dans le cadre d'une prestation de production ou de SAV sur un accès (PM/PBO/PTO). Les malfaçons que l’on constate le plus souvent sont : un non-respect du cheminement de la jarretière, une non-conformité de la jarretière (couleur, diamètre, longueur…) mais aussi des déchets laissés sur place (sachet plastique, chute de jarretière…) ou des dégradations (serrure cassée…)
-
-La Malfaçon se distingue de la notion de dysfonctionnement dont est ici rappelée la définition Interop’Fibre : un dysfonctionnement est une problématique qui rend impossible l’adduction du réseau d’un OC au PM mis à disposition par un OI.
+Une malfaçon est une non-conformité par rapport aux STAS (Spécification Technique d’Accès aux Services) ou règles de l’art, issue de travaux menés dans le cadre d'une prestation de production ou de SAV sur un accès (PM/PBO/PTO). Les malfaçons que l’on constate le plus souvent sont : un non-respect du cheminement de la jarretière, une non-conformité de la jarretière (couleur, diamètre, longueur…) mais aussi des déchets laissés sur place (sachet plastique, chute de jarretière…) ou des dégradations (serrure cassée…). La Malfaçon se distingue de la notion de dysfonctionnement dont est ici rappelée la définition Interop’Fibre : un dysfonctionnement est une problématique qui rend impossible l’adduction du réseau d’un OC au PM mis à disposition par un OI.
 
 Un signalisation est créée par typologie de malfaçon et par OC imputable, sans regroupement par élément d’infra. Au niveau du dépôt de signalisation, celui se traduit par la création unitaire des TT pour une typologie de malfaçon : 1 ticket = 1 typologie de malfaçon.
 
+Les signalisations peuvent être :
+1) De l'OI vers l'OC : c'est alors une notification appelant action de la part de l’OC destinataire (malfaçon imputable non critique) ou informant ce dernier d’une malfaçon n’appelant pas action de sa part (reprise OI si malfaçon sans-tiers identifié ou si malfaçon imputable mais critique).
+
+2) L'OC informe l'OI pour que l'OI dépose une signalisation vers l'OC responsable. L’OC à l’origine de la remontée initiale ne suit pas le cycle de vie de la malfaçon et ne sera pas informé de la reprise de la malfaçon qu’il a signalée.  La signalisation de la malfaçon par un OC vers un OI est une remontée d’information qui n’implique pas d’engagement de l’OC sur son niveau de précision : cette signalisation constitue une information complémentaire pour l’OI dans le cadre de l’exploitation de son réseau.
+
 ## Types d'anomalies
+Les différents types de malfaçons sont :
 ![Types de signalement](./type.drawio.svg)
+
+![testPDF](./RéférentielMalfaçonVersionGitHub2.pdf)
 
 # Cycle de vie d'une Malfaçon OI vers OC
 ![Workflow](./statusOiOc.drawio.svg)
@@ -177,12 +188,13 @@ Le champ statusChangeReason doit être renseigné avec la valeur RESOLUTION_REFU
 
 Le champ statusChangeDetails doit être renseigné avec la raison du refus.
 
-## Liste des différents compteurs utilisés dans le process malfaçons
-Les valeurs des compteurs sont propres à chaque OC/OI et seront formalisées dans les contrats
+## Liste des différents compteurs utilisés dans le process malfaçons lors d'une signalisation OI vers OC
+Le protocole Interop n’harmonise pas les délais car ils relèvent du domaine contractuel propre à chaque opérateur. Néanmoins, il est recommandé aux opérateurs de mettre en place des délais pour les cas décrits ci-dessous. Lles valeurs des compteurs sont propres à chaque OC/OI et seront formalisées dans les contrats.
 
 ### Délai max de contestation  OC :
-Démarre au passage du ticket à Acknowledged qui correspond à la transmission de la signalisation par l’OI. Orange OI fixe ce délai à 5 jours ouvrés durant lesquels l’OC peut contester sa responsabilité.
-Une fois ce délai dépassé, le ticket est automatiquement considéré comme en cours de reprise par l’OC.
+Dans le cas d'une malfaçon imputable à résoudre par l'OC, ce compteur démarre au passage du ticket à Acknowledged qui correspond à la transmission de la signalisation par l’OI. Orange OI fixe ce délai à 5 jours ouvrés durant lesquels l’OC peut contester sa responsabilité. Une fois ce délai dépassé, le ticket est automatiquement considéré comme en cours de reprise par l’OC.
+
+Dans le cas d’une malfaçon non imputable ou d’une malfaçon critique, l’OI déclenche son intervention dès le statut Acknowledged. De ce fait, si contestation OC de sa responsabilité, cela ne sera pas traité dans le cycle de vie du ticket mais au moment de la réception de la facture via une réclamation.
 
 ### Délai max de reprise OC :
 Démarre au passage du ticket à Acknowledged qui correspond à la transmission de la signalisation par l’OI.
@@ -197,8 +209,12 @@ Une fois ce délai dépassé, la résolution de la malfaçon sera traitée par l
 Démarre lors de la réception par l’OI de la résolution envoyée par l’OC (passage du ticket à Resolved)
 Ce délai correspond au temps maximum alloué à l’OI pour valider ou non, la résolution par l’OC. Orange OI fixe ce délai à 15 jours calendaires.
 Ce délai de validation OI gèle le délai de reprise OC et laisse ainsi l’opportunité à l’OC de réitérer sa reprise dans les jours restants au compteur si sa reprise initiale n’est pas conforme.
-Une fois ce délai dépassé, la résolution est considérée comme automatiquement validée par l’OI et le ticket doit être clôturé.
+Une fois ce délai dépassé, la résolution est considérée comme automatiquement validée par l’OI et le ticket doit être clôturé. Une fois le ticket clôturé, l’OI ne pourra pas facturer l’OC s’il n’est pas satisfait de sa reprise. Il devra alors ouvrir un nouveau ticket, patienter le délai de reprise OC et, si de nouveau la reprise OC ne lui convient pas, exprimer le refus de validation dans le délai imparti pour ensuite reprendre la malfaçon et facturer l’OC.
 
+### Délai max de dépôt entre les tickets auprès d’un même OC sur un même élément d’infra (Gestion des compléments de signalisations) :
+Il ne s'agit pas ici d'un compteur, mais plutôt d'une règle de gestion.
+Afin d’optimiser les interventions terrains, l’OI doit veiller à signaler l’ensemble des malfaçons auprès d’un même OC sur un « même élément d’infra* » dans un « délai max de dépôt entre les tickets ». Orange OC fixe ce délai à 24h. Les OC pourront refuser tout nouveau ticket de la part d’un OI s’il existe déjà un ticket en provenance de ce même OI sur ce même élément d’infra, créé antérieurement à ce délai max et qui est toujours sous la responsabilité de l’OC en terme de résolution.
+Remarque : Elément d’infra = PM / PB et CCF
 
 # Cas d'utilisation Signalisation OI
 Ces diagrammes se concentrent sur la signalisation et la correction des malfaçons. Toute malfaçon corrigée par l’OI donnera lieu à une facturation vers l’OC ou les OC concernés (si non-imputable), mettant en œuvre les processus de facturation OI et de certification OC existants.
@@ -607,6 +623,12 @@ sequenceDiagram
   OI->>OC: Notif (status = CLOSED, statusChangeReason = Resolved_OC)
 ```
 
+# Modèle de données Signalisation OI vers OC
+Le modèle de donnée est disponible dans le fichier Excel RéférentielMalfaçonVersionGitHub.xlsx du sharepoint Malfaçon, répertoire DocumentsDeRefenceInterop-EncoursDeConstruction
+1) L'onglet "Modèle de données Malfaçon OI" présente l'ensemble des champs
+2) L'onglet "Valeurs possibles" présente les valeurs possibles pour les champs "liste de valeur"
+3) L'onglet Criticité présente les règles permettant de fixer la valeur Critique/Majeur/Mineur
+
 # Cycle de vie d'une Malfaçon OC vers OI
 ![Workflow](./statusOcOi.drawio.svg)
 
@@ -648,29 +670,10 @@ sequenceDiagram
   OI->>OC: Notif (état = « CLOSED », statusChangeReason = Defect_Communicated_By_OC)
 ```
 
-## Swagger
-Le swagger est disponible à l'adresse suivante : https://ggrebert.github.io/malfacon/
+# Modèle de données Signalisation OC vers OI
+Le modèle de donnée est disponible dans le fichier Excel RéférentielMalfaçonVersionGitHub.xlsx du sharepoint Malfaçon, répertoire DocumentsDeRefenceInterop-EncoursDeConstruction
 
-Proposition de modification sur le swagger
-0) gestion de la "malfaçon OC" très différente de la malfaçon OI en terme de cycle de vie + modèle donnée
-1) Pas de ref OC comme sur ano adresse ==> échange / partage pour comprendre
-2) Name ?  pas utile
-3) Priority ? pas utile, nous c’est severity
-4) relatedEntity ? Pas utile ?
-5) relatedParty ? Pas utile ?
-6) requestedResolutionDate ? pas utile car on utilise expectedResolutionDate ?
-7) ticketType ? pas utile ?
-8) Ajouter detectionDate en facultatif ?
-9) Ajouter chargeable
-10) Ajouter OcNumber
-11) Ajouter resolutionOwner
-12) Ajouter maxChallengeDate
-13) Ajouter volumetryDone
-14) Comment on trace que l’attachment est obligatoire à la création de la malfaçon --> photo / plan suivant type de malfaçon
-15) Même question sur le resolved
-16) Où trace-t-on les coordonnées XY et type associé ? C’est fait mais je trouve pas
-17) Ajouter maxValidationDate
-18) malfaçonOne ? malfaçonBase ?
+1) L'onglet "Modèle de données Malfaçon OC" présente l'ensemble des champs
 
 # Requetes / KPI
 KPI Arcep actuel :
@@ -700,6 +703,18 @@ Sur la totalité des tickets :
     - au dela des délais de résolution
 - Combien créés entre tel et tel date sur tel element d'infra ?
 
-| Headline 1 in the tablehead | Headline 2 in the tablehead | Headline 3 in the tablehead |
-|:--------------|:-------------:|--------------:|
-| text-align left | text-align center | text-align right |
+## Swagger
+Le swagger est disponible à l'adresse suivante : https://ggrebert.github.io/malfacon/
+
+Proposition de modification sur le swagger
+Mapping à faire avec la boite à outils, mais on peut déjà noter :
+Ajouter chargeable
+Ajouter OcNumber
+Ajouter resolutionOwner
+Ajouter maxChallengeDate
+Ajouter volumetryDone
+Comment on trace que l’attachment est obligatoire à la création de la malfaçon --> photo / plan suivant type de malfaçon
+Même question sur le resolved
+Ajouter maxValidationDate
+
+
