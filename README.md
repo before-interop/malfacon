@@ -687,3 +687,7 @@ Sur la totalité des tickets :
     - dans les délais de résolution
     - au dela des délais de résolution
 - Combien créés entre tel et tel date sur tel element d'infra ?
+
+| Headline 1 in the tablehead | Headline 2 in the tablehead | Headline 3 in the tablehead |
+|:--------------|:-------------:|--------------:|
+| text-align left | text-align center | text-align right |
