@@ -7,7 +7,7 @@
 3. [Gestion des compteurs](#liste-des-différents-compteurs-utilisés-dans-le-process-malfaçons)
 4. [Diagramme de séquence des 13 Cas d'utilisation](#cas-dutilisation-signalisation-oi)
 5. [Modèle de données](#modèle-de-données-signalisation-oi-vers-oc)
-     #### Malfaçon signalée par l'OI vers l'OC
+     #### Malfaçon signalée par l'OC vers l'OI
 6. [Cycle de vie](#cycle-de-vie-dune-malfaçon-oc-vers-oi)
 7. [Diagramme de séquence du cas d'utilisation](#cas-dutilisation-signalisation-oc)
 8. [Modèle de données](#modèle-de-données-signalisation-oc-vers-oi)
