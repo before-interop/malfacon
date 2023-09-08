@@ -23,11 +23,18 @@ Une malfaçon est une non-conformité par rapport aux STAS (Spécification Techn
 Un signalisation est créée par typologie de malfaçon et par OC imputable, sans regroupement par élément d’infra. Au niveau du dépôt de signalisation, celui se traduit par la création unitaire des TT pour une typologie de malfaçon : 1 ticket = 1 typologie de malfaçon.
 
 Les signalisations peuvent être :
-1) De l'OI vers l'OC : c'est alors une notification appelant action de la part de l’OC destinataire (malfaçon imputable non critique) ou informant ce dernier d’une malfaçon n’appelant pas action de sa part (reprise OI si malfaçon sans-tiers identifié ou si malfaçon imputable mais critique).
+1) De l'OI vers l'OC :
 
-2) L'OC informe l'OI pour que l'OI dépose une signalisation vers l'OC responsable. L’OC à l’origine de la remontée initiale ne suit pas le cycle de vie de la malfaçon et ne sera pas informé de la reprise de la malfaçon qu’il a signalée.  La signalisation de la malfaçon par un OC vers un OI est une remontée d’information qui n’implique pas d’engagement de l’OC sur son niveau de précision : cette signalisation constitue une information complémentaire pour l’OI dans le cadre de l’exploitation de son réseau.
+Cas 1 : Malfaçon non critique imputable à un seul OC : c'est alors une notification appelant action corrective de la part de l’OC destinataire.
 
-## Types d'anomalies
+Cas 2 : Malfaçon critique imputable à un seul OC : c'est alors une notification à l'OC n’appelant pas action de sa part car la reprise sera effectuée par l'OI
+
+Cas 3 : Malfaçon non imputable à un seul OC : c'est alors une notification à l'ensemble des OC concernés n’appelant pas d'action de leur part car la reprise sera effectuée par l'OI
+
+2) De l'OC vers l'OI :
+L'OC informe l'OI pour que celui-ci dépose une signalisation vers l'OC responsable. L’OC à l’origine de la remontée initiale ne suit pas le cycle de vie de la malfaçon et ne sera pas informé de la reprise de la malfaçon qu’il a signalée.  La signalisation de la malfaçon par un OC vers un OI est une remontée d’information qui n’implique pas d’engagement de l’OC sur son niveau de précision : cette signalisation constitue une information complémentaire pour l’OI dans le cadre de l’exploitation de son réseau.
+
+## Types de Malfaçons
 Les différents types de malfaçons sont :
 ![Types de signalement](./type.drawio.svg)
 
@@ -61,7 +68,7 @@ o	le champs ResolutionOwner = ‘OI’. Le champ statusChangeReason doit être r
 
 o	ou que le champs ResolutionOwner = ‘OC’ et que que Max_Challenge_Date (délai de contestation OC) est dépassé. Dans ce cas, le changement d'état est réalisé par l'OI mais le champs ResolutionOwner est bien conservée à ‘OC’. Le champs statusChangeReason est renseigné à 'Challenge_Time_Over'.
 
-#### IN_PROGRESS → IN_PROGRESS: l'OI prend en charge la résolution du ticket
+#### IN_PROGRESS → IN_PROGRESS: l'OI prend en charge la résolution du ticket suite dépassement délai OC
 Ce changement de status ne peut être effectué que par l'OI sur une malfaçon dont :
 - le ResolutionOwner est « OC »
 - Et que le délai de résolution par l'OC est dépassé (MaxResolutionDate)
@@ -76,7 +83,7 @@ L'OI doit alors :
 Sur un ticket dont le champs resolutionOwner='OI', ce changement de status ne peut être effectué que par l'OI. Le champ statusChangeReason doit être renseigné avec RESOLVED_OI.
 
 Sur un ticket dont le champs resolutionOwner='OC', ce changement de status ne peut être effectué que par l'OC. Le champ statusChangeReason doit être renseigné avec RESOLVED_OC.
-Le compteur de délai max de validation OI (maxValidationDate) démarre alors.
+Le compteur de délai de résolution OC (MaxResolutionDate) se gèle et le délai max de validation OI (maxValidationDate) démarre alors.
 
 Dans les deux cas:
 - le champs resolutionDate doit être renseigné
@@ -86,7 +93,7 @@ Dans les deux cas:
 
 #### ACKNOWLEDGED → REJECTED: Le ticket n'est pas recevable.
 
-Ce changement de status ne peut être effectué que par l'OC sur une malfaçon dont le ResolutionOwner='OC'.
+Ce changement de status ne peut être effectué que par l'OC sur une malfaçon dont le ResolutionOwner='OC' et obligatoirement avant que le délai max de contestation OC ait été atteint (max_challenge_date).
 
 Les raisons (statusChangeReason) possibles sont:
 
@@ -119,6 +126,8 @@ Ce changement de status ne peut être effectué que par l'OI, et quel que soit l
 Cela peut faire suite à une mauvaise initialisation, ou à des échanges OC/OI en cours de vie du ticket.
 
 Le champs statusChangeReason doit être renseigné avec :
+
+REC_CANDIDATE : Malfaçon à requalifier en REC
 
 WRONG_TICKET :  ticket mal initialisé
 
@@ -170,7 +179,7 @@ Ce changement de status est effectué par l'OI :
 - par validation explicite de la résolution OC par l'OI sur un ticket dont le ResolutionOwner='OC'
 Le champ statusChangeReason doit alors être renseigné avec la valeur RESOLUTION_ACCEPTED.
 
-- par validation implicite de la résolution OC par dépassement du délai de validation OI (maxValidationDate) sur un ticket dont le ResolutionOwner='OC'
+- ou de façon automatique si le délai de validation OI (maxValidationDate) est dépassé sur un ticket dont le ResolutionOwner='OC'
 
 Le champ statusChangeReason doit alors être renseigné avec la valeur DELAY_VALIDATION_EXPIRED
 
@@ -193,6 +202,7 @@ Le protocole Interop n’harmonise pas les délais car ils relèvent du domaine 
 
 ### Délai max de contestation  OC :
 Dans le cas d'une malfaçon imputable à résoudre par l'OC, ce compteur démarre au passage du ticket à Acknowledged qui correspond à la transmission de la signalisation par l’OI. Orange OI fixe ce délai à 5 jours ouvrés durant lesquels l’OC peut contester sa responsabilité. Une fois ce délai dépassé, le ticket est automatiquement considéré comme en cours de reprise par l’OC.
+Important : ce délai de contestation OC est inclus dans le délai max de reprise OC. Si par exemple le délai de reprise OC est de 30 jours, cela signifie 30 jours au sein desquels il est possible de contester pendant 5 jours.
 
 Dans le cas d’une malfaçon non imputable ou d’une malfaçon critique, l’OI déclenche son intervention dès le statut Acknowledged. De ce fait, si contestation OC de sa responsabilité, cela ne sera pas traité dans le cycle de vie du ticket mais au moment de la réception de la facture via une réclamation.
 
@@ -703,18 +713,6 @@ Sur la totalité des tickets :
     - au dela des délais de résolution
 - Combien créés entre tel et tel date sur tel element d'infra ?
 
-## Swagger
-Le swagger est disponible à l'adresse suivante : https://ggrebert.github.io/malfacon/
 
-Proposition de modification sur le swagger
-Mapping à faire avec la boite à outils, mais on peut déjà noter :
-Ajouter chargeable
-Ajouter OcNumber
-Ajouter resolutionOwner
-Ajouter maxChallengeDate
-Ajouter volumetryDone
-Comment on trace que l’attachment est obligatoire à la création de la malfaçon --> photo / plan suivant type de malfaçon
-Même question sur le resolved
-Ajouter maxValidationDate
 
 
