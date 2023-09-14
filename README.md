@@ -2,34 +2,44 @@
 
 # Table des matières
 1. [Introduction](#apimalfaçon)
-     #### Malfaçon signalée par l'OI vers l'OC
-2. [Cycle de vie et règles de transition entre états](#cycle-de-vie-dune-malfaçon-oi-vers-oc)
-3. [Gestion des compteurs](#liste-des-différents-compteurs-utilisés-dans-le-process-malfaçons)
-4. [Diagramme de séquence des 13 Cas d'utilisation](#cas-dutilisation-signalisation-oi)
-5. [Modèle de données](#modèle-de-données-signalisation-oi-vers-oc)
-     #### Malfaçon signalée par l'OC vers l'OI
-6. [Cycle de vie](#cycle-de-vie-dune-malfaçon-oc-vers-oi)
-7. [Diagramme de séquence du cas d'utilisation](#cas-dutilisation-signalisation-oc)
-8. [Modèle de données](#modèle-de-données-signalisation-oc-vers-oi)
-     #### Requêtes / Consultation / KPI sur les malfaçons
-9. [Données Consultables](#requetes--kpi)
+ #### 2. Malfaçon signalée par l'OI vers l'OC
+ #### 2.1 Malfaçon "Imputable" signalée par l'OI vers l'OC
+ 2.1.1 [Cycle de vie et règles de transition entre états](#imputable--cycle-de-vie-dune-malfaçon-oi-vers-oc)
+
+2.1.2 [Gestion des compteurs](#liste-des-différents-compteurs-utilisés-dans-le-process-malfaçons)
+ #### 2.2 Malfaçon "Non Imputable" ou "Critique" signalée par l'OI vers l'OC
+2.2.1 [Cycle de vie et règles de transition entre états](#non-imputable-ou-critique--cycle-de-vie-dune-malfaçon-oi-vers-oc)
+#### 2.3 Diagrammes de séquence de cas d'utilisation de Malfaçons signalée par l'OI vers l'OC
+2.3.1 [Diagramme de séquence des 13 Cas d'utilisation](#cas-dutilisation-signalisation-oi)
+#### 2.4. Modèle de donnée d'une malfaçon OI vers OC
+2.4.1 [Modèle de données](#modèle-de-données-signalisation-oi-vers-oc)
+#### 3. Malfaçon signalée par l'OC vers l'OI
+3.1 [Cycle de vie](#cycle-de-vie-dune-malfaçon-oc-vers-oi)
+
+3.2 [Diagramme de séquence du cas d'utilisation](#cas-dutilisation-signalisation-oc)
+
+3.3 [Modèle de données](#modèle-de-données-signalisation-oc-vers-oi)
+#### 4. Requêtes / Consultation / KPI sur les malfaçons
+4.1 [Données Consultables](#requetes--kpi)
 
 
-# APIMalfaçon
+# API Malfaçon
 Cette API permet la déclaration et le traitement d’une malfaçon grâce à des flux normalisés.
 
 Une malfaçon est une non-conformité par rapport aux STAS (Spécification Technique d’Accès aux Services) ou règles de l’art, issue de travaux menés dans le cadre d'une prestation de production ou de SAV sur un accès (PM/PBO/PTO). Les malfaçons que l’on constate le plus souvent sont : un non-respect du cheminement de la jarretière, une non-conformité de la jarretière (couleur, diamètre, longueur…) mais aussi des déchets laissés sur place (sachet plastique, chute de jarretière…) ou des dégradations (serrure cassée…). La Malfaçon se distingue de la notion de dysfonctionnement dont est ici rappelée la définition Interop’Fibre : un dysfonctionnement est une problématique qui rend impossible l’adduction du réseau d’un OC au PM mis à disposition par un OI.
 
-Un signalisation est créée par typologie de malfaçon et par OC imputable, sans regroupement par élément d’infra. Au niveau du dépôt de signalisation, celui se traduit par la création unitaire des TT pour une typologie de malfaçon : 1 ticket = 1 typologie de malfaçon.
+Un signalisation est créée par typologie de malfaçon et par OC imputable, sans regroupement par élément d’infra. Au niveau du dépôt de signalisation, celui se traduit par la création unitaire des trouble ticket pour une typologie de malfaçon : 1 ticket = 1 typologie de malfaçon.
 
 Les signalisations peuvent être :
 1) De l'OI vers l'OC :
 
-Cas 1 : Malfaçon non critique imputable à un seul OC : c'est alors une notification appelant action corrective de la part de l’OC destinataire.
+Cas 1 : Avec reprise attendue de la part de l'OC
+Il s'agit alors de Malfaçon non critique imputable à un seul OC : c'est alors une notification appelant action corrective de la part de l’OC destinataire. Si l'OC ne corrige pas dans les délais attendus, alors l'OI effectue la correction lui-même et facturera l'OC pour cela.
 
-Cas 2 : Malfaçon critique imputable à un seul OC : c'est alors une notification à l'OC n’appelant pas action de sa part car la reprise sera effectuée par l'OI
-
-Cas 3 : Malfaçon non imputable à un seul OC : c'est alors une notification à l'ensemble des OC concernés n’appelant pas d'action de leur part car la reprise sera effectuée par l'OI
+Cas 2 : Avec reprise par l'OI
+Dans ces deux sous-cas ci-dessous, l'OI corrige la malfaçon lui-même et facturera l'OC (ou les OC suivant le sous cas):
+Cas 2.1 : Malfaçon critique imputable à un seul OC : c'est alors une notification à l'OC n’appelant pas action de sa part car la reprise sera effectuée par l'OI
+Cas 2.3 : Malfaçon non imputable à un seul OC : c'est alors une notification à l'ensemble des OC concernés n’appelant pas d'action de leur part car la reprise sera effectuée par l'OI
 
 2) De l'OC vers l'OI :
 L'OC informe l'OI pour que celui-ci dépose une signalisation vers l'OC responsable. L’OC à l’origine de la remontée initiale ne suit pas le cycle de vie de la malfaçon et ne sera pas informé de la reprise de la malfaçon qu’il a signalée.  La signalisation de la malfaçon par un OC vers un OI est une remontée d’information qui n’implique pas d’engagement de l’OC sur son niveau de précision : cette signalisation constitue une information complémentaire pour l’OI dans le cadre de l’exploitation de son réseau.
@@ -40,8 +50,8 @@ Les différents types de malfaçons sont :
 
 ![testPDF](./RéférentielMalfaçonVersionGitHub2.pdf)
 
-# Cycle de vie d'une Malfaçon OI vers OC
-![Workflow](./statusOiOc.drawio.svg)
+# Imputable : Cycle de vie d'une Malfaçon OI vers OC
+![Workflow](./statusOiOcImput.drawio.svg)
 
 ### Initialisation : statut ACKNOWLEDGED
 Une signalisation est créée par l’OI et porte l’information de l’opérateur en charge de sa résolution :
@@ -226,6 +236,24 @@ Il ne s'agit pas ici d'un compteur, mais plutôt d'une règle de gestion.
 Afin d’optimiser les interventions terrains, l’OI doit veiller à signaler l’ensemble des malfaçons auprès d’un même OC sur un « même élément d’infra* » dans un « délai max de dépôt entre les tickets ». Orange OC fixe ce délai à 24h. Les OC pourront refuser tout nouveau ticket de la part d’un OI s’il existe déjà un ticket en provenance de ce même OI sur ce même élément d’infra, créé antérieurement à ce délai max et qui est toujours sous la responsabilité de l’OC en terme de résolution.
 Remarque : Elément d’infra = PM / PB et CCF
 
+# Non imputable ou Critique : Cycle de vie d'une Malfaçon OI vers OC
+![Workflow](./statusOiOcNonImputCrit.drawio.svg)
+
+### Initialisation : statut ACKNOWLEDGED
+Une signalisation est créée par l’OI et porte l’information de l’opérateur en charge de sa résolution :
+
+-	Soit ResolutionOwner = ‘OC’ : malfaçon imputable non critique.
+Dans ce cas, deux compteurs démarrent dès la communication de ce ticket à l'OC :
+- un compteur de délai max de contestation OC (max_challenge_date) (ex: 5 jours)
+- un compteur de délai max de reprise/résolution OC (MaxResolutionDate) (ex 30 jours)
+
+-	Soit ResolutionOwner = ‘OI’ : malfaçon imputable critique, ou non imputable
+
+Une signalisation porte obligatoirement une pièce jointe illustrant la malfaçon.
+
+Possibilités de changement de status:
+
+
 # Cas d'utilisation Signalisation OI
 Ces diagrammes se concentrent sur la signalisation et la correction des malfaçons. Toute malfaçon corrigée par l’OI donnera lieu à une facturation vers l’OC ou les OC concernés (si non-imputable), mettant en œuvre les processus de facturation OI et de certification OC existants.
 Les cas d'utilisation détaillés par la suite sont les suivants :
@@ -241,7 +269,7 @@ Les cas d'utilisation détaillés par la suite sont les suivants :
 #### Cas 9 : Rejet de la résolution OC par l’OI - Cas reprise complémentaire
 #### Cas 10 : Contestation de l’OC de sa responsabilité
 #### Cas 11 : Annulation d'un ticket par l'OI 
-#### Cas 12 : Mise en par l'OC suite à un incident technique ou problèmee environnemental (ex: PM inaccessible)
+#### Cas 12 : Mise en attente (HELD) par l'OC suite à un incident technique ou problème environnemental (ex: PM inaccessible)
 #### Cas 13  : Malfaçon imputable, dépassement du délai de contestation OC, puis résolution OC
 
 ## Cas 1 (cas nominal) : Malfaçon imputable résolue par l’OC et validée par l’OI
@@ -371,6 +399,7 @@ sequenceDiagram
   OC->>OC: Contrôle de surface
   OC->>OC: Contrôle métier (ex: consulter PJ, délai entre tickets etc...)
   OC->>OI: Notif (status = « IN PROGRESS », statusChangeReason= Chargeable_Accepted)
+  OI->>OI: Dépassement du compteur du délai de reprise OC
   OI->>OC: Notif (status = « IN PROGRESS », statusChangeReason= Resolution_Date_Expired, ResolutionOwner=OI)
   OI->>OI: Résolution de la malfaçon
   OI->>OI: Ajout PJ obligatoire
