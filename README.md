@@ -44,6 +44,10 @@ Sous-Cas 2.2 : Malfaçon non imputable à un seul OC : c'est alors une notificat
 
 L'OC informe l'OI pour que celui-ci dépose une signalisation vers l'OC responsable. L’OC à l’origine de la remontée initiale ne suit pas le cycle de vie de la malfaçon et ne sera pas informé de la reprise de la malfaçon qu’il a signalée.  La signalisation de la malfaçon par un OC vers un OI est une remontée d’information qui n’implique pas d’engagement de l’OC sur son niveau de précision : cette signalisation constitue une information complémentaire pour l’OI dans le cadre de l’exploitation de son réseau.
 
+## Swagger
+
+Le swagger est disponible à l'adresse suivante : https://before-interop.github.io/malfacon/
+
 ## Types de Malfaçons
 Les différents types de malfaçons sont :
 
