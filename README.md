@@ -21,7 +21,7 @@
 3.3 [Modèle de données](#modèle-de-données-signalisation-oc-vers-oi)
 
 # Introduction API Malfaçon
-Cette API permet la déclaration et le traitement d’une malfaçon grâce à des flux normalisés.:::
+Cette API permet la déclaration et le traitement d’une malfaçon grâce à des flux normalisés :
 
 Une malfaçon est une non-conformité par rapport aux STAS (Spécification Technique d’Accès aux Services) ou règles de l’art, issue de travaux menés dans le cadre d'une prestation de production ou de SAV sur un accès (PM/PBO/PTO). Les malfaçons que l’on constate le plus souvent sont : un non-respect du cheminement de la jarretière, une non-conformité de la jarretière (couleur, diamètre, longueur…) mais aussi des déchets laissés sur place (sachet plastique, chute de jarretière…) ou des dégradations (serrure cassée…). La Malfaçon se distingue de la notion de dysfonctionnement dont est ici rappelée la définition Interop’Fibre : un dysfonctionnement est une problématique qui rend impossible l’adduction du réseau d’un OC au PM mis à disposition par un OI.
 
@@ -74,33 +74,12 @@ Possibilités de changement de status:
 
 #### ACKNOWLEDGED → REJECTED: Le ticket n'est pas jugé recevable par l'OC
 
-Ce changement ne peut être effectué que par  l'OC.
+Ce changement ne peut être effectué que par  l'OC et uniquement si le ticket est invalide
 
-Les raisons (statusChangeReason) possibles sont:
-
-CRITICAL_PM :  PM critique (plat de nouille)
-
-ERRONEOUS_THIRD_PARTY : Tiers erroné
-Le champ statusChangeDetails est obligatoire avec justification de la raison pour laquelle le tiers est erroné
-
-LACK_OF_INFORMATION : Manque d'information
-Le champ statusChangeDetails est obligatoire avec indication des informations manquantes
-
-ORDER_PUT_INTO_SERVICE_FOR_MORE_THAN_A_YEAR: Commande MES de plus d'un an
-Le champ statusChangeDetails est obligatoire avec indication de la référence de la commande et la date de MES
-
-DUPLICATE : Doublon
-Le champ statusChangeDetails est obligatoire avec la référence du ou des tickets en conflit.
-
-DEADLINE_BETWEEN_SIGNALING : Délai de dépôt entre les compléments de signalisation non respecté.
-Le champ statusChangeDetails est obligatoire avec indication de la(les) référence(s) des autre(s) ticket(s) en cours sur la ressource infra datant de plus que le délai fixé
+Le statusChangeReason est alors
 
 INVALID: le ticket est invalide (champ manquant, valeur incorrecte, etc.)
 Le champ statusChangeDetails est obligatoire avec indication de l'erreur.
-
-OTHER: autre raison non référencée par le protocole.
-Le champ statusChangeDetails est obligatoire avec indication de l'erreur.
-
 
 #### ACKNOWLEDGED → IN_PROGRESS: Le ticket est en cours de résolution
 
@@ -127,6 +106,8 @@ PM_ERROR : Confusion entre identification du PM et PM déclaré
 
 LOCALISATION_ERROR : Mauvaise Geolocalisation du site
 
+CONTESTATION : cette transition n’est possible qu’une et une seule fois par l'OC, sinon rejet OI
+
 OTHER : Autre information attendue
 
 L'OC doit fournir le détail des informations complémentaires attendues dans le champs statusChangeDetails.
@@ -146,15 +127,12 @@ L'OI fournit la liste des informations complémentaires attendues:
 
 Sur un ticket dont le champs resolutionOwner='OI', ce changement de status ne peut être effectué que par l'OI. Le champ statusChangeReason doit être renseigné avec RESOLVED_OI.
 
-Sur un ticket dont le champs resolutionOwner='OC', ce changement de status ne peut être effectué que par l'OC. Le champ statusChangeReason doit être renseigné :
-
-- soit à RESOLVED_OC. Le compteur de délai de résolution OC (MaxResolutionDate) se gèle et le délai max de validation OI (maxValidationDate) démarre alors
-- soit à CONTESTATION. Dans ce cas l'OC indique, suite à litige avec l'OI, sa contestation sur ce ticket et le trace via le statusChangeReason = "Contestation".
+Sur un ticket dont le champs resolutionOwner='OC', ce changement de status ne peut être effectué que par l'OC. Le champ statusChangeReason doit être renseigné avec RESOLVED_OC. Le compteur de délai de résolution OC (MaxResolutionDate) se gèle et le délai max de validation OI (maxValidationDate) démarre alors.
 
 Dans tous les cas :
 - le champs resolutionDate doit être renseigné
 - ainsi que le champs recoveryVolumeDone
-- une photo illustrant la résolution de la malfaçon est obligatoire sauf si statusChangeReason = Contestation
+- une photo illustrant la résolution de la malfaçon est obligatoire
 
 
 #### ACKNOWLEDGED|IN_PROGRESS|PENDING → CANCELLED : annulation du ticket par l'OI
