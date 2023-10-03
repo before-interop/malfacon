@@ -21,7 +21,7 @@
 3.3 [Modèle de données](#modèle-de-données-signalisation-oc-vers-oi)
 
 # Introduction API Malfaçon
-Cette API permet la déclaration et le traitement d’une malfaçon grâce à des flux normalisés.
+Cette API permet la déclaration et le traitement d’une malfaçon grâce à des flux normalisés.:::
 
 Une malfaçon est une non-conformité par rapport aux STAS (Spécification Technique d’Accès aux Services) ou règles de l’art, issue de travaux menés dans le cadre d'une prestation de production ou de SAV sur un accès (PM/PBO/PTO). Les malfaçons que l’on constate le plus souvent sont : un non-respect du cheminement de la jarretière, une non-conformité de la jarretière (couleur, diamètre, longueur…) mais aussi des déchets laissés sur place (sachet plastique, chute de jarretière…) ou des dégradations (serrure cassée…). La Malfaçon se distingue de la notion de dysfonctionnement dont est ici rappelée la définition Interop’Fibre : un dysfonctionnement est une problématique qui rend impossible l’adduction du réseau d’un OC au PM mis à disposition par un OI.
 
