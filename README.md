@@ -10,7 +10,7 @@
  #### 2.2 Malfaçon "Non Imputable" ou "Critique" signalée par l'OI vers l'OC
 2.2.1 [Cycle de vie et règles de transition entre états](#non-imputable-ou-critique--cycle-de-vie-dune-malfaçon-oi-vers-oc)
 #### 2.3 Diagrammes de séquence de cas d'utilisation de Malfaçons signalée par l'OI vers l'OC
-2.3.1 [Diagramme de séquence des 12 Cas d'utilisation](#cas-dutilisation-signalisation-oi)
+2.3.1 [Diagramme de séquence des 11 Cas d'utilisation](#cas-dutilisation-signalisation-oi)
 #### 2.4. Modèle de donnée d'une malfaçon OI vers OC
 2.4.1 [Modèle de données](#modèle-de-données-signalisation-oi-vers-oc)
 ### 3. Malfaçon signalée par l'OC vers l'OI
@@ -46,7 +46,7 @@ L'OC informe l'OI pour que celui-ci dépose une signalisation vers l'OC responsa
 
 ## Swagger
 
-Le swagger est disponible à l'adresse suivante : https://before-interop.github.io/malfacon/
+A construire suite à la validation fonctionnelle
 
 ## Types de Malfaçons
 Les différents types de malfaçons sont :
@@ -123,7 +123,7 @@ L'OI fournit la liste des informations complémentaires attendues:
 - et/ou une note
 - et/ou un attachment
 
-#### IN_PROGRESS → RESOLVED: résolution, ou contestation, du ticket
+#### IN_PROGRESS → RESOLVED: résolution du ticket
 
 Sur un ticket dont le champs resolutionOwner='OI', ce changement de status ne peut être effectué que par l'OI. Le champ statusChangeReason doit être renseigné avec RESOLVED_OI.
 
@@ -143,7 +143,7 @@ Le champs statusChangeReason doit être renseigné avec :
 
 REC_CANDIDATE : Malfaçon à requalifier en REC
 
-WRONG_TICKET :  ticket mal initialisé
+WRONG_TICKET :  ticket mal initialisé/contestation acceptée
 
 UNRESOLVED_TICKET :  ticket qui ne sera pas résolu
 Le champ statusChangeDetails doit être renseigné avec la raison de l'annulation.
@@ -157,8 +157,6 @@ Le champ statusChangeReason doit alors être renseigné avec la valeur RESOLUTIO
 
 - ou de façon automatique si le délai de validation OI (maxValidationDate) est dépassé sur un ticket dont le ResolutionOwner='OC'.
 Le champ statusChangeReason doit alors être renseigné avec la valeur DELAY_VALIDATION_EXPIRED
-
-- ou enfin suite à contestation par l'OC. Le champ statusChangeReason doit alors être renseigné avec la valeur CONTESTATION.
 
 #### RESOLVED → IN_PROGRESS: refus OI de la résolution OC du ticket
 
@@ -255,9 +253,8 @@ Les cas d'utilisation détaillés par la suite sont les suivants :
 #### Cas 7 : Demande d’information complémentaire de l’OI à l’OC suite à la résolution OC
 #### Cas 8 : Demande d’information complémentaire de l’OC à l’OI suite à la réception du ticket
 #### Cas 9 : Rejet de la résolution OC par l’OI - Cas reprise complémentaire réalisée par l'OC
-#### Cas 10 : Contestation de l’OC de sa responsabilité sur réception de la signalisation
+#### Cas 10 : Contestation de l’OC de sa responsabilité sur réception de la signalisation acceptée par l'OI
 #### Cas 11 : Annulation d'un ticket par l'OI 
-#### Cas 12 : Rejet de la résolution OC par l’OI - Cas de contestation par l'OC
 
 ## Cas 1 (cas nominal) : Malfaçon imputable résolue par l’OC et validée par l’OI
 Déclaration d'une malfaçon par l'OI à l’OC imputable et reprise par l’OC dans le délai max. de reprise OC. Lorsqu’il a effectué la reprise, l'OC passe le ticket en résolu avec en PJ n photos. L’OI valide la résolution de l’OC et clôt le ticket.
@@ -526,18 +523,9 @@ sequenceDiagram
   OI->>OC: Notif (status = CLOSED, statusChangeReason = Resolved_OC)
 ```
 
-## Cas 10 : Contestation de l’OC de sa responsabilité
-Déclaration d'une malfaçon par l'OI à l’OC imputable. L’OC conteste sa responsabilité et l’OI clôture automatiquement le ticket.
-L’OI ne peut pas s’opposer au rejet de l’OC. L’OI analyse néanmoins la contestation de l’OC, il en découle 3 suites possibles :
-
-1) L’OI n’est pas en phase avec la contestation OC et réouvre un ticket vers l’OC initial en lui expliquant pourquoi sa responsabilité est avérée
-Donc Réouverture ticket via le « Cas 1 nominal » avec une nouvelle référence mais il est alors fait référence, dans les notes ou commentaires, à l’ancienne malfaçon « contestée » avec les anciennes ref OC et OI concernées.
-
-2) L’OI est en phase avec la contestation OC et réouvre un ticket vers un autre OC jugé responsable
-Donc Réouverture ticket via le « Cas 1 nominal » auprès du nouvel OC
-
-3) Aucun OC n’est jugé responsable de la malfaçon et l’OI la reprend 
-Donc Réouverture d’un ticket via le Cas 2 « Malfaçon non imputable »
+## Cas 10 : Contestation de l’OC de sa responsabilité acceptée par l'OI
+Déclaration d'une malfaçon par l'OI à l’OC imputable. L’OC conteste sa responsabilité, en passant tout d'abord la malfaçon à In Progress puis en indiquant son motif de contestation lors d'un passage en Helding pour gel du compteur de reprise OC. L'OI analyse alors la contestation OC et peut décider d'annuler, ou de de refuser, la contestation OC.
+L'OC ne peut passer le statusChangeReason="Contestation" qu'une et une seule fois vers l'OI.
 
 ```mermaid
 sequenceDiagram
@@ -550,9 +538,13 @@ sequenceDiagram
   OI->>OC: Transmission signalisation (status = ACKNOWLEDGED, statusChangeReason = Defect_Chargeable, chargeable=Yes, ResolutionOwner=OC)
   OI->>OI: Démarrage du compteur du délai de reprise OC
   OC->>OC: Contrôle de surface
-  OC->>OI: Notif (status = REJECTED, statusChangeReason = Erroneous_Third_Party)
-  OI->>OI: Cloture ticket (CLOSED)
-  OI->>OC: Notif (status = « CLOSED », statusChangeReason = Erroneous_Third_Party)
+  OC->>OC: Contrôle métier (ex: consulter PJ, délai entre tickets etc...)
+  OC->>OI: Notif (status = « IN PROGRESS », statusChangeReason= Chargeable_Accepted)
+  OC->>OI: Notif (status = PENDING, statusChangeReason=Contestation)
+  OI->>OI: Gel du compteur du délai de reprise OC
+  OI->>OI: Analyse de la contestation OC
+  OI->>OI: Annuler ticket (status = CANCELLED, statusChangeReason = « Wrong Ticket »)
+  OI->>OC: Notif (état = CANCELLED, statusChangeReason = « Wrong Ticket »)
 ```
 
 ## Cas 11 : Annulation d'un ticket par l'OI 
@@ -573,46 +565,6 @@ sequenceDiagram
   OI->>OI: Annuler ticket (status = CANCELLED, statusChangeReason = « Wrong Ticket »)
   OI->>OC: Notif (état = CANCELLED, statusChangeReason = « Wrong Ticket »)
 ```
-
-## Cas 12 : Rejet de la résolution OC par l’OI - Contestation par l'OC
-Déclaration d'une malfaçon par l'OI à l’OC imputable. Lorsqu’il a effectué la reprise, l'OC passe le ticket en résolu avec en PJ n photos. L’OI rejette la reprise de la malfaçon faite par l’OC. Suite à échange avec l'OI, l'OC conteste la position de l'OI. L'OC met fin au ticket en le passant en "resolved" avec status Change Reason = "Contestation OC".
-
-```mermaid
-sequenceDiagram
-
-  participant OC
-  participant OI
-
-
-  OI->>OI: Création malfaçon respectant le délai max de dépôt entre les tickets (ACKNOWLEDGED)
-  OI->>OI: Ajout d'une PJ (obligatoire)
-  OI->>OC: Transmission signalisation (status = ACKNOWLEDGED, statusChangeReason = Defect_Chargeable, chargeable=Yes, ResolutionOwner=OC)
-  OI->>OI: Démarrage du compteur du délai de reprise OC
-  OC->>OC: Contrôle de surface
-  OC->>OC: Contrôle métier (ex: consulter PJ, délai entre tickets etc...)
-  OC->>OI: Notif (status = « IN PROGRESS », statusChangeReason= Chargeable_Accepted)
-  OC->>OC: Regroupement tickets liés pour intervention (bonne pratique)
-  OC->>OC: Résolution de la malfaçon
-  OC->>OC: Ajout PJ obligatoire
-  OC->>OI: Notif (status = RESOLVED, statusChangeReason = Resolved_OC)
-  OI->>OI: Gel du compteur du délai de reprise OC
-  OI->>OI: Démarrage du compteur de validation OI
-  OI->>OI: Contrôle de surface
-  OI->>OI: Contrôle métier (ex: consulter PJ, etc...)
-  OI->>OC: Notif (status = « IN PROGRESS », statusChangeReason=resolution_refused)
-  OI->>OI: Dégel du compteur du délai de reprise OC
-  OC->>OI: Notif (status = PENDING, statusChangeReason=Lack_Of_Information)
-  OI->>OI: Gel du compteur du délai de reprise OC
-  OI->>OI: Ajout d'une Note
-  OI->>OC: Notif Note
-  OI->>OC: Notif (status = « IN PROGRESS », statusChangeReason=« Information_Given»)
-  OI->>OI: Dégel du compteur du délai de reprise OC
-  OC->>OI: Notif (status = RESOLVED, statusChangeReason = Contestation_OC)
-  OI->>OI: Contrôle de surface
-  OI->>OI: Cloture ticket (status = CLOSED, statusChangeReason = Contestation_OC)
-  OI->>OC: Notif (status = CLOSED, statusChangeReason = Contestation_OC)
-```
-
 
 # Modèle de données Signalisation OI vers OC
 Le modèle de donnée est disponible dans le fichier Excel RéférentielMalfaçonVersionGitHub.xlsx :
