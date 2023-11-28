@@ -93,6 +93,8 @@ UNKNOWN_RESOURCE: la ressource n'existe pas chez l'OC
 DUPLICATE: le ticket est en conflit avec un autre ticket (non respect du délai des 24h)
 Le champ statusChangeDetails est obligatoire avec la référence du ticket en conflit.
 
+ORDER_PUT_INTO_SERVICE_FOR_MORE_THAN_A_YEAR : la commande d'accès date d'il y a plus d'un an
+
 INVALID: le ticket est jugé invalide et non analysable par l'OC
 Le champ statusChangeDetails est obligatoire.
 
@@ -119,8 +121,6 @@ Le champ statusChangeReason doit être renseigné avec  :
 PHOTO_NOT_USABLE : Photo non exploitable (flou mal cadré)
 
 PM_ERROR : Confusion entre identification du PM et PM déclaré
-
-LOCALISATION_ERROR : Mauvaise Geolocalisation du site
 
 CONTESTATION : cette transition n’est possible qu’une et une seule fois par l'OC, sinon rejet OI
 
@@ -349,8 +349,9 @@ sequenceDiagram
   OI->>OI: Gel du compteur du délai de reprise OC
   OI->>OI: Démarrage du compteur de validation OI
   OI->>OI: Contrôle de surface
-  OI->>OI: Délai max du compteur de validation OI atteint. Cloture du ticket  (status=CLOSED, statusChangeReason = Validation_Oi_Date_Expired)
-  OI->>OC: Notif (status = « CLOSED », statusChangeReason = Validation_Oi_Date_Expired)
+  OI->>OI: Délai max du compteur de validation OI atteint. Cloture du ticket  (status=CLOSED, statusChangeReason = DELAY_VALIDATION_EXPIRED
+)
+  OI->>OC: Notif (status = « CLOSED », statusChangeReason = DELAY_VALIDATION_EXPIRED
 ```
 
 ## Cas 3 : Malfaçon non-imputable (hors REC)
