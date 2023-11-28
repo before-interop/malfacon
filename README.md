@@ -70,6 +70,7 @@ L'OI a renseigné les champs :
 - faultDetails
 - volumetry
 - severity (ne peut pas être Critical puisque chargeable=Yes)
+- les informations de localisation de la Malfaçon (ref PM et/ou ref PB et/ou ref PTO)
 - ocNumber = 1
 
 
@@ -146,7 +147,7 @@ Sur un ticket dont le champs resolutionOwner='OI', ce changement de status ne pe
 
 Sur un ticket dont le champs resolutionOwner='OC', ce changement de status ne peut être effectué que par l'OC. Le champ statusChangeReason doit être renseigné avec RESOLVED_OC. Le compteur de délai de résolution OC (totalResolutionOcDuration) se gèle et le délai max de validation OI (maxValidationDate) est alors calculé.
 
-Dans tous les cas :
+Sur ces statusChangeReason = Resolved_OI ou Resolved_OI :
 - le champs resolutionDate doit être renseigné
 - ainsi que le champs recoveryVolumeDone
 - une photo illustrant la résolution de la malfaçon est obligatoire
@@ -165,6 +166,9 @@ WRONG_TICKET :  ticket mal initialisé/contestation acceptée
 UNRESOLVED_TICKET :  ticket qui ne sera pas résolu
 Le champ statusChangeDetails doit être renseigné avec la raison de l'annulation.
 
+OTHER :  Autre raison
+Le champ statusChangeDetails doit être renseigné avec la raison de l'annulation.
+
 #### RESOLVED → CLOSED: cloture du ticket.
 
 Ce changement de status est effectué par l'OI :
@@ -174,6 +178,9 @@ Le champ statusChangeReason doit alors être renseigné avec la valeur RESOLUTIO
 
 - ou de façon automatique si le délai de validation OI (totalResolutionOcDuration>délai) est dépassé sur un ticket dont le ResolutionOwner='OC'.
 Le champ statusChangeReason doit alors être renseigné avec la valeur DELAY_VALIDATION_EXPIRED
+
+- ou enfin pour cloturer une signalisation dont la résolution est portée par l'OI (ResolutionOwner='OI')
+Le champ statusChangeReason doit alors être renseigné avec la valeur RESOLUTION_ACCEPTED
 
 #### RESOLVED → IN_PROGRESS: refus OI de la résolution OC du ticket
 
@@ -230,7 +237,7 @@ L'OI a renseigné les champs :
 - severity (doit être Critical si chargeable=Yes car résolution portée par l'OI)
 - les informations de localisation de la Malfaçon (ref PM et/ou ref PB et/ou ref PTO)
 - chargeable : yes or no
-- nombre d'OC renseignés si chargeable = No
+- nombre d'OC concerné
 
 #### Complétude : statut ACKNOWLEDGED
 Une signalisation porte obligatoirement une photo illustrant la malfaçon.
@@ -253,6 +260,8 @@ WRONG_TICKET :  ticket mal initialisé
 UNRESOLVED_TICKET :  ticket qui ne sera pas résolu
 Le champ statusChangeDetails doit être renseigné avec la raison de l'annulation.
 
+OTHER :  autre raison
+Le champ statusChangeDetails doit être renseigné avec la raison de l'annulation.
 
 #### IN_PROGRESS → RESOLVED: résolution du ticket
 
@@ -265,7 +274,7 @@ Une photo jointe illustrant la résolution de la malfaçon est obligatoire
 
 Ce changement de status est effectué par l'OI suite à sa propre résolution sur un ticket dont le ResolutionOwner='OI'.
 
-Le champ statusChangeReason doit alors être renseigné avec la valeur RESOLVED_OI
+Le champ statusChangeReason doit alors être renseigné avec la valeur RESOLUTION_ACCEPTED
 
 # Cas d'utilisation Signalisation OI
 Ces diagrammes se concentrent sur la signalisation et la correction des malfaçons. Toute malfaçon corrigée par l’OI donnera lieu à une facturation vers l’OC ou les OC concernés (si non-imputable), mettant en œuvre les processus de facturation OI et de certification OC existants.
@@ -433,14 +442,13 @@ sequenceDiagram
   OC->>OC: Contrôle métier (ex: consulter PJ, délai entre tickets etc...)
   OC->>OI: Notif (status = « IN PROGRESS », statusChangeReason= Chargeable_Accepted)
   OI->>OC: Notif (status = « IN PROGRESS », statusChangeReason= Resolution_Date_Expired, ResolutionOwner=OI)
-  OI->>OC: Notif (status = « RESOLVED », statusChangeReason= Unresolved_ticket, ResolutionOwner=OI)
-  OI->>OI: Cloture du ticket (status=CLOSED, statusChangeReason=Unresolved_ticket)
-  OI->>OC: Notif (status = CLOSED, statusChangeReason=Unresolved_ticket)
+  OI->>OI: Annuler ticket (status = CANCELLED, statusChangeReason = « Wrong Ticket »)
+  OI->>OC: Notif (état = CANCELLED, statusChangeReason = « Wrong Ticket »)
 ```
 
-## Cas 7 : Demande d’information complémentaire de l’OI à l’OC suite à la résolution OC
-Déclaration d'une malfaçon par l'OI à l’OC imputable et reprise par l’OC dans le délai max. de reprise OC. Lorsqu’il a effectué la reprise, l'OC passe le ticket en résolu avec en PJ n photos. L’OI demande des informations complémentaires à l’OC. Une fois ces informations reçues, l’OI valide la résolution de l’OC et clôt le ticket. L’OI devra donc valider le retour OC à plusieurs reprises, à priori 2 fois.
-Suite au rejet de la résolution, le délai max. de reprise OC redémarre. L’OC a l’opportunité de compléter sa résolution en fournissant davantage d’informations à l’OI ou une nouvelle pièce-jointe.
+## Cas 7 : Demande d’information complémentaire de l’OI à l’OC suite à la première résolution OC
+Déclaration d'une malfaçon par l'OI à l’OC imputable et reprise par l’OC dans le délai max. de reprise OC. Lorsqu’il a effectué la reprise, l'OC passe le ticket en résolu avec en PJ n photos. L’OI refuse la correction en demandant des informations complémentaires à l’OC. L'OC les fournit en repassant la signlisation à Resolved. L'OI valide la résolution de l’OC et clôt le ticket.
+
 
 ```mermaid
 sequenceDiagram
@@ -495,6 +503,7 @@ sequenceDiagram
   OC->>OI: Notif (status = « IN PROGRESS », statusChangeReason= Chargeable_Accepted)
   OC->>OI: Notif (status = PENDING, statusChangeReason=Lack_Of_Information)
   OI->>OI: Gel du compteur du délai de reprise OC
+  OI->>OI: Démarrage du compteur de réponse OI MaxPendingDate
   OI->>OI: Ajout d'une PJ et/ou Note
   OI->>OC: Notif Note ET/OU Attachment
   OI->>OC: Notif (status = « IN PROGRESS », statusChangeReason=« Information_Given»)
@@ -551,7 +560,7 @@ sequenceDiagram
 ```
 
 ## Cas 10 : Contestation de l’OC de sa responsabilité acceptée par l'OI
-Déclaration d'une malfaçon par l'OI à l’OC imputable. L’OC conteste sa responsabilité, en passant tout d'abord la malfaçon à In Progress puis en indiquant son motif de contestation lors d'un passage en Helding pour gel du compteur de reprise OC. L'OI analyse alors la contestation OC et peut décider d'annuler, ou de de refuser, la contestation OC.
+Déclaration d'une malfaçon par l'OI à l’OC imputable. L’OC conteste sa responsabilité, en passant tout d'abord la malfaçon à In Progress puis en indiquant son motif de contestation lors d'un passage en Pending pour gel du compteur de reprise OC. L'OI analyse alors la contestation OC et peut décider d'annuler, ou de de refuser, la contestation OC.
 L'OC ne peut passer le statusChangeReason="Contestation" qu'une et une seule fois vers l'OI.
 
 ```mermaid
