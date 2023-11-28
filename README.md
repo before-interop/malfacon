@@ -44,7 +44,7 @@ Sous-Cas 2.2 : Malfaçon non imputable à un seul OC : c'est alors une notificat
 
 2) De l'OC vers l'OI :
 
-L'OC informe l'OI pour que celui-ci dépose une signalisation vers l'OC responsable. L’OC à l’origine de la remontée initiale ne suit pas le cycle de vie de la malfaçon et ne sera pas informé de la reprise de la malfaçon qu’il a signalée.  La signalisation de la malfaçon par un OC vers un OI est une remontée d’information qui n’implique pas d’engagement de l’OC sur son niveau de précision : cette signalisation constitue une information complémentaire pour l’OI dans le cadre de l’exploitation de son réseau.
+L'OC informe l'OI pour que celui-ci dépose une signalisation vers l'OC responsable. L’OC a l’origine de la remontée initiale ne suit pas le cycle de vie de la malfaçon et ne sera pas informé de la reprise de la malfaçon qu’il a signalée.  La signalisation de la malfaçon par un OC vers un OI est une remontée d’information qui n’implique pas d’engagement de l’OC sur son niveau de précision : cette signalisation constitue une information complémentaire pour l’OI dans le cadre de l’exploitation de son réseau.
 
 ## Swagger
 
@@ -55,7 +55,7 @@ Les différents types de malfaçons sont :
 
 ![Types de signalement](./type.drawio.svg)
 
-# Cycle de vie d'une Malfaçon Imputable OI vers OC
+# Cycle de vie d'une Malfaçon Imputable OI vers OC non critique
 ![Workflow](./statusOiOcImput.drawio.svg)
 
 #### Initialisation : statut CREATING
@@ -70,6 +70,7 @@ L'OI a renseigné les champs :
 - faultDetails
 - volumetry
 - severity (ne peut pas être Critical puisque chargeable=Yes)
+- ocNumber = 1
 
 
 #### Complétude : statut ACKNOWLEDGED
@@ -108,6 +109,7 @@ L'OI doit alors :
 #### IN_PROGRESS → PENDING: demande OC d'information complémentaire à l'OI
 Ce changement de statut ne peut être effectué que par l'OC sur une malfaçon dont le ResolutionOwner='OC'.
 Cette transition a pour effet de geler le compteur totalResolutionOcDuration.
+L'OI a alors un délai maximum pour apporter sa réponse : maxPendingDate
 
 Le champ statusChangeReason doit être renseigné avec  :
 
@@ -124,7 +126,7 @@ OTHER : Autre information attendue
 L'OC doit fournir le détail des informations complémentaires attendues dans le champs statusChangeDetails.
 
 #### PENDING → IN_PROGRESS: réponse OI à une demande d'information complémentaire OC
-Ce changement de status ne peut être effectué que par l'OI.
+Ce changement de status ne peut être effectué que par l'OI et dans un délai inférieur au maxPendingDate.
 Cette transition a pour effet de dégeler le compteur totalResolutionOcDuration.
 
 Le champ statusChangeReason doit être renseigné avec la valeur INFORMATION_GIVEN
@@ -135,7 +137,7 @@ L'OI fournit la liste des informations complémentaires attendues:
 - et/ou un attachment
 
 #### PENDING → RESOLVED: absence de réponse OI dans les délais
-Ce changement de status ne peut être effectué que par l'OI. (automatiquement)
+Ce changement de status ne peut être effectué que par l'OI (automatiquement) lorsque le délai de réponse OI a été dépassé (maxPendingDate).
 En absence de réponse OI, le ticket passe automatiquement en Resolved avec le champ statusChangeReason renseigné à  DELAY_ANSWER_EXPIRED
 
 #### IN_PROGRESS → RESOLVED: résolution du ticket
