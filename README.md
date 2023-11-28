@@ -73,10 +73,12 @@ L'OI a renseigné les champs :
 - les informations de localisation de la Malfaçon (ref PM et/ou ref PB et/ou ref PTO)
 - ocNumber = 1
 
+Le champs statusChangeReason = Creating
 
 #### Complétude : statut ACKNOWLEDGED
 La signalisation porte obligatoirement une photo illustrant la malfaçon.
 Le compteur de délai max de reprise/résolution OC (totalResolutionOcDuration) démarre dès ce statut (ex 30 jours).
+Le champs statusChangeReason = Acknowledged
 
 Possibilités de changement de status:
 
@@ -239,14 +241,17 @@ L'OI a renseigné les champs :
 - chargeable : yes or no
 - nombre d'OC concerné
 
+Le champs statusChangeReason = Creating
+
 #### Complétude : statut ACKNOWLEDGED
 Une signalisation porte obligatoirement une photo illustrant la malfaçon.
+Le champs statusChangeReason = Acknowledged
 
 Possibilités de changement de status:
 
 #### ACKNOWLEDGED → IN_PROGRESS: Le ticket est en cours de résolution
 
-Ce changement de statut est effectué par  l'OI et le champ statusChangeReason doit être renseigné avec statusChangeReason = "Non_Chargeable_In_Progress" si chargeable = No, Criticial_In_Progress sinon
+Ce changement de statut est effectué par  l'OI et le champ statusChangeReason doit être renseigné avec statusChangeReason = "Non_Chargeable_In_Progress" si chargeable = No, Critical_In_Progress sinon
 
 #### ACKNOWLEDGED|IN_PROGRESS → CANCELLED : annulation du ticket par l'OI
 Ce changement de status est effectué par l'OI.
@@ -611,7 +616,7 @@ Le modèle de donnée est disponible dans le fichier Excel RéférentielMalfaço
 # Cycle de vie d'une Malfaçon OC vers OI
 ![Workflow](./statusOcOi.drawio.svg)
 
-### Complétude : statut CREATING
+### Initialisation : statut CREATING
 Une signalisation est créée par l’OC qui souhaite porter l’information à l'OI d'une potentielle malfaçon. A ce stade la signalisation n'est pas complète puisqu'aucune pièce jointe n'a été ajoutée au ticket.
 
 L'OC a renseigné les champs :
@@ -619,13 +624,17 @@ L'OC a renseigné les champs :
 - localisationDetails
 - faultDetails
 - volumetry
+- les informations de localisation de la Malfaçon (ref PM et/ou ref PB et/ou ref PTO)
+
+Le champs statusChangeReason = Creating
 
 ### Complétude : statut ACKNOWLEDGED
 La signalisation porte obligatoirement une photo illustrant la malfaçon.
+Le champs statusChangeReason = Acknowledged
 
 Possibilités de changement de status:
 
-#### ACKNOWLEDGED → CLOSED : suspicion de malfaçon remontée par l'OC
+#### ACKNOWLEDGED → CLOSED
 
 Ce changement de status ne peut être effectué que par l'OI.
 
