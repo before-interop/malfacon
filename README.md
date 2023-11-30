@@ -38,7 +38,7 @@ Cas 2 : Malfaçon "Critique" ou "non imputable" à un seul OC : la reprise est e
 
 Dans ces deux sous-cas ci-dessous, l'OI corrige la malfaçon lui-même et facturera l'OC (ou les OC suivant le sous cas):
 
-Sous-Cas 2.1 : Malfaçon critique : c'est alors une notification à l'OC n’appelant pas action de sa part car la reprise sera effectuée par l'OI compte-tenu de son aspect critique. L'aspect "Critique" de la malfaçon doit alors être conforme aux travaux Interop (cf onglet criticité du fichier excel listant les données de référence).
+Sous-Cas 2.1 : Malfaçon critique : c'est alors une notification à l'OC n’appelant pas action de sa part car la reprise sera effectuée par l'OI compte-tenu de son aspect critique (c’est-à-dire pouvant présenter un danger grave et imminent pour les personnes et entrainer la responsabilité de l'OI à ce titre). L'aspect "Critique" de la malfaçon doit alors être conforme aux travaux Interop (cf onglet criticité du fichier excel listant les données de référence).
 
 Sous-Cas 2.2 : Malfaçon non imputable à un seul OC : c'est alors une notification à l'ensemble des OC concernés n’appelant pas d'action de leur part car la reprise sera effectuée par l'OI
 
@@ -76,7 +76,9 @@ L'OI a renseigné les champs :
 Le champs statusChangeReason = Creating
 
 #### Complétude : statut ACKNOWLEDGED
-La signalisation porte obligatoirement une photo illustrant la malfaçon.
+La signalisation porte obligatoirement une pièce jointe illustrant la malfaçon.
+Pour les malfaçons de type AmontPm, Pm, PmPbo, Pbo, cette pièce jointe est obligatoirement une photo.
+Pour les types CcfCable et CcfPto, la pièce jointe peut être une photo ou un plan.
 Le compteur de délai max de reprise/résolution OC (totalResolutionOcDuration) démarre dès ce statut (ex 30 jours).
 Le champs statusChangeReason = Acknowledged
 
@@ -90,12 +92,11 @@ Les raisons (statusChangeReason) possibles sont:
 
 UNKNOWN_RESOURCE: la ressource n'existe pas chez l'OC
 
-DUPLICATE: le ticket est en conflit avec un autre ticket (non respect du délai des 24h)
-Le champ statusChangeDetails est obligatoire avec la référence du ticket en conflit.
+DUPLICATE: le ticket est en conflit avec un autre ticket (non respect du délai max de dépôt entre les tickets auprès d’un même OC sur un même élément d’infra ). Le champ statusChangeDetails est obligatoire avec la référence du ticket en conflit.
 
 ORDER_PUT_INTO_SERVICE_FOR_MORE_THAN_A_YEAR : la commande d'accès date d'il y a plus d'un an
 
-INVALID: le ticket est jugé invalide et non analysable par l'OC
+INVALID: le ticket est jugé invalide et non analysable par l'OC.
 Le champ statusChangeDetails est obligatoire.
 
 #### ACKNOWLEDGED → IN_PROGRESS: Le ticket est en cours de résolution
@@ -244,7 +245,9 @@ L'OI a renseigné les champs :
 Le champs statusChangeReason = Creating
 
 #### Complétude : statut ACKNOWLEDGED
-Une signalisation porte obligatoirement une photo illustrant la malfaçon.
+Une signalisation porte obligatoirement une pièce jointe illustrant la malfaçon.
+Pour les malfaçons de type AmontPm, Pm, PmPbo, Pbo, cette pièce jointe est obligatoirement une photo.
+Pour les types CcfCable et CcfPto, la pièce jointe peut être une photo ou un plan.
 Le champs statusChangeReason = Acknowledged
 
 Possibilités de changement de status:
