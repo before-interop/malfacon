@@ -70,16 +70,41 @@ info:
         Dans tous les cas, il est important que ces définitions contractuelles
         ne viennent pas recouvrir le périmètre de la Malfaçon.
 
-    ## Dépendances
+    ## Types de signalement
 
-    Cette API utilise une architecture proxyfié pour la gestion des dépendances.
+    ![Types de signalement](./type.drawio.svg)
 
-    ![Proxyfied architecture schema](https://raw.githubusercontent.com/before-interop/common/main/schema/architecture.drawio.svg)
+    ## Workflow
+
+    ### Cycle de vie d'une Malfaçon Imputable OI vers OC non critique
+
+    ![Cycle de vie d'une Malfaçon Imputable OI vers OC non critique](./statusOiOcImput.drawio.svg)
+
+    ### Cycle de vie d'une Malfaçon Non imputable ou Critique de l'OI vers OC
+
+    ![Cycle de vie d'une Malfaçon Non imputable ou Critique de l'OI vers OC](./statusOiOcNonImputCrit.drawio.svg)
+
+    ### Cycle de vie d'une Malfaçon OC vers OI
+
+    ![Cycle de vie d'une Malfaçon OC vers OI](./statusOcOi.drawio.svg)
+
+    ## Pagination
+
+    Les listes de ressources sont paginées.
+
+    * La valeur par défaut d'une page est `limit=50` et `offset=0`.
+    * La valeur maximale de `limit` est `100`.
 
     * [TroubleTicket](https://ggrebert.github.io/before-interop-common/?urls.primaryName=TroubleTicket)
     * [Attachment](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Attachment)
     * [Note](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Note)
     * [Event](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Event)
+
+    ## Dépendances
+
+    Cette API utilise une architecture proxyfié pour la gestion des dépendances.
+
+    ![Proxyfied architecture schema](https://raw.githubusercontent.com/before-interop/common/main/schema/architecture.drawio.svg)
 
 servers:
   - url: "{protocol}://{host}:{port}{basePath}/malfacon"
