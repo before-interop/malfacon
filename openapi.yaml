@@ -697,7 +697,7 @@ components:
         - "@type"
         - severity
         - volumetry
-        - localisationDetails
+        - localizationDetails
         - codeFault
       properties:
         codeOi:
@@ -723,7 +723,7 @@ components:
           description: The volumetry of the malfacon
           type: integer
           example: 1
-        localisationDetails:
+        localizationDetails:
           type: string
         "@type":
           default: Malfacon
@@ -858,7 +858,7 @@ components:
           example: Pm
           enum:
             - Pm
-        localisationDetails:
+        localizationDetails:
           enum:
             - TIROIR ZAPM
             - CONNECTEUR TIROIR ZAPM
@@ -896,7 +896,7 @@ components:
           example: AmontPm
           enum:
             - AmontPM
-        localisationDetails:
+        localizationDetails:
           enum:
             - COLLECTE LIEN PM-PRDM
             - ADDUCTION OC
@@ -920,7 +920,7 @@ components:
           example: PmPbo
           enum:
             - PmPbo
-        localisationDetails:
+        localizationDetails:
           enum:
             - PM-PBO INSTALLATION
         codeFault:
@@ -942,7 +942,7 @@ components:
           example: Pbo
           enum:
             - Pbo
-        localisationDetails:
+        localizationDetails:
           enum:
             - CASSETTE
             - BOITIER
@@ -976,7 +976,7 @@ components:
           example: CcfCable
           enum:
             - CcfCable
-        localisationDetails:
+        localizationDetails:
           enum:
             - CABLE CARACTERISTIQUE
             - CABLE INSTALLATION
@@ -991,9 +991,9 @@ components:
         refOrder:
           description: Référence de la commande
           type: string
-        localisation:
+        localization:
           description: Localisation GPS du câble
-          $ref: "#/components/schemas/localisation"
+          $ref: "#/components/schemas/localization"
         pbo:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
         pto:
@@ -1009,7 +1009,7 @@ components:
           example: CcfPto
           enum:
             - CcfPto
-        localisationDetails:
+        localizationDetails:
           enum:
             - PTO CARACTERISTIQUE
             - PTO INSTALLATION
@@ -1018,9 +1018,9 @@ components:
             - FD10
             - FD40
             - FD43
-        localisation:
+        localization:
           description: Localisation GPS de la PTO
-          $ref: "#/components/schemas/localisation"
+          $ref: "#/components/schemas/localization"
         pto:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
 
@@ -1034,7 +1034,7 @@ components:
           example: Pm
           enum:
             - Pm
-        localisationDetails:
+        localizationDetails:
           enum:
             - TIROIR ZAPM
             - CONNECTEUR TIROIR ZAPM
@@ -1066,7 +1066,7 @@ components:
           example: AmontPm
           enum:
             - AmontPM
-        localisationDetails:
+        localizationDetails:
           enum:
             - COLLECTE LIEN PM-PRDM
             - ADDUCTION OC
@@ -1092,7 +1092,7 @@ components:
           example: PmPbo
           enum:
             - PmPbo
-        localisationDetails:
+        localizationDetails:
           enum:
             - PM-PBO INSTALLATION
         codeFault:
@@ -1112,7 +1112,7 @@ components:
           example: Pbo
           enum:
             - Pbo
-        localisationDetails:
+        localizationDetails:
           enum:
             - CASSETTE
             - BOITIER
@@ -1140,7 +1140,7 @@ components:
           example: CcfCable
           enum:
             - CcfCable
-        localisationDetails:
+        localizationDetails:
           enum:
             - CABLE CARACTERISTIQUE
             - CABLE INSTALLATION
@@ -1162,9 +1162,9 @@ components:
         refOrder:
           description: Référence de la commande
           type: string
-        localisation:
+        localization:
           description: Localisation GPS du câble
-          $ref: "#/components/schemas/localisation"
+          $ref: "#/components/schemas/localization"
         pbo:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
         pto:
@@ -1180,7 +1180,7 @@ components:
           example: CcfPto
           enum:
             - CcfPto
-        localisationDetails:
+        localizationDetails:
           enum:
             - PTO CARACTERISTIQUE
             - PTO INSTALLATION
@@ -1189,13 +1189,13 @@ components:
             - FD10
             - FD40
             - FD43
-        localisation:
+        localization:
           description: Localisation GPS de la PTO
-          $ref: "#/components/schemas/localisation"
+          $ref: "#/components/schemas/localization"
         pto:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
 
-    localisation:
+    localization:
       $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
 
     Attachment:
