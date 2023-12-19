@@ -5,7 +5,6 @@ info:
   version: 2.0.0
   license:
     name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0.html
     identifier: Apache-2.0
   description: |
     Cet outil permet la déclaration et le traitement d'une malfaçon grâce à des flux normalisés.
@@ -74,65 +73,107 @@ info:
 
     ![Types de signalement](./type.drawio.svg)
 
-    ## Liste des défauts de malfaçon
-
-    | Code | valeur                                                                                 |
-    | ---- | -------------------------------------------------------------------------------------- |
-    | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
-    | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE                                  |
-    | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS                                                    |
-    | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION                                  |
-    | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE                                             |
-    | FD06 | BOUCHON_ABSENT                                                                         |
-    | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT                                            |
-    | FD08 | BRASSAGE_OC_NON_CONFORME                                                               |
-    | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS                                           |
-    | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS                                                |
-    | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME                                                   |
-    | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS                                                      |
-    | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE                                        |
-    | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES                               |
-    | FD15 | DEGRADATION                                                                            |
-    | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU                                                      |
-    | FD17 | DEGRADATION_MAJEURE                                                                    |
-    | FD18 | DEGRADATION_PORTE                                                                      |
-    | FD19 | DEGRADATION_SERRURE                                                                    |
-    | FD20 | DEGRADATION_TAMBOURS                                                                   |
-    | FD21 | DEGRADATION_TIROIRS_CASSES                                                             |
-    | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE                                              |
-    | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE                                   |
-    | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION                                 |
-    | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS                                                       |
-    | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS                                       |
-    | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME                                   |
-    | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION       |
-    | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS                                                     |
-    | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS                                |
-    | FD31 | MAUVAISE_FIXATION                                                                      |
-    | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE                                                |
-    | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME                                                   |
-    | FD34 | NETTOYAGE_CHANTIER                                                                     |
-    | FD35 | NON_CONFORME_AUX_STAS                                                                  |
-    | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE                                                  |
-    | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT                                        |
-    | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE                                             |
-    | FD39 | PASSAGE_DE_CABLE_NON_CONFORME                                                          |
-    | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION                                             |
-    | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES                                                 |
-    | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES                                                      |
-    | FD43 | PTO_MAL_OU_NON_ETIQUETEE                                                               |
-    | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE                                              |
-    | FD45 | REBOUCHAGE_NON_EFFECTUE                                                                |
-    | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO                                 |
-    | FD47 | TAILLE_SMOOVE_NON_CONFORME                                                             |
-    | FD48 | TIROIR_OI_DEGRADE                                                                      |
-    | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI                               |
-
     ## Workflow
 
     ### Cycle de vie d'une Malfaçon Imputable OI vers OC non critique
 
     ![Cycle de vie d'une Malfaçon Imputable OI vers OC non critique](./statusOiOcImput.drawio.svg)
+
+    **Possibilités de changement de status:**
+
+    * `CREATING` → `ACKNOWLEDGED`: Ticket en cours de création.
+
+      Le créateur du ticket peut fournir des pièces jointes et des notes à ce moment.
+
+    * `ACKNOWLEDGED` → `IN_PROGRESS`: Le ticket est recevable.
+
+      **Ce changement de status ne peut être effectué que par l'OC.**
+
+      Il n'est plus possible de passer le ticket à `REJECTED` une fois ce changement de status effectué.
+
+      Le temps de traitement est décompté à partir de ce changement de status (`totalInProgressDuration`).
+
+    * `ACKNOWLEDGED` → `REJECTED`: Le ticket n'est pas recevable.
+
+      **Ce changement de status ne peut être effectué que par l'OC.**
+
+      **Ce changement de status n'est pas possible si le ticket a déjà été qualifié.**
+
+      **L'OC doit fournir la durée d'analyse dans le champ `acknowledgedDuration`.**
+
+      Les raisons (`statusChangeReason`) possibles sont:
+
+      * `UNKNOWN_RESOURCE`: Le ticket ne peut pas être traité car le PM/PBO/PTO n'existe pas.
+
+      * `DUPLICATE`: Le ticket est un doublon d'un ticket existant.
+
+        Le ticket est en conflit avec un autre ticket (non respect du délai max de dépôt entre les tickets auprès d'un même OC sur un même élément d'infra ).
+
+        * Le champ `statusChangeDetails` est obligatoire avec la référence du ticket en conflit.
+
+      * `INVALID`: Le ticket est jugé invalide et/ou non analysable par l'OC.
+
+        * Le champ `statusChangeDetails` est obligatoire avec la raison de l'invalidité.
+
+    * `IN_PROGRESS` → `IN_PROGRESS`: l'OI prend en charge le ticket suite au dépacement de délai de traitement par l'OC.
+
+      **Ce changement de status ne peut être effectué que par l'OI.**
+      Celui-ci doit fournir les informations suivantes:
+
+      * le champ `resolutionOwner` doit être renseigné à la valeur `OI`
+      * le champ `statusChangeReason` doit être renseigné à la valeur `RESOLUTION_DATE_EXPIRED`
+
+    * `IN_PROGRESS` → `PENDING`: L'OC demande des informations complémentaires à l'OI.
+
+      **Ce changement de status ne peut être effectué que par l'OC.**
+
+      * Le champ `statusChangeReason` doit être renseigné avec l'une des valeus suivantes:
+        * `PHOTO_UNUSABLE`: Photo non exploitable (ex: flou, mal cadré)
+        * `PHOTO_MISSING`: Photo manquante
+        * `PM_ERROR`: Confusion entre identification du PM et PM déclaré
+        * `CONTESTATION`: Contestation de la malfaçon. Cette transition n'est possible que deux fois par l'OC, sinon rejet OI.
+        * `OTHER`: Autre raison
+
+      * Le champ `statusChangeDetails` doit être renseigné avec la raison de la demande d'information.
+
+    * `IN_PROGRESS` → `RESOLVED`: résolution du ticket
+
+      * Si le ticket a le champ `resolutionOwner` à la valeur `OI`, **ce changement de status ne peut être effectué que par l'OI.**
+        * Le champ `statusChangeReason` doit être renseigné à la valeur `RESOLVED_OI`.
+        * Le champ `resolutionDate` doit être renseigné avec la date de résolution de l'OI.
+        * Une photo prouvant la résolution doit être fournie en pièce jointe.
+
+      * Si le ticket a le champ `resolutionOwner` à la valeur `OC`, **ce changement de status ne peut être effectué que par l'OC.**
+        * Le champ `statusChangeReason` doit être renseigné à la valeur `RESOLVED_OC`.
+        * Le champ `totalResolutionOcDuration` doit être rensigné avec la durée de résolution de l'OC.
+        * Le champ `resolutionDate` doit être renseigné avec la date de résolution de l'OC.
+        * Une photo prouvant la résolution doit être fournie en pièce jointe.
+
+    * `PENDING` → `RESOLVED`: absence de réponse de la part de l'OI dans les délais.
+
+      **Ce changement de status ne peut être effectué que par l'OI (automatiquement)**
+      lorsque le délai de réponse OI a été dépassé (`maxPendingDate`).
+
+      En absence de réponse OI, le ticket passe automatiquement à RESOLVED avec le champ `statusChangeReason` renseigné à `DELAY_ANSWER_EXPIRED`.
+
+    * `RESOLVED` → `CLOSED`: clôture du ticket
+
+      * Par validation explicite de la résolution fournie par l'OC (`resolutionOwner`=`OC`).
+        Le champ `statusChangeReason` doit être renseigné à la valeur `RESOLUTION_ACCEPTED`.
+
+      * Par validation explicite de la résolution fournie par l'OI (`resolutionOwner`=`OI`).
+        Le champ `statusChangeReason` doit être renseigné à la valeur `RESOLUTION_ACCEPTED`.
+
+      * automatiquement si le délai de validation a expiré.
+        Le champ `statusChangeReason` doit être renseigné à la valeur `DELAY_VALIDATION_EXPIRED`.
+
+    * `ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELLED`: Annulation de la malfaçon par l'OI
+
+      **Ce changement de status ne peut être effectué que par l'OI.**
+
+      Le temps de traitement est annulé à partir de ce changement de status.
+
+      Le champ `statusChangeDetails` doit être renseigné avec la raison de l'annulation.
 
     ### Cycle de vie d'une Malfaçon Non imputable ou Critique de l'OI vers OC
 
@@ -693,7 +734,6 @@ components:
       required:
         - codeOi
         - codeOc
-        - referenceSignalisationOi
         - "@type"
         - severity
         - volumetry
@@ -701,39 +741,112 @@ components:
         - codeFault
       properties:
         codeOi:
-          description: Code(s) OI référence Interop
-          type: array
-          items:
-            type: string
+          description: Code ARCEP de l'OI.
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
         codeOc:
-          description: Code(s) OC référence Interop
-          type: array
-          items:
-            type: string
-        referenceSignalisationOi:
-          description: Référence du ticket créé dans le système de l'OI
-          type: string
-        referenceSignalisationOc:
+          description: Code ARCEP de l'OC.
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
+        externalId:
           description: Référence du ticket créé dans le système de l'OC
-          type: string
         codeFault:
-          description: Code du défaut de la malfacon
           type: string
+          description: |
+            Code du défaut de la malfacon.
+
+            Liste des valeurs possibles:
+
+            | Code | valeur                                                                                 |
+            | ---- | -------------------------------------------------------------------------------------- |
+            | FD01 | absence de gaine demi-lune pour protéger câble PBO aérien, poteau ou façade            |
+            | FD02 | absence protection obligatoire gaine fendue, demi-lune, …                              |
+            | FD03 | bilan optique non conforme aux STAS                                                    |
+            | FD04 | boîtier PBO non/mal étiqueté hors échec production                                     |
+            | FD05 | boîtier PBO non/mal refermé, non/mal refixé,…                                          |
+            | FD06 | bouchon absent                                                                         |
+            | FD07 | brassage existant encombrant le cheminement                                            |
+            | FD08 | brassage OC non conforme                                                               |
+            | FD09 | caractéristiques tiroir non conforme aux STAS                                          |
+            | FD10 | caractéristiques non conformes aux STAS                                                |
+            | FD11 | cheminement câble OC/OI non conforme                                                   |
+            | FD12 | cheminement non conforme aux STAS                                                      |
+            | FD13 | cheminement non conforme surplomb domaine privé, …                                     |
+            | FD14 | cordon non conforme aux STAS caractéristiques techniques                               |
+            | FD15 | dégradation                                                                            |
+            | FD16 | dégradation du support PBO poteau                                                      |
+            | FD17 | dégradation majeure                                                                    |
+            | FD18 | dégradation porte                                                                      |
+            | FD19 | dégradation serrure                                                                    |
+            | FD20 | dégradation tambours                                                                   |
+            | FD21 | dégradation tiroirs cassés                                                             |
+            | FD22 | environnement nettoyage déchets, fermeture                                             |
+            | FD23 | épissure non conforme dénudage, protection de soudure                                  |
+            | FD24 | étiquetage du PM non conforme hors échec de production                                 |
+            | FD25 | étiquetage non conforme aux STAS                                                       |
+            | FD26 | implantation ou étiquetage non conforme aux STAS                                       |
+            | FD27 | implantation tiroir OC/OI ou étiquetage non conforme                                   |
+            | FD28 | localisation non conforme aux données OI commande accès hors échec production          |
+            | FD29 | lovage fibre non conforme aux STAS                                                     |
+            | FD30 | lovage câble en chambre ou poteau non conforme aux STAS                                |
+            | FD31 | mauvaise fixation                                                                      |
+            | FD32 | mauvaise fixation ou fermeture dégradée                                                |
+            | FD33 | modularité du câble CCF non conforme                                                   |
+            | FD34 | nettoyage chantier                                                                     |
+            | FD35 | entrée de cable PBO non conforme aux STAS                                              |
+            | FD36 | non respect Route Optique communiquée                                                  |
+            | FD37 | non utilisable pas d'autorisation de cheminement                                       |
+            | FD38 | non utilisable risque de surplomb, sécurisé                                            |
+            | FD39 | passage de câble non conforme                                                          |
+            | FD40 | pose non conforme implantation ou fixation                                             |
+            | FD41 | présence de cordons à zéro non retirés                                                 |
+            | FD42 | présence de cordons non conformes                                                      |
+            | FD43 | PTO mal ou non étiquetée                                                               |
+            | FD44 | raccordement de site non déployé dans IPE                                              |
+            | FD45 | rebouchage non effectué                                                                |
+            | FD46 | reprise sauvage Route Optique par casse soudure au PBO                                 |
+            | FD47 | taille SMOOVE non conforme                                                             |
+            | FD48 | tiroir OI dégradé                                                                      |
+            | FD49 | type de pose/fixation non conforme aux préconisations OI                               |
+
         volumetry:
-          description: The volumetry of the malfacon
+          description: |
+            The volumetry of the malfacon.
+
+            TODO: améliorer la description
           type: integer
           example: 1
         localizationDetails:
           type: string
+          description: |
+            Détails de localisation de la malfacon
+
+            Liste des valeurs possibles:
+
+            | Code | valeur                                                                                 |
+            | ---- | -------------------------------------------------------------------------------------- |
+            | LD01 | AMONT_PM_INSTALLATION                                                                  |
+            | LD02 | ARMOIRE                                                                                |
+            | LD03 | BOITIER                                                                                |
+            | LD04 | BRASSAGE_OC                                                                            |
+            | LD05 | CABLE_CARACTERISTIQUE                                                                  |
+            | LD06 | CABLE_INSTALLATION                                                                     |
+            | LD07 | CASSETTE                                                                               |
+            | LD08 | COLLECTE_LIEN_PM_PRDM                                                                  |
+            | LD09 | CONNECTEUR_TIROIR_ZAPM                                                                 |
+            | LD10 | ENTREE_DE_CABLE_PBO                                                                    |
+            | LD11 | PBO_ENVIRONNEMENT                                                                      |
+            | LD12 | PM_PBO_INSTALLATION                                                                    |
+            | LD13 | PTO_CARACTERISTIQUE                                                                    |
+            | LD14 | PTO_INSTALLATION                                                                       |
+            | LD15 | ROUTE_OPTIQUE                                                                          |
+            | LD16 | TIROIR_OC                                                                              |
+            | LD17 | TIROIR_ZAPM                                                                            |
+            | LD18 | ADDUCTION_OC                                                                           |
+
         "@type":
-          default: Malfacon
-          example: Malfacon
           readOnly: false
         "@baseType":
           default: Malfacon
-          example: Malfacon
-          enum:
-            - Malfacon
+          const: Malfacon
         severity:
           description: |
             The severity of the malfacon
@@ -771,16 +884,20 @@ components:
             - MAJOR
             - MINOR
         status:
+          description: |
+            Status de la malafacon.
+
+            ![Malfacon status diagram](./statusOiOcImput.drawio.svg)
           enum:
             - ACKNOWLEDGED
             - CANCELLED
             - CLOSED
             - CREATING
-            - HELD
             - IN_PROGRESS
             - PENDING
             - REJECTED
             - RESOLVED
+          default: CREATING
         statusChangeReason:
           enum:
             - ACKNOWLEDGED
@@ -792,6 +909,7 @@ components:
             - DEFECT_COMMUNICATED_BY_OC
             - DEFECT_UNCHARGEABLE
             - DELAY_ANSWER_EXPIRED
+            - DELAY_RESOLUTION_OI_EXPIRED
             - DELAY_VALIDATION_EXPIRED
             - DUPLICATE
             - INFORMATION_GIVEN
@@ -812,7 +930,7 @@ components:
             - UNKNOWN_RESSOURCE
             - UNRESOLVED_TICKET
             - WRONG_TICKET
-            - DELAY_RESOLUTION_OI_EXPIRED
+          default: CREATING
 
     MalfaconOcBase:
       allOf:
@@ -829,9 +947,15 @@ components:
         chargeable:
           type: boolean
         ocNumber:
+          description: Nombre d'OCs concernés par la malfaçon
           type: number
         resolutionOwner:
           type: string
+          readOnly: true
+          enum:
+            - OI
+            - OC
+          default: OC
         totalResolutionOcDuration:
           description: The OC resolution duration. Calculated only as long as ResolutionOwner = OC
           type: number
@@ -855,17 +979,13 @@ components:
         - pm
       properties:
         "@type":
-          example: Pm
-          enum:
-            - Pm
+          const: malfacon.pm.oi
         localizationDetails:
           enum:
-            - TIROIR ZAPM
-            - CONNECTEUR TIROIR ZAPM
-            - BRASSAGE OC
-            - TIROIR OC
-            - ARMOIRE
-            - ROUTE OPTIQUE
+            - LD02
+            - LD04
+            - LD09
+            - LD17
         codeFault:
           enum:
             - FD06
@@ -884,7 +1004,7 @@ components:
             - FD41
             - FD42
         pm:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
+          $ref: "#/components/schemas/PM"
 
     MalfaconOiAmontPm:
       allOf:
@@ -893,13 +1013,11 @@ components:
         - pm
       properties:
         "@type":
-          example: AmontPm
-          enum:
-            - AmontPM
+          const: malfacon.oi.amontpm
         localizationDetails:
           enum:
-            - COLLECTE LIEN PM-PRDM
-            - ADDUCTION OC
+            - LD08
+            - LD18
         codeFault:
           enum:
             - FD06
@@ -907,7 +1025,7 @@ components:
             - FD11
             - FD27
         pm:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
+          $ref: "#/components/schemas/PM"
 
     MalfaconOiPmPbo:
       allOf:
@@ -917,20 +1035,18 @@ components:
         - pbo
       properties:
         "@type":
-          example: PmPbo
-          enum:
-            - PmPbo
+          const: malfacon.pmpbo.oi
         localizationDetails:
           enum:
-            - PM-PBO INSTALLATION
+            - LD12
         codeFault:
           enum:
             - FD01
             - FD15
         pm:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
+          $ref: "#/components/schemas/PM"
         pbo:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
+          $ref: "#/components/schemas/PBO"
 
     MalfaconOiPbo:
       allOf:
@@ -939,15 +1055,13 @@ components:
         - pbo
       properties:
         "@type":
-          example: Pbo
-          enum:
-            - Pbo
+          const: malafacon.pbo.oi
         localizationDetails:
           enum:
-            - CASSETTE
-            - BOITIER
-            - PBO ENVIRONNEMENT
-            - ROUTE OPTIQUE
+            - LD03
+            - LD07
+            - LD11
+            - LD15
         codeFault:
           enum:
             - FD04
@@ -963,7 +1077,7 @@ components:
             - FD46
             - FD47
         pbo:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
+          $ref: "#/components/schemas/PBO"
 
     MalfaconOiCcfCable:
       allOf:
@@ -973,14 +1087,12 @@ components:
         - pto
       properties:
         "@type":
-          example: CcfCable
-          enum:
-            - CcfCable
+          const: malafacon.ccfcable.oi
         localizationDetails:
           enum:
-            - CABLE CARACTERISTIQUE
-            - CABLE INSTALLATION
-            - ENTREE DE CABLE PBO
+            - LD05
+            - LD06
+            - LD10
         codeFault:
           enum:
             - FD02
@@ -993,11 +1105,11 @@ components:
           type: string
         localization:
           description: Localisation GPS du câble
-          $ref: "#/components/schemas/localization"
+          $ref: "#/components/schemas/Localization"
         pbo:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
+          $ref: "#/components/schemas/PBO"
         pto:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
+          $ref: "#/components/schemas/PTO"
 
     MalfaconOiCcfPto:
       allOf:
@@ -1006,13 +1118,11 @@ components:
         - pto
       properties:
         "@type":
-          example: CcfPto
-          enum:
-            - CcfPto
+          const: malafacon.ccfpto.oi
         localizationDetails:
           enum:
-            - PTO CARACTERISTIQUE
-            - PTO INSTALLATION
+            - LD13
+            - LD14
         codeFault:
           enum:
             - FD10
@@ -1020,9 +1130,9 @@ components:
             - FD43
         localization:
           description: Localisation GPS de la PTO
-          $ref: "#/components/schemas/localization"
+          $ref: "#/components/schemas/Localization"
         pto:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
+          $ref: "#/components/schemas/PTO"
 
     MalfaconOcPm:
       allOf:
@@ -1031,15 +1141,13 @@ components:
         - pm
       properties:
         "@type":
-          example: Pm
-          enum:
-            - Pm
+          const: malfacon.pm.oc
         localizationDetails:
           enum:
-            - TIROIR ZAPM
-            - CONNECTEUR TIROIR ZAPM
-            - BRASSAGE OC
-            - ARMOIRE
+            - LD02
+            - LD04
+            - LD09
+            - LD17
         codeFault:
           enum:
             - FD06
@@ -1054,7 +1162,7 @@ components:
             - FD31
             - FD42
         pm:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
+          $ref: "#/components/schemas/PM"
 
     MalfaconOcAmontPm:
       allOf:
@@ -1063,14 +1171,12 @@ components:
         - pm
       properties:
         "@type":
-          example: AmontPm
-          enum:
-            - AmontPM
+          const: malafacon.amontpm.oc
         localizationDetails:
           enum:
-            - COLLECTE LIEN PM-PRDM
-            - ADDUCTION OC
-            - AMONT PM INSTALLATION
+            - LD01
+            - LD08
+            - LD18
         codeFault:
           enum:
             - FD06
@@ -1079,7 +1185,7 @@ components:
             - FD39
             - FD48
         pm:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
+          $ref: "#/components/schemas/PM"
 
     MalfaconOcPmPbo:
       allOf:
@@ -1089,34 +1195,30 @@ components:
         - pbo
       properties:
         "@type":
-          example: PmPbo
-          enum:
-            - PmPbo
+          const: malafacon.pmpbo.oc
         localizationDetails:
           enum:
-            - PM-PBO INSTALLATION
+            - LD12
         codeFault:
           enum:
             - FD01
             - FD15
         pm:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
+          $ref: "#/components/schemas/PM"
         pbo:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
+          $ref: "#/components/schemas/PBO"
 
     MalfaconOcPbo:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
       properties:
         "@type":
-          example: Pbo
-          enum:
-            - Pbo
+          const: malfacon.pbo.oc
         localizationDetails:
           enum:
-            - CASSETTE
-            - BOITIER
-            - PBO ENVIRONNEMENT
+            - LD03
+            - LD07
+            - LD11
         codeFault:
           enum:
             - FD04
@@ -1127,7 +1229,7 @@ components:
             - FD30
             - FD34
         pbo:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
+          $ref: "#/components/schemas/PBO"
 
     MalfaconOcCcfCable:
       allOf:
@@ -1137,14 +1239,12 @@ components:
         - pto
       properties:
         "@type":
-          example: CcfCable
-          enum:
-            - CcfCable
+          const: malafacon.ccfcable.oc
         localizationDetails:
           enum:
-            - CABLE CARACTERISTIQUE
-            - CABLE INSTALLATION
-            - ENTREE DE CABLE PBO
+            - LD05
+            - LD06
+            - LD10
         codeFault:
           enum:
             - FD02
@@ -1164,11 +1264,11 @@ components:
           type: string
         localization:
           description: Localisation GPS du câble
-          $ref: "#/components/schemas/localization"
+          $ref: "#/components/schemas/Localization"
         pbo:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
+          $ref: "#/components/schemas/PBO"
         pto:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
+          $ref: "#/components/schemas/PTO"
 
     MalfaconOcCcfPto:
       allOf:
@@ -1177,13 +1277,11 @@ components:
         - pto
       properties:
         "@type":
-          example: CcfPto
-          enum:
-            - CcfPto
+          const: malfacon.ccfpto.oc
         localizationDetails:
           enum:
-            - PTO CARACTERISTIQUE
-            - PTO INSTALLATION
+            - LD13
+            - LD14
         codeFault:
           enum:
             - FD10
@@ -1191,11 +1289,11 @@ components:
             - FD43
         localization:
           description: Localisation GPS de la PTO
-          $ref: "#/components/schemas/localization"
+          $ref: "#/components/schemas/Localization"
         pto:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
+          $ref: "#/components/schemas/PTO"
 
-    localization:
+    Localization:
       $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
 
     Attachment:
@@ -1227,6 +1325,10 @@ components:
           description: Reference to the malfacon
           minItems: 1
           maxItems: 1
+          readOnly: true
+          items:
+            allOf:
+              - $ref: "#/components/schemas/RelatedMalfacon"
 
     AttachmentFormData:
       allOf:
@@ -1243,6 +1345,10 @@ components:
           description: Reference to the malfacon
           minItems: 1
           maxItems: 1
+          readOnly: true
+          items:
+            allOf:
+              - $ref: "#/components/schemas/RelatedMalfacon"
 
     Event:
       allOf:
@@ -1269,6 +1375,24 @@ components:
             - $ref: "#/components/schemas/MalfaconOne"
             - $ref: "#/components/schemas/Note"
             - $ref: "#/components/schemas/Attachment"
+
+    RelatedMalfacon:
+      allOf:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
+      properties:
+        "@referredType":
+          const: "Malfacon"
+        role:
+          const: "troubleTicket"
+
+    PM:
+      $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
+
+    PBO:
+      $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
+
+    PTO:
+      $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
 
   parameters:
     malfaconId:
