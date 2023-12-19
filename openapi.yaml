@@ -1831,7 +1831,7 @@ components:
 
     Note:
       allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Note.openapi.yaml#/components/schemas/Note
       properties:
         relatedEntity:
           description: Reference to the malfacon
