@@ -1950,9 +1950,11 @@ components:
           format: uuid
         type:
           enum:
+            - fr.interop.malfacon.create
             - fr.interop.malfacon.update
             - fr.interop.malfacon.note.create
             - fr.interop.malfacon.attachment.create
+            - fr.interop.malfacon.attachment.update
         datacontenttype:
           const: application/json
         data:
