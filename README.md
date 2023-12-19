@@ -291,14 +291,14 @@ Les cas d'utilisation détaillés par la suite sont les suivants :
 #### Cas 1 : Cas nominal, Malfaçon imputable résolue par l’OC et validée par l’OI
 #### Cas 2 : Malfaçon imputable résolue par l’OC et non validée par l’OI dans les temps
 #### Cas 3 : Malfaçon non-imputable (hors REC)
-#### Cas 4 : Malfaçon critique 
-#### Cas 5 : Malfaçon imputable avec reprise par OI suite au dépassement du délai de reprise OC, résolue par l’OI 
+#### Cas 4 : Malfaçon critique
+#### Cas 5 : Malfaçon imputable avec reprise par OI suite au dépassement du délai de reprise OC, résolue par l’OI
 #### Cas 6 : Malfaçon imputable avec reprise par OI suite au dépassement du délai de reprise OC MAIS non résolue par l’OI
 #### Cas 7 : Demande d’information complémentaire de l’OI à l’OC suite à la résolution OC
 #### Cas 8 : Demande d’information complémentaire de l’OC à l’OI suite à la réception du ticket
 #### Cas 9 : Rejet de la résolution OC par l’OI - Cas reprise complémentaire réalisée par l'OC
 #### Cas 10 : Contestation de l’OC de sa responsabilité sur réception de la signalisation acceptée par l'OI
-#### Cas 11 : Annulation d'un ticket par l'OI 
+#### Cas 11 : Annulation d'un ticket par l'OI
 
 ## Cas 1 (cas nominal) : Malfaçon imputable résolue par l’OC et validée par l’OI
 Déclaration d'une malfaçon par l'OI à l’OC imputable et reprise par l’OC dans le délai max. de reprise OC. Lorsqu’il a effectué la reprise, l'OC passe le ticket en résolu avec en PJ n photos. L’OI valide la résolution de l’OC et clôt le ticket.
@@ -353,7 +353,6 @@ sequenceDiagram
   OI->>OI: Démarrage du compteur de validation OI
   OI->>OI: Contrôle de surface
   OI->>OI: Délai max du compteur de validation OI atteint. Cloture du ticket  (status=CLOSED, statusChangeReason = DELAY_VALIDATION_EXPIRED
-)
   OI->>OC: Notif (status = « CLOSED », statusChangeReason = DELAY_VALIDATION_EXPIRED
 ```
 
@@ -381,7 +380,7 @@ sequenceDiagram
   OI->>OC: Notif (status = CLOSED, statusChangeReason = Resolved_OI)
 ```
 
-## Cas 4 : Malfaçon critique 
+## Cas 4 : Malfaçon critique
 L’OI signale la malfaçon critique à l’OC pour information. La malfaçon est reprise directement par l’OI qui clôt le ticket avec en PJ n photos et facture l’OC.
 La résolution est portée par l’OI.
 L’OC ne valide pas la recevabilité du ticket ni sa résolution.
@@ -406,7 +405,7 @@ sequenceDiagram
   OI->>OC: Notif (status = CLOSED, statusChangeReason = Resolved_OI)
 ```
 
-## Cas 5 : Malfaçon imputable avec reprise par OI suite au dépassement du délai de reprise OC, résolue par l’OI 
+## Cas 5 : Malfaçon imputable avec reprise par OI suite au dépassement du délai de reprise OC, résolue par l’OI
 Déclaration d'une malfaçon par l'OI à l’OC imputable. L’OC ne reprend pas dans le délai max. de reprise OC. L’OI notifie l’OC  qu’il n’est plus nécessaire d’intervenir car la malfaçon va être reprise directement par l’OI. Quand l’OI a effectué la reprise, il clôt le ticket avec en PJ n photos et facture l’OC.
 Compte-tenu de la non-reprise de la malfaçon par l’OC dans le délai qui lui est alloué, l’OI reprend la main.
 L’OC ne valide pas la recevabilité du ticket ni sa résolution.
@@ -592,7 +591,7 @@ sequenceDiagram
   OI->>OC: Notif (état = CANCELLED, statusChangeReason = « Wrong Ticket »)
 ```
 
-## Cas 11 : Annulation d'un ticket par l'OI 
+## Cas 11 : Annulation d'un ticket par l'OI
 Seul l'OI peut annuler un ticket, et celui-ci doit alors être à l'état Acknowledged, Pending ou In Progress.
 
 ```mermaid
@@ -650,7 +649,7 @@ L'OI ne doit aucun retour à l'OC sur le traitement potentiel qui sera réalisé
 
 # Cas d'utilisation Signalisation OC
 
-#### Cas 1 : Création du flux de signalisation OC -> OI 
+#### Cas 1 : Création du flux de signalisation OC -> OI
 Signalisation par l’OC constituant un input supplémentaire à prendre en compte par l'OI pour détecter des malfaçons.
 Les données fournies dans la signalisation OC ne sont pas les mêmes que dans le cas de la détection par l’OI.
 Suite à la signalisation par l’OC, l’OI ne partage pas de feedback avec l’OC concernant la reprise de cette malfaçon.

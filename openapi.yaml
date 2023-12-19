@@ -636,16 +636,24 @@ components:
     MalfaconBase:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
+      required:
+        - codeOi
+        - codeOc
+        - referenceSignalisationOi
+        - "@type"
+        - severity
+        - status
+        - statusChangeReason
+        - lastUpdateDate
+        - creationDate
       properties:
         codeOi:
           description: Code(s) OI référence Interop
-          required: true
           type: array
           items:
             type: string
         codeOc:
           description: Code(s) OC référence Interop
-          required: true
           type: array
           items:
             type: string
@@ -747,6 +755,10 @@ components:
     MalfaconOcBase:
       allOf:
         - $ref: "#/components/schemas/MalfaconBase"
+      required:
+        - volumetry
+        - localisationDetails
+        - codeFault
       properties:
         volumetry:
           description: The volumetry of the malfacon
@@ -813,6 +825,13 @@ components:
     MalfaconOiBase:
       allOf:
         - $ref: "#/components/schemas/MalfaconBase"
+      required:
+        - volumetry
+        - localisationDetails
+        - codeFault
+        - chargeable
+        - ocNumber
+        - resolutionOwner
       properties:
         volumetry:
           description: The volumetry of the malfacon
@@ -900,6 +919,11 @@ components:
     MalfaconOiPm:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
+      required:
+        - "@type"
+        - localisationDetails
+        - codeFault
+        - pm
       properties:
         "@type":
           example: Pm
@@ -989,6 +1013,11 @@ components:
     MalfaconOiAmontPm:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
+      required:
+        - "@type"
+        - localisationDetails
+        - codeFault
+        - pm
       properties:
         "@type":
           example: AmontPm
@@ -1063,6 +1092,12 @@ components:
     MalfaconOiPmPbo:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
+      required:
+        - "@type"
+        - localisationDetails
+        - codeFault
+        - pm
+        - pbo
       properties:
         "@type":
           example: PmPbo
@@ -1136,6 +1171,11 @@ components:
     MalfaconOiPbo:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
+      required:
+        - "@type"
+        - localisationDetails
+        - codeFault
+        - pbo
       properties:
         "@type":
           example: Pbo
@@ -1220,6 +1260,12 @@ components:
     MalfaconOiCcfCable:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
+      required:
+        - "@type"
+        - localisationDetails
+        - codeFault
+        - pbo
+        - pto
       properties:
         "@type":
           example: CcfCable
@@ -1304,6 +1350,11 @@ components:
     MalfaconOiCcfPto:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
+      required:
+        - "@type"
+        - localisationDetails
+        - codeFault
+        - pto
       properties:
         "@type":
           example: CcfPto
@@ -1380,6 +1431,11 @@ components:
     MalfaconOcPm:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
+      required:
+        - "@type"
+        - localisationDetails
+        - codeFault
+        - pm
       properties:
         "@type":
           example: Pm
@@ -1463,6 +1519,11 @@ components:
     MalfaconOcAmontPm:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
+      required:
+        - "@type"
+        - localisationDetails
+        - codeFault
+        - pm
       properties:
         "@type":
           example: AmontPm
@@ -1539,6 +1600,12 @@ components:
     MalfaconOcPmPbo:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
+      required:
+        - "@type"
+        - localisationDetails
+        - codeFault
+        - pm
+        - pbo
       properties:
         "@type":
           example: PmPbo
@@ -1637,6 +1704,12 @@ components:
     MalfaconOcCcfCable:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
+      required:
+        - "@type"
+        - localisationDetails
+        - codeFault
+        - pbo
+        - pto
       properties:
         "@type":
           example: CcfCable
@@ -1728,6 +1801,11 @@ components:
     MalfaconOcCcfPto:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
+      required:
+        - "@type"
+        - localisationDetails
+        - codeFault
+        - pto
       properties:
         "@type":
           example: CcfPto
