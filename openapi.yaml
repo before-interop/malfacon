@@ -8,24 +8,24 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
     identifier: Apache-2.0
   description: |
-    Cet outil permet la déclaration et le traitement d’une malfaçon grâce à des flux normalisés.
+    Cet outil permet la déclaration et le traitement d'une malfaçon grâce à des flux normalisés.
 
     ## Lexique
 
     #### OI
 
-    Opérateur d’immeuble:
-    Toute personne chargée de l’établissement ou de la gestion d’une ou plusieurs lignes dans un immeuble bâti,
-    notamment dans le cadre d’une convention d’installation, d’entretien, de remplacement ou de gestion
+    Opérateur d'immeuble:
+    Toute personne chargée de l'établissement ou de la gestion d'une ou plusieurs lignes dans un immeuble bâti,
+    notamment dans le cadre d'une convention d'installation, d'entretien, de remplacement ou de gestion
     des lignes signée avec le propriétaire ou le syndicat de copropriétaires,
-    en application de l’article L. 33-6 du code des postes et des communications électroniques ;
-    l’opérateur d’immeuble n’est pas nécessairement un opérateur au sens de l’article L. 33-1 du même code.
+    en application de l'article L. 33-6 du code des postes et des communications électroniques ;
+    l'opérateur d'immeuble n'est pas nécessairement un opérateur au sens de l'article L. 33-1 du même code.
 
     #### OC
 
     Opérateur Commercial
     Opérateur choisi par le client final pour la fourniture d'un service de télécommunications
-    ou par un fournisseur d’accès au service pour la fourniture d’un service de télécommunications
+    ou par un fournisseur d'accès au service pour la fourniture d'un service de télécommunications
     à son propre client final.
 
     #### Malfaçon
@@ -39,30 +39,30 @@ info:
     1. La signalisation de malfaçons peut être faite par un OI vers OC comme par un OC vers un OI.
 
     2. Certaines malfaçons sont détectables aussi bien par un OI que par un OC,
-        d’autres sont vues comme détectables uniquement par un OI ou uniquement par un OC.
+        d'autres sont vues comme détectables uniquement par un OI ou uniquement par un OC.
 
     3. La signalisation de malfaçon par un OI vers un OC est une notification
-        appelant action de la part de l’OC destinataire ou informant ce dernier
-        d’une malfaçon n’appelant pas action de sa part.
+        appelant action de la part de l'OC destinataire ou informant ce dernier
+        d'une malfaçon n'appelant pas action de sa part.
 
-        Cette notification suppose que l’OC pourra intervenir pour traiter la malfaçon:
+        Cette notification suppose que l'OC pourra intervenir pour traiter la malfaçon:
 
-        * Si les conditions font que c’est impossible et plus particulièrement sur un PM devenu inexploitable,
-          alors l’OI doit procéder par une Remise En Conformité (REC)
-        * Si l’OC constate lors de son intervention que l’état du PM ne lui permet pas de traiter la malfaçon,
-          alors il aura la possibilité de le signaler en retour à l’OI.
+        * Si les conditions font que c'est impossible et plus particulièrement sur un PM devenu inexploitable,
+          alors l'OI doit procéder par une Remise En Conformité (REC)
+        * Si l'OC constate lors de son intervention que l'état du PM ne lui permet pas de traiter la malfaçon,
+          alors il aura la possibilité de le signaler en retour à l'OI.
 
-    4. La signalisation de malfaçon par un OC vers un OI est une remontée d’information
-        qui n’implique pas d’engagement de l’OC sur son niveau de précision:
-        cette signalisation constitue une information complémentaire pour l’OI
-        dans le cadre de l’exploitation de son réseau.
+    4. La signalisation de malfaçon par un OC vers un OI est une remontée d'information
+        qui n'implique pas d'engagement de l'OC sur son niveau de précision:
+        cette signalisation constitue une information complémentaire pour l'OI
+        dans le cadre de l'exploitation de son réseau.
 
     5. De par sa définition, la Malfaçon se distingue de la notion de « Dysfonctionnement »
-        dont est ici rappelée la définition Interop’Fibre:
+        dont est ici rappelée la définition Interop'Fibre:
 
             «
               Un dysfonctionnement est une problématique qui rend impossible
-              l’adduction du réseau d’un OC au PM mis à disposition par un OI
+              l'adduction du réseau d'un OC au PM mis à disposition par un OI
             »
 
     6. A noter que les notions de « Dommages »,
