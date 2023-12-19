@@ -182,14 +182,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MalfaconOne"
+              $ref: "#/components/schemas/MalfaconOiOne"
       responses:
         "201": &troubleTicket201
           description: The created malfacon
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MalfaconOne"
+                $ref: "#/components/schemas/MalfaconOiOne"
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag
@@ -564,26 +564,72 @@ components:
   schemas:
     MalfaconAny:
       anyOf:
-        - $ref: "#/components/schemas/MalfaconPm"
-        - $ref: "#/components/schemas/MalfaconAmontPm"
-        - $ref: "#/components/schemas/MalfaconPmPbo"
-        - $ref: "#/components/schemas/MalfaconPbo"
-        - $ref: "#/components/schemas/MalfaconCcfCable"
-        - $ref: "#/components/schemas/MalfaconCcfPto"
+        - $ref: "#/components/schemas/MalfaconOiAny"
+        - $ref: "#/components/schemas/MalfaconOcAny"
 
     MalfaconOne:
+      anyOf:
+        - $ref: "#/components/schemas/MalfaconOiOne"
+        - $ref: "#/components/schemas/MalfaconOcOne"
+
+    MalfaconOiAny:
+      anyOf:
+        - $ref: "#/components/schemas/MalfaconOiPm"
+        - $ref: "#/components/schemas/MalfaconOiAmontPm"
+        - $ref: "#/components/schemas/MalfaconOiPmPbo"
+        - $ref: "#/components/schemas/MalfaconOiPbo"
+        - $ref: "#/components/schemas/MalfaconOiCcfCable"
+        - $ref: "#/components/schemas/MalfaconOiCcfPto"
+
+    MalfaconOiOne:
       oneOf:
-        - $ref: "#/components/schemas/MalfaconPm"
-        - $ref: "#/components/schemas/MalfaconAmontPm"
-        - $ref: "#/components/schemas/MalfaconPmPbo"
-        - $ref: "#/components/schemas/MalfaconPbo"
-        - $ref: "#/components/schemas/MalfaconCcfCable"
-        - $ref: "#/components/schemas/MalfaconCcfPto"
+        - $ref: "#/components/schemas/MalfaconOiPm"
+        - $ref: "#/components/schemas/MalfaconOiAmontPm"
+        - $ref: "#/components/schemas/MalfaconOiPmPbo"
+        - $ref: "#/components/schemas/MalfaconOiPbo"
+        - $ref: "#/components/schemas/MalfaconOiCcfCable"
+        - $ref: "#/components/schemas/MalfaconOiCcfPto"
+
+    MalfaconOcAny:
+      anyOf:
+        - $ref: "#/components/schemas/MalfaconOcPm"
+        - $ref: "#/components/schemas/MalfaconOcAmontPm"
+        - $ref: "#/components/schemas/MalfaconOcPmPbo"
+        - $ref: "#/components/schemas/MalfaconOcPbo"
+        - $ref: "#/components/schemas/MalfaconOcCcfCable"
+        - $ref: "#/components/schemas/MalfaconOcCcfPto"
+
+    MalfaconOcOne:
+      oneOf:
+        - $ref: "#/components/schemas/MalfaconOcPm"
+        - $ref: "#/components/schemas/MalfaconOcAmontPm"
+        - $ref: "#/components/schemas/MalfaconOcPmPbo"
+        - $ref: "#/components/schemas/MalfaconOcPbo"
+        - $ref: "#/components/schemas/MalfaconOcCcfCable"
+        - $ref: "#/components/schemas/MalfaconOcCcfPto"
 
     MalfaconBase:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
       properties:
+        codeOi:
+          description: Code(s) OI référence Interop
+          required: true
+          type: array
+          items:
+            type: string
+        codeOc:
+          description: Code(s) OC référence Interop
+          required: true
+          type: array
+          items:
+            type: string
+        referenceSignalisationOi:
+          description: Référence du ticket créé dans le système de l'OI
+          type: string
+        referenceSignalisationOc:
+          description: Référence du ticket créé dans le système de l'OC
+          type: string
         "@type":
           default: Malfacon
           example: Malfacon
@@ -629,32 +675,212 @@ components:
             - CRITICAL
             - MAJOR
             - MINOR
-        volumetry:
-          description: The volumetrie of the malfacon
-          type: integer
-          example: 1
-        quotePart:
-          description: |
-            The quote part of the malfacon
+        status:
+          enum:
+            - ACKNOWLEDGED
+            - CANCELLED
+            - CLOSED
+            - CREATING
+            - HELD
+            - IN_PROGRESS
+            - PENDING
+            - REJECTED
+            - RESOLVED
+        statusChangeReason:
+          enum:
+            - ACKNOWLEDGED
+            - CHARGEABLE_ACCEPTED
+            - CONTESTATION
+            - CREATING
+            - CRITICAL_IN_PROGRESS
+            - DEFECT_CHARGEABLE
+            - DEFECT_COMMUNICATED_BY_OC
+            - DEFECT_UNCHARGEABLE
+            - DELAY_ANSWER_EXPIRED
+            - DELAY_VALIDATION_EXPIRED
+            - DUPLICATE
+            - INFORMATION_GIVEN
+            - INVALID
+            - LACK_OF_INFORMATION
+            - NON_CHARGEABLE_IN_PROGRESS
+            - ORDER_PUT_INTO_SERVICE_FOR_MORE_THAN_A_YEAR
+            - OTHER
+            - PARTIALLY_RESOLVED
+            - PHOTO_NOT_USABLE
+            - PM_ERROR
+            - REC_CANDIDATE
+            - RESOLUTION_ACCEPTED
+            - RESOLUTION_DATE_EXPIRED
+            - RESOLUTION_REFUSED
+            - RESOLVED_OC
+            - RESOLVED_OI
+            - UNKNOWN_RESSOURCE
+            - UNRESOLVED_TICKET
+            - WRONG_TICKET
+            - DELAY_RESOLUTION_OI_EXPIRED
 
-            TODO: should be replaced by `share` or `part` or `quota`
-          type: number
-          minimum: 0
-          maximum: 1
-        localizationDetails:
-          type: string
-        faultDetails:
-          type: string
-
-    MalfaconPm:
+    MalfaconOcBase:
       allOf:
         - $ref: "#/components/schemas/MalfaconBase"
+      properties:
+        volumetry:
+          description: The volumetry of the malfacon
+          type: integer
+          example: 1
+        localisationDetails:
+          type: string
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
+          type: string
+
+    MalfaconOiBase:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconBase"
+      properties:
+        volumetry:
+          description: The volumetry of the malfacon
+          type: integer
+          example: 1
+        localisationDetails:
+          type: string
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
+          type: string
+        chargeable:
+          type: boolean
+        ocNumber:
+          type: number
+        resolutionOwner:
+          type: string
+        totalResolutionOcDuration:
+          description: The OC resolution duration. Calculated only as long as ResolutionOwner = OC
+          type: number
+        expectedResolutionDate:
+          descritpion: The maximum OC resolution date, recalculated only during state changes taking into account the ticket creation date and successive pauses.
+          type: string
+          format: date
+        validationDueDate:
+          description: The deadline for validation status
+          type: string
+          format: date
+        pendingDueDate:
+          description: The deadline for pending status
+          type: string
+          format: date
+
+    MalfaconOiPm:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconOiBase"
       properties:
         "@type":
           example: Pm
           enum:
             - Pm
-        localizationDetails:
+        localisationDetails:
           enum:
             - TIROIR ZAPM
             - CONNECTEUR TIROIR ZAPM
@@ -662,246 +888,895 @@ components:
             - TIROIR OC
             - ARMOIRE
             - ROUTE OPTIQUE
-        faultDetails:
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
           enum:
-            - mauvaise fixation ou fermeture dégradée
-            - bouchon absent
-            - cheminement non conforme aux STAS
-            - brassage existant encombrant le cheminement
-            - cordon non conforme aux STAS caractéristiques techniques
-            - présence de cordons non conformes
-            - présence de cordons à zéro non retirés
-            - Caractéristiques tiroir non conforme aux STAS
-            - implantation ou étiquetage non conforme aux STAS
-            - mauvaise fixation
-            - bouchon absent
-            - dégradation majeure
-            - Dégradations serrure, porte, tiroir cassé, tambours …
-            - Environnement nettoyage déchets, fermeture
-            - Etiquetage du PM non conforme hors échec de production
-            - Non respect Route Optique communiquée
+            - FD06
+            - FD09
+            - FD12
+            - FD14
+            - FD17
+            - FD18
+            - FD19
+            - FD20
+            - FD21
+            - FD22
+            - FD26
+            - FD31
+            - FD36
+            - FD41
+            - FD42
         pm:
-          allOf:
-            - $ref: "#/components/schemas/Equipment"
-          properties:
-            "@type":
-              example: PM
-              enum:
-                - PM
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
 
-    MalfaconAmontPm:
+    MalfaconOiAmontPm:
       allOf:
-        - $ref: "#/components/schemas/MalfaconBase"
+        - $ref: "#/components/schemas/MalfaconOiBase"
       properties:
         "@type":
           example: AmontPm
           enum:
             - AmontPM
-        localizationDetails:
+        localisationDetails:
           enum:
             - COLLECTE LIEN PM-PRDM
             - ADDUCTION OC
-            - AMONT PM INSTALLATION
-        faultDetails:
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
           enum:
-            - brassage OC non conforme
-            - tiroir OI dégradé
-            - bouchon absent
-            - cheminement câble OC/OI non conforme
-            - implantation tiroir OC/OI ou étiquetage non conforme
-            - brassage OC non conforme
-            - passage de câble non conforme
+            - FD06
+            - FD08
+            - FD11
+            - FD27
         pm:
-          allOf:
-            - $ref: "#/components/schemas/Equipment"
-          properties:
-            "@type":
-              example: PM
-              enum:
-                - PM
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
 
-    MalfaconPmPbo:
+    MalfaconOiPmPbo:
       allOf:
-        - $ref: "#/components/schemas/MalfaconBase"
+        - $ref: "#/components/schemas/MalfaconOiBase"
       properties:
         "@type":
           example: PmPbo
           enum:
             - PmPbo
-        localizationDetails:
+        localisationDetails:
           enum:
             - PM-PBO INSTALLATION
-        faultDetails:
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
           enum:
-            - Absence de gaine demi-lune pour protéger câble PBO aérien, poteau ou façade
-            - dégradation
+            - FD01
+            - FD15
         pm:
-          allOf:
-            - $ref: "#/components/schemas/Equipment"
-          properties:
-            "@type":
-              example: PM
-              enum:
-                - PM
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
         pbo:
-          allOf:
-            - $ref: "#/components/schemas/Equipment"
-          properties:
-            "@type":
-              example: PBO
-              enum:
-                - PBO
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
 
-    MalfaconPbo:
+    MalfaconOiPbo:
       allOf:
-        - $ref: "#/components/schemas/MalfaconBase"
+        - $ref: "#/components/schemas/MalfaconOiBase"
       properties:
         "@type":
           example: Pbo
           enum:
             - Pbo
-        localizationDetails:
+        localisationDetails:
           enum:
             - CASSETTE
             - BOITIER
             - PBO ENVIRONNEMENT
             - ROUTE OPTIQUE
-        faultDetails:
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
           enum:
-            - lovage fibre non conforme aux STAS
-            - épissure non conforme dénudage, protection de soudure
-            - boîtier PBO non/mal refermé, non/mal refixé,…
-            - dégradation
-            - boîtier PBO non /mal étiqueté hors échec production
-            - localisation non conforme aux données OI commande accès hors échec production
-            - dégradation du support PBO poteau
-            - nettoyage chantier
-            - lovage câble en chambre ou poteau non conforme aux STAS
-            - Reprise sauvage Route Optique par casse soudure au PBO
-            - Raccordement de site non déployé dans IPE
-            - Non respect Route Optique communiquée
+            - FD04
+            - FD05
+            - FD15
+            - FD16
+            - FD23
+            - FD29
+            - FD30
+            - FD34
+            - FD36
+            - FD44
+            - FD46
+            - FD47
         pbo:
-          allOf:
-            - $ref: "#/components/schemas/Equipment"
-          properties:
-            "@type":
-              example: PBO
-              enum:
-                - PBO
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
 
-    MalfaconCcfCable:
+    MalfaconOiCcfCable:
       allOf:
-        - $ref: "#/components/schemas/MalfaconBase"
+        - $ref: "#/components/schemas/MalfaconOiBase"
       properties:
         "@type":
           example: CcfCable
           enum:
             - CcfCable
-        localizationDetails:
+        localisationDetails:
           enum:
             - CABLE CARACTERISTIQUE
             - CABLE INSTALLATION
             - ENTREE DE CABLE PBO
-        faultDetails:
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
           enum:
-            - étiquetage non conforme aux STAS
-            - caractéristiques non conformes aux STAS
-            - cheminement non conforme surplomb domaine privé,…
-            - rebouchage non effectué
-            - type de pose/fixation non conforme aux préconisations OI
-            - absence protection obligatoire gaine fendue, demi-lune,…
-            - non utilisable risque de surplomb, sécurisé
-            - non utilisable pas d'autorisation de cheminement
-            - bilan optique non conforme aux STAS
-            - dégradation
-            - nettoyage chantier
-            - non conforme aux STAS
+            - FD02
+            - FD03
+            - FD13
+            - FD37
+            - FD38
         refOrder:
           description: Référence de la commande
           type: string
-        localization:
+        localisation:
           description: Localisation GPS du câble
-          $ref: "#/components/schemas/Localization"
+          $ref: "#/components/schemas/localisation"
         pbo:
-          allOf:
-            - $ref: "#/components/schemas/Equipment"
-          properties:
-            "@type":
-              example: PBO
-              enum:
-                - PBO
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
         pto:
-          allOf:
-            - $ref: "#/components/schemas/Equipment"
-          properties:
-            "@type":
-              example: PTO
-              enum:
-                - PTO
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
 
-    MalfaconCcfPto:
+    MalfaconOiCcfPto:
       allOf:
-        - $ref: "#/components/schemas/MalfaconBase"
+        - $ref: "#/components/schemas/MalfaconOiBase"
       properties:
         "@type":
           example: CcfPto
           enum:
             - CcfPto
-        localizationDetails:
+        localisationDetails:
           enum:
             - PTO CARACTERISTIQUE
             - PTO INSTALLATION
-        faultDetails:
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
           enum:
-            - caractéristiques non conformes aux STAS
-            - pose non conforme implantation ou fixation
-            - PTO mal ou non étiquetée
-        localization:
+            - FD10
+            - FD40
+            - FD43
+        localisation:
           description: Localisation GPS de la PTO
-          $ref: "#/components/schemas/Localization"
+          $ref: "#/components/schemas/localisation"
         pto:
-          allOf:
-            - $ref: "#/components/schemas/Equipment"
-          properties:
-            "@type":
-              example: PTO
-              enum:
-                - PTO
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
 
-    Address:
-      type: object
+    MalfaconOcPm:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconOcBase"
       properties:
-        streetNumber:
-          description: The street number
-          type: string
-          example: 1
-        streetName:
-          description: The street name
-          type: string
-          example: Rue de la Paix
-        postalCode:
-          description: The postal code
-          type: string
-          example: 75000
-        city:
-          description: The city
-          type: string
-          example: Paris
-        country:
-          description: The country
-          type: string
-          example: France
-          default: France
-        floor:
-          description: The floor
-          type: string
-          example: 1
-        building:
-          description: The building
-          type: string
-          example: A
+        "@type":
+          example: Pm
+          enum:
+            - Pm
+        localisationDetails:
+          enum:
+            - TIROIR ZAPM
+            - CONNECTEUR TIROIR ZAPM
+            - BRASSAGE OC
+            - ARMOIRE
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
+          enum:
+            - FD06
+            - FD07
+            - FD14
+            - FD18
+            - FD19
+            - FD20
+            - FD21
+            - FD22
+            - FD24
+            - FD31
+            - FD42
+        pm:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
 
-    Localization:
+    MalfaconOcAmontPm:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconOcBase"
+      properties:
+        "@type":
+          example: AmontPm
+          enum:
+            - AmontPM
+        localisationDetails:
+          enum:
+            - COLLECTE LIEN PM-PRDM
+            - ADDUCTION OC
+            - AMONT PM INSTALLATION
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
+          enum:
+            - FD06
+            - FD11
+            - FD27
+            - FD39
+            - FD48
+        pm:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
+
+    MalfaconOcPmPbo:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconOcBase"
+      properties:
+        "@type":
+          example: PmPbo
+          enum:
+            - PmPbo
+        localisationDetails:
+          enum:
+            - PM-PBO INSTALLATION
+        codeFault:
+          enum:
+            - FD01
+            - FD15
+        pm:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM
+        pbo:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
+
+    MalfaconOcPbo:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconOcBase"
+      properties:
+        "@type":
+          example: Pbo
+          enum:
+            - Pbo
+        localisationDetails:
+          enum:
+            - CASSETTE
+            - BOITIER
+            - PBO ENVIRONNEMENT
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
+          enum:
+            - FD04
+            - FD15
+            - FD16
+            - FD28
+            - FD29
+            - FD30
+            - FD34
+        pbo:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
+
+    MalfaconOcCcfCable:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconOcBase"
+      properties:
+        "@type":
+          example: CcfCable
+          enum:
+            - CcfCable
+        localisationDetails:
+          enum:
+            - CABLE CARACTERISTIQUE
+            - CABLE INSTALLATION
+            - ENTREE DE CABLE PBO
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
+          enum:
+            - FD02
+            - FD03
+            - FD10
+            - FD13
+            - FD15
+            - FD25
+            - FD34
+            - FD35
+            - FD37
+            - FD38
+            - FD45
+            - FD49
+        refOrder:
+          description: Référence de la commande
+          type: string
+        localisation:
+          description: Localisation GPS du câble
+          $ref: "#/components/schemas/localisation"
+        pbo:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
+        pto:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
+
+    MalfaconOcCcfPto:
+      allOf:
+        - $ref: "#/components/schemas/MalfaconOcBase"
+      properties:
+        "@type":
+          example: CcfPto
+          enum:
+            - CcfPto
+        localisationDetails:
+          enum:
+            - PTO CARACTERISTIQUE
+            - PTO INSTALLATION
+        codeFault:
+          description: |
+            Correspondances des codeFault :
+            | Code                             | valeur                                |
+            | ------------------------------------ | -------------------------------------- |
+            | FD01 | ABSENCE_DE_GAINE_DEMI-LUNE_POUR_PROTEGER_CABLE_PBO_AERIEN_POTEAU_OU_FACADE_DEGRADATION |
+            | FD02 | ABSENCE_PROTECTION_OBLIGATOIRE_GAINE_FENDUE_DEMI LUNE |
+            | FD03 | BILAN_OPTIQUE_NON_CONFORME_AUX_STAS |
+            | FD04 | BOITIER_PBO_NON_MAL_ETIQUETE_HORS_ECHEC_DE_PRODUCTION |
+            | FD05 | BOITIER_PBO_NON_MAL_REFERME_NON_MAL_REFIXE |
+            | FD06 | BOUCHON_ABSENT |
+            | FD07 | BRASSAGE_EXISTANT_ENCOMBRANT_LE_CHEMINEMENT |
+            | FD08 | BRASSAGE_OC_NON_CONFORME |
+            | FD09 | CARACTERISTIQUE_TIROIR_NON_CONFORME_AUX_STAS |
+            | FD10 | CARACTERISTIQUES_NON_CONFORMES_AUX_STAS |
+            | FD11 | CHEMINEMENT_CABLE_OC_OI_NON_CONFORME |
+            | FD12 | CHEMINEMENT_NON_CONFORME_AUX_STAS |
+            | FD13 | CHEMINEMENT_NON_CONFORME_SURPLOMB_DOMAINE PRIVE |
+            | FD14 | CORDON_NON_CONFORME_AUX_STAS_CARACTERISTIQUES_TECHNIQUES |
+            | FD15 | DEGRADATION |
+            | FD16 | DEGRADATION_DU_SUPPORT_PBO_POTEAU |
+            | FD17 | DEGRADATION_MAJEURE |
+            | FD18 | DEGRADATION_PORTE |
+            | FD19 | DEGRADATION_SERRURE |
+            | FD20 | DEGRADATION_TAMBOURS |
+            | FD21 | DEGRADATION_TIROIRS_CASSES |
+            | FD22 | ENVIRONNEMENT_NETTOYAGE_DECHETS_FERMETURE |
+            | FD23 | EPISSURE_NON_CONFORME_DENUDAGE_PROTECTION_DE_SOUDURE |
+            | FD24 | ETIQUETAGE_DU_PM_NON_CONFORME_HORS_ECHEC_DE_PRODUCTION |
+            | FD25 | ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD26 | IMPLANTATION_OU_ETIQUETAGE_NON_CONFORME_AUX_STAS |
+            | FD27 | IMPLANTATION_TIROIR_OC_OI_OU_ETIQUETAGE_NON_CONFORME |
+            | FD28 | LOCALISATION_NON_CONFORME_AUX_DONNEES_OI_COMMANDE_ACCES_HORS_ECHEC_DE_PRODUCTION |
+            | FD29 | LOVAGE_FIBRE_NON_CONFORME_AUX_STAS |
+            | FD30 | LOVAGE_CABLE_EN_CHAMBRE_OU_POTEAU_NON_CONFORME_AUX_STAS |
+            | FD31 | MAUVAISE_FIXATION |
+            | FD32 | MAUVAISE_FIXATION_OU_FERMETURE_DEGRADEE |
+            | FD33 | MODULARITE_DU_CABLE_CCF_NON_CONFORME |
+            | FD34 | NETTOYAGE_CHANTIER |
+            | FD35 | NON_CONFORME_AUX_STAS |
+            | FD36 | NON_RESPECT_ROUTE_OPTIQUE_COMMUNIQUEE |
+            | FD37 | NON_UTILISABLE_PAS_DAUTORISATION_DE_CHEMINEMENT |
+            | FD38 | NON_UTILISABLE_RISQUE_DE_SURPLOMB_SECURISE |
+            | FD39 | PASSAGE_DE_CABLE_NON_CONFORME |
+            | FD40 | POSE_NON_CONFORME_IMPLANTATION_OU_FIXATION |
+            | FD41 | PRESENCE_DE_CORDONS_A_ZERO_NON_RETIRES |
+            | FD42 | PRESENCE_DE_CORDONS_NON_CONFORMES |
+            | FD43 | PTO_MAL_OU_NON_ETIQUETEE |
+            | FD44 | RACCORDEMENT_DE_SITE_NON_DEPLOYE_DANS_IPE |
+            | FD45 | REBOUCHAGE_NON_EFFECTUE |
+            | FD46 | REPRISE_SAUVAGE_ROUTE_OPTIQUE_PAR_CASSE_SOUDURE_AU_PBO |
+            | FD47 | TAILLE_SMOOVE_NON_CONFORME |
+            | FD48 | TIROIR_OI_DEGRADE |
+            | FD49 | TYPE_DE_POSE_FIXATION_NON_CONFORME_AUX_PRECONISATIONS_OI |
+          enum:
+            - FD10
+            - FD40
+            - FD43
+        localisation:
+          description: Localisation GPS de la PTO
+          $ref: "#/components/schemas/localisation"
+        pto:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
+
+    localisation:
       type: object
       properties:
         latitude:
@@ -912,31 +1787,6 @@ components:
           description: The longitude
           type: number
           example: 2.3522
-
-    Equipment:
-      description: |
-        An equipment is a physical entity that is part of the network.
-        It can be a PM, a PBO, a PTO, a cable, a splice, a connector, etc.
-
-        The equipment is identified by its ARCEP reference.
-      allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Entity.openapi.yaml#/components/schemas/Entity
-      type: object
-      properties:
-        id:
-          readOnly: false
-          description: The ARCEP reference of the equipement
-        "@type":
-          type: string
-          readOnly: false
-        "@baseType":
-          type: string
-          readOnly: true
-          default: Equipement
-          example: Equipement
-        address:
-          description: The address of the equipement
-          $ref: "#/components/schemas/Address"
 
     Attachment:
       allOf:
