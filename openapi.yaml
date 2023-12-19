@@ -1816,7 +1816,28 @@ components:
     Attachment:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
+      description: |
+        An attachment is a file that is attached to an entity.
+
+        Only JPEG images are allowed.
+
+        Extensions:
+
+        * `.jpg`
+        * `.jpeg`
+
+        Mime types:
+
+        * `image/jpeg`
       properties:
+        mimeType:
+          enum:
+            - image/jpeg
+        status:
+          enum:
+            - PENDING
+            - VALIDATED
+            - REJECTED
         relatedEntity:
           description: Reference to the malfacon
           minItems: 1
