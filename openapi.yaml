@@ -9,187 +9,6 @@ info:
   description: |
     Cet outil permet la déclaration et le traitement d'une malfaçon grâce à des flux normalisés.
 
-    ## Lexique
-
-    #### OI
-
-    Opérateur d'immeuble:
-    Toute personne chargée de l'établissement ou de la gestion d'une ou plusieurs lignes dans un immeuble bâti,
-    notamment dans le cadre d'une convention d'installation, d'entretien, de remplacement ou de gestion
-    des lignes signée avec le propriétaire ou le syndicat de copropriétaires,
-    en application de l'article L. 33-6 du code des postes et des communications électroniques ;
-    l'opérateur d'immeuble n'est pas nécessairement un opérateur au sens de l'article L. 33-1 du même code.
-
-    #### OC
-
-    Opérateur Commercial
-    Opérateur choisi par le client final pour la fourniture d'un service de télécommunications
-    ou par un fournisseur d'accès au service pour la fourniture d'un service de télécommunications
-    à son propre client final.
-
-    #### Malfaçon
-
-    Une malfaçon est une non-conformité issue de travaux menés dans le cadre
-    d'une prestation de production ou de SAV sur un accès (PM/PBO/PTO),
-    confiée à un intervenant selon un cahier des charges (STAS et règles de l'art).
-
-    ## Processus
-
-    1. La signalisation de malfaçons peut être faite par un OI vers OC comme par un OC vers un OI.
-
-    2. Certaines malfaçons sont détectables aussi bien par un OI que par un OC,
-        d'autres sont vues comme détectables uniquement par un OI ou uniquement par un OC.
-
-    3. La signalisation de malfaçon par un OI vers un OC est une notification
-        appelant action de la part de l'OC destinataire ou informant ce dernier
-        d'une malfaçon n'appelant pas action de sa part.
-
-        Cette notification suppose que l'OC pourra intervenir pour traiter la malfaçon:
-
-        * Si les conditions font que c'est impossible et plus particulièrement sur un PM devenu inexploitable,
-          alors l'OI doit procéder par une Remise En Conformité (REC)
-        * Si l'OC constate lors de son intervention que l'état du PM ne lui permet pas de traiter la malfaçon,
-          alors il aura la possibilité de le signaler en retour à l'OI.
-
-    4. La signalisation de malfaçon par un OC vers un OI est une remontée d'information
-        qui n'implique pas d'engagement de l'OC sur son niveau de précision:
-        cette signalisation constitue une information complémentaire pour l'OI
-        dans le cadre de l'exploitation de son réseau.
-
-    5. De par sa définition, la Malfaçon se distingue de la notion de « Dysfonctionnement »
-        dont est ici rappelée la définition Interop'Fibre:
-
-            «
-              Un dysfonctionnement est une problématique qui rend impossible
-              l'adduction du réseau d'un OC au PM mis à disposition par un OI
-            »
-
-    6. A noter que les notions de « Dommages »,
-        qui peuvent apparaître dans les contrats des OI, ne sont pas normalisées.
-        Dans tous les cas, il est important que ces définitions contractuelles
-        ne viennent pas recouvrir le périmètre de la Malfaçon.
-
-    ## Types de signalement
-
-    ![Types de signalement](./type.drawio.svg)
-
-    ## Workflow
-
-    ### Cycle de vie d'une Malfaçon Imputable OI vers OC non critique
-
-    ![Cycle de vie d'une Malfaçon Imputable OI vers OC non critique](./statusOiOcImput.drawio.svg)
-
-    **Possibilités de changement de status:**
-
-    * `CREATING` → `ACKNOWLEDGED`: Ticket en cours de création.
-
-      Le créateur du ticket peut fournir des pièces jointes à ce moment.
-
-    * `ACKNOWLEDGED` → `IN_PROGRESS`: Le ticket est recevable.
-
-      **Ce changement de status ne peut être effectué que par l'OC.**
-
-      Il n'est plus possible de passer le ticket à `REJECTED` une fois ce changement de status effectué.
-
-      Le temps de traitement est décompté à partir de ce changement de status (`totalInProgressDuration`).
-
-    * `ACKNOWLEDGED` → `REJECTED`: Le ticket n'est pas recevable.
-
-      **Ce changement de status ne peut être effectué que par l'OC.**
-
-      **Ce changement de status n'est pas possible si le ticket a déjà été qualifié.**
-
-      **L'OC doit fournir la durée d'analyse dans le champ `acknowledgedDuration`.**
-
-      Les raisons (`statusChangeReason`) possibles sont:
-
-      * `UNKNOWN_RESOURCE`: Le ticket ne peut pas être traité car le PM/PBO/PTO n'existe pas.
-
-      * `DUPLICATE`: Le ticket est un doublon d'un ticket existant.
-
-        Le ticket est en conflit avec un autre ticket (non respect du délai max de dépôt entre les tickets auprès d'un même OC sur un même élément d'infra ).
-
-        * Le champ `statusChangeDetails` est obligatoire avec la référence du ticket en conflit.
-
-      * `INVALID`: Le ticket est jugé invalide et/ou non analysable par l'OC.
-
-        * Le champ `statusChangeDetails` est obligatoire avec la raison de l'invalidité.
-
-    * `IN_PROGRESS` → `IN_PROGRESS`: l'OI prend en charge le ticket suite au dépacement de délai de traitement par l'OC.
-
-      **Ce changement de status ne peut être effectué que par l'OI.**
-      Celui-ci doit fournir les informations suivantes:
-
-      * le champ `resolutionOwner` doit être renseigné à la valeur `OI`
-      * le champ `statusChangeReason` doit être renseigné à la valeur `RESOLUTION_DATE_EXPIRED`
-
-    * `IN_PROGRESS` → `PENDING`: L'OC demande des informations complémentaires à l'OI.
-
-      **Ce changement de status ne peut être effectué que par l'OC.**
-
-      * Le champ `statusChangeReason` doit être renseigné avec l'une des valeus suivantes:
-        * `PHOTO_UNUSABLE`: Photo non exploitable (ex: flou, mal cadré)
-        * `PHOTO_MISSING`: Photo manquante
-        * `PM_ERROR`: Confusion entre identification du PM et PM déclaré
-        * `CONTESTATION`: Contestation de la malfaçon. Cette transition n'est possible que deux fois par l'OC, sinon rejet OI.
-        * `OTHER`: Autre raison
-
-      * Le champ `statusChangeDetails` doit être renseigné avec la raison de la demande d'information.
-
-    * `IN_PROGRESS` → `RESOLVED`: résolution du ticket
-
-      * Si le ticket a le champ `resolutionOwner` à la valeur `OI`, **ce changement de status ne peut être effectué que par l'OI.**
-        * Le champ `statusChangeReason` doit être renseigné à la valeur `RESOLVED_OI_ATTRIBUTABLE`, `RESOLVED_OI_NON_ATTRIBUTABLE` OU `RESOLVED_OI_CRITICAL`.
-        * Le champ `resolutionDate` doit être renseigné avec la date de résolution de l'OI.
-        * Une photo prouvant la résolution doit être fournie en pièce jointe.
-
-      * Si le ticket a le champ `resolutionOwner` à la valeur `OC`, **ce changement de status ne peut être effectué que par l'OC.**
-        * Le champ `statusChangeReason` doit être renseigné à la valeur `RESOLVED_OC`.
-        * Le champ `totalResolutionOcDuration` doit être rensigné avec la durée de résolution de l'OC.
-        * Le champ `resolutionDate` doit être renseigné avec la date de résolution de l'OC.
-        * Une photo prouvant la résolution doit être fournie en pièce jointe.
-
-    * `PENDING` → `RESOLVED`: absence de réponse de la part de l'OI dans les délais.
-
-      **Ce changement de status ne peut être effectué que par l'OI (automatiquement)**
-      lorsque le délai de réponse OI a été dépassé (`maxPendingDate`).
-
-      En absence de réponse OI, le ticket passe automatiquement à RESOLVED avec le champ `statusChangeReason` renseigné à `DELAY_ANSWER_EXPIRED`.
-
-    * `RESOLVED` → `CLOSED`: clôture du ticket
-
-      * Par validation explicite de la résolution fournie par l'OC (`resolutionOwner`=`OC`).
-        Le champ `statusChangeReason` doit être renseigné à la valeur `RESOLUTION_ACCEPTED`.
-
-      * Par validation explicite de la résolution fournie par l'OI (`resolutionOwner`=`OI`).
-        Le champ `statusChangeReason` doit être renseigné à la valeur `RESOLUTION_ACCEPTED`.
-
-      * automatiquement si le délai de validation a expiré.
-        Le champ `statusChangeReason` doit être renseigné à la valeur `DELAY_VALIDATION_EXPIRED`.
-
-    * `ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELLED`: Annulation de la malfaçon par l'OI
-
-      **Ce changement de status ne peut être effectué que par l'OI.**
-
-      Le temps de traitement est annulé à partir de ce changement de status.
-
-      Le champ `statusChangeDetails` doit être renseigné avec la raison de l'annulation.
-
-    ### Cycle de vie d'une Malfaçon Non imputable ou Critique de l'OI vers OC
-
-    ![Cycle de vie d'une Malfaçon Non imputable ou Critique de l'OI vers OC](./statusOiOcNonImputCrit.drawio.svg)
-
-    ### Cycle de vie d'une Malfaçon OC vers OI
-
-    ![Cycle de vie d'une Malfaçon OC vers OI](./statusOcOi.drawio.svg)
-
-    ## Pagination
-
-    Les listes de ressources sont paginées.
-
-    * La valeur par défaut d'une page est `limit=50` et `offset=0`.
-    * La valeur maximale de `limit` est `100`.
-
     ## Dépendances
 
     Cette API utilise une architecture proxyfié pour la gestion des dépendances.
@@ -200,6 +19,13 @@ info:
     * [Attachment](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Attachment)
     * [Event](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Event)
 
+
+    ## Pagination
+
+    Les listes de ressources sont paginées.
+
+    * La valeur par défaut d'une page est `limit=50` et `offset=0`.
+    * La valeur maximale de `limit` est `100`.
 servers:
   - url: "{protocol}://{host}:{port}{basePath}/malfacon"
     variables:
@@ -632,7 +458,6 @@ components:
         - $ref: "#/components/schemas/MalfaconOcPmPbo"
         - $ref: "#/components/schemas/MalfaconOcPbo"
         - $ref: "#/components/schemas/MalfaconOcCcf"
-        - $ref: "#/components/schemas/MalfaconOcPto"
 
     MalfaconOcOne:
       oneOf:
@@ -641,7 +466,6 @@ components:
         - $ref: "#/components/schemas/MalfaconOcPmPbo"
         - $ref: "#/components/schemas/MalfaconOcPbo"
         - $ref: "#/components/schemas/MalfaconOcCcf"
-        - $ref: "#/components/schemas/MalfaconOcPto"
 
     MalfaconBase:
       allOf:
@@ -651,7 +475,7 @@ components:
         - codeOc
         - "@type"
         - severity
-        - volumetry
+        - quantity
         - localizationDetails
         - codeFault
       properties:
@@ -830,7 +654,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/MalfaconBase"
       required:
-        - chargeable
+        - attributable
         - ocNumber
         - resolutionOwner
       properties:
@@ -1185,29 +1009,6 @@ components:
           $ref: "#/components/schemas/Localization"
         pbo:
           $ref: "#/components/schemas/PBO"
-        pto:
-          $ref: "#/components/schemas/PTO"
-
-    MalfaconOcPto:
-      allOf:
-        - $ref: "#/components/schemas/MalfaconOcBase"
-      required:
-        - pto
-      properties:
-        "@type":
-          const: malfacon.pto.oc
-        localizationDetails:
-          enum:
-            - LD13
-            - LD14
-        codeFault:
-          enum:
-            - FD10
-            - FD40
-            - FD43
-        localization:
-          description: Localisation GPS de la PTO
-          $ref: "#/components/schemas/Localization"
         pto:
           $ref: "#/components/schemas/PTO"
 
