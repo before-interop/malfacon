@@ -22,10 +22,10 @@ Cette API permet la déclaration et le traitement d’une malfaçon grâce à de
 
 Une malfaçon est une non-conformité par rapport aux STAS (Spécification Technique d’Accès aux Services) ou règles de l’art, issue de travaux menés dans le cadre d'une prestation de production ou de SAV sur un accès (PM/PBO/PTO). Les malfaçons que l’on constate le plus souvent sont : un non-respect du cheminement de la jarretière, une non-conformité de la jarretière (couleur, diamètre, longueur…) mais aussi des déchets laissés sur place (sachet plastique, chute de jarretière…) ou des dégradations (serrure cassée…). La Malfaçon se distingue de la notion de dysfonctionnement dont est ici rappelée la définition Interop’Fibre : un dysfonctionnement est une problématique qui rend impossible l’adduction du réseau d’un OC au PM mis à disposition par un OI.
 
-Structurant : 
+Structurant :
 - Un signalisation est créée par typologie de malfaçon à l'OC imputable, sans regroupement par élément d’infra
 - et elle devra obligatoirement, sauf exception (cf ci-dessous) porter à la détection et à la résolution une photo au format JPEG prouvant la malfaçon ainsi que sa résolution. Il sera possible de joindre plusieurs photos à une signalisation mais une et une seule devra porter la notion de "photo principale" à la détection, et à la "résolution". Si l'OI ou l'OC attache une photo comme "photo principale", de détection ou résolution, alors qu'il en existe déjà une, alors le système enlèvera automatiquement la notion de principale à la photo précédente.
-  
+
 Exception : Dans les cas ci-dessous, l'OI devra fournir la route optique constatée (obligatoire) et la route optique théorique (facultatif) au sein d'un "attachment", à la détection, et à la résolution :
 - PBO	/ ROUTE OPTIQUE /	Reprise sauvage Route Optique par casse soudure au PBO
 - PBO	/ ROUTE OPTIQUE	/ Raccordement de site non déployé dans IPE
@@ -53,7 +53,7 @@ L'OC informe l'OI pour que celui-ci dépose une signalisation vers l'OC responsa
 
 ## Swagger
 
-A construire suite à la validation fonctionnelle
+https://julienb-o.github.io/malfacon/
 
 ## Types de Malfaçons
 Les différents types de malfaçons sont :
@@ -80,7 +80,7 @@ Ce délai peut cependant s’allonger suite à l’application de « gels » :
 - Quand l’OC demande des compléments d’informations à l’OI pour traiter la malfaçon, le compteur de reprise OC est gelé le temps que l’OI réponde à la sollicitation.
 - Lorsque l’OC a effectué la reprise de la malfaçon (passage du ticket à Resolved), le compteur est gelé le temps que l’OI analyse la reprise OC. En cas de rejet de résolution, le compteur redémarrera là où il en était et l’OC pourra réitérer sa reprise dans les jours restants.
 
-Cas particulier pour les "gestions de crise" : suite à une demande OC, l'OI peut accepter d'allonger ponctuellement ce délai de résolution OC sur une période. Dans ce cas la nouvelle valeur sera mise en en remplacement de l'ancienne avec une information expliquant qu'elle a été mise à jour au cours de son cycle de vie pour raison de crise. Le filtrage des signalisations candidates à cette gestion de crise pourra être effectuée à partir du code_insee (information obligatoire d'une signalisation). 
+Cas particulier pour les "gestions de crise" : suite à une demande OC, l'OI peut accepter d'allonger ponctuellement ce délai de résolution OC sur une période. Dans ce cas la nouvelle valeur sera mise en en remplacement de l'ancienne avec une information expliquant qu'elle a été mise à jour au cours de son cycle de vie pour raison de crise. Le filtrage des signalisations candidates à cette gestion de crise pourra être effectuée à partir du code_insee (information obligatoire d'une signalisation).
 
 ### Délai max de validation OI :
 Est calculé lors de la réception par l’OI de la résolution envoyée par l’OC (passage du ticket à Resolved)
@@ -125,8 +125,8 @@ L'OI a renseigné les champs :
 - la/les références équipement de la Malfaçon (ref PM et/ou ref PB et/ou ref PTO)
 - ocNumber = 1
 
-Règle de geston : 
-- une signlisation portant sur la "présence de cordons à zéro non retirés" ne peut avoir une quantité < 5 que si il existe une autre signsalition sur le même élément d'infra déposé dans le "délai max de dépôt entre les tickets auprès d’un même OC sur un même élément d’infra" 
+Règle de geston :
+- une signlisation portant sur la "présence de cordons à zéro non retirés" ne peut avoir une quantité < 5 que si il existe une autre signsalition sur le même élément d'infra déposé dans le "délai max de dépôt entre les tickets auprès d’un même OC sur un même élément d’infra"
 - Sinon l'OC sera en droit de la contester
 
 Le champs statusChangeReason = Creating
@@ -139,7 +139,7 @@ La signalisation est alors complète et contient l'ensemble des informations pou
   - PBO	/ ROUTE OPTIQUE	/ Raccordement de site non déployé dans IPE
   - PBO	/ ROUTE OPTIQUE	/ Non respect Route Optique communiquée
   - PM / ROUTE OPTIQUE	/ Non respect Route Optique communiquée
-  
+
 Le compteur de délai max de reprise démarre dès ce statut (ex 30 jours).
 Le champs statusChangeReason = Acknowledged
 
@@ -165,13 +165,13 @@ L'OI doit alors :
 - Le champ statusChangeReason doit être renseigné avec OC_RESOLUTION_DELAY_EXPIRED
 
 #### IN_PROGRESS → PENDING: demande OC d'information complémentaire à l'OI, ou inversement - Contestation OC
-Ce changement de statut peut être effectué 
+Ce changement de statut peut être effectué
 - par l'OC sur une malfaçon dont le ResolutionOwner='OC'
 - par l'OI sur une malfaçon dont le ResolutionOwner='OI'
 
 Lorsque cela est à l'initiative de l'OC :
 - Cette transition a pour effet de geler le compteur de résolution OC
-- L'OI a alors un délai maximum pour apporter sa réponse 
+- L'OI a alors un délai maximum pour apporter sa réponse
 Le champ statusChangeReason doit être renseigné avec  :
 - INFORMATION_REQUEST: demande d'information
 - ou un motif de contestation.L'OC ne pourra contester que 2 fois maximum une signalisation auprès de l'OI. Les motifs de contestation sont :
@@ -185,7 +185,7 @@ Le champ statusChangeReason doit être renseigné avec  :
 L'OC peut fournir le détail des informations complémentaires attendues dans le champs statusChangeDetails (obligatoire pour CONTESTATION_NOT_ALLOWED).
 
 Lorsque cela est à l'initiative de l'OI :
-- L'OC a alors un délai maximum pour apporter sa réponse 
+- L'OC a alors un délai maximum pour apporter sa réponse
 Le champ statusChangeReason doit être renseigné avec  :
 - INFORMATION_REQUEST: demande d'information
 

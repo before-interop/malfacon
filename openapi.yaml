@@ -665,6 +665,7 @@ components:
           description: Référence du ticket créé dans le système de l'OC
         codeInsee:
           type: string
+          required: true
         codeFault:
           type: string
           description: |
