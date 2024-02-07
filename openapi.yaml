@@ -614,16 +614,16 @@ components:
         - $ref: "#/components/schemas/MalfaconOiPm"
         - $ref: "#/components/schemas/MalfaconOiAmontPm"
         - $ref: "#/components/schemas/MalfaconOiPbo"
-        - $ref: "#/components/schemas/MalfaconOiCcfCable"
-        - $ref: "#/components/schemas/MalfaconOiCcfPto"
+        - $ref: "#/components/schemas/MalfaconOiCcf"
+        - $ref: "#/components/schemas/MalfaconOiPto"
 
     MalfaconOiOne:
       oneOf:
         - $ref: "#/components/schemas/MalfaconOiPm"
         - $ref: "#/components/schemas/MalfaconOiAmontPm"
         - $ref: "#/components/schemas/MalfaconOiPbo"
-        - $ref: "#/components/schemas/MalfaconOiCcfCable"
-        - $ref: "#/components/schemas/MalfaconOiCcfPto"
+        - $ref: "#/components/schemas/MalfaconOiCcf"
+        - $ref: "#/components/schemas/MalfaconOiPto"
 
     MalfaconOcAny:
       anyOf:
@@ -631,8 +631,8 @@ components:
         - $ref: "#/components/schemas/MalfaconOcAmontPm"
         - $ref: "#/components/schemas/MalfaconOcPmPbo"
         - $ref: "#/components/schemas/MalfaconOcPbo"
-        - $ref: "#/components/schemas/MalfaconOcCcfCable"
-        - $ref: "#/components/schemas/MalfaconOcCcfPto"
+        - $ref: "#/components/schemas/MalfaconOcCcf"
+        - $ref: "#/components/schemas/MalfaconOcPto"
 
     MalfaconOcOne:
       oneOf:
@@ -640,8 +640,8 @@ components:
         - $ref: "#/components/schemas/MalfaconOcAmontPm"
         - $ref: "#/components/schemas/MalfaconOcPmPbo"
         - $ref: "#/components/schemas/MalfaconOcPbo"
-        - $ref: "#/components/schemas/MalfaconOcCcfCable"
-        - $ref: "#/components/schemas/MalfaconOcCcfPto"
+        - $ref: "#/components/schemas/MalfaconOcCcf"
+        - $ref: "#/components/schemas/MalfaconOcPto"
 
     MalfaconBase:
       allOf:
@@ -800,7 +800,7 @@ components:
             - MINOR
         status:
           description: |
-            Status de la malafacon.
+            Status de la malfacon.
 
             ![Malfacon status diagram](./statusOiOcImput.drawio.svg)
           enum:
@@ -972,7 +972,7 @@ components:
         - pbo
       properties:
         "@type":
-          const: malafacon.pbo.oi
+          const: malfacon.pbo.oi
         localizationDetails:
           enum:
             - LD03
@@ -996,7 +996,7 @@ components:
         pbo:
           $ref: "#/components/schemas/PBO"
 
-    MalfaconOiCcfCable:
+    MalfaconOiCcf:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
       required:
@@ -1004,7 +1004,7 @@ components:
         - pto
       properties:
         "@type":
-          const: malafacon.ccfcable.oi
+          const: malfacon.ccf.oi
         localizationDetails:
           enum:
             - LD05
@@ -1028,14 +1028,14 @@ components:
         pto:
           $ref: "#/components/schemas/PTO"
 
-    MalfaconOiCcfPto:
+    MalfaconOiPto:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
       required:
         - pto
       properties:
         "@type":
-          const: malafacon.ccfpto.oi
+          const: malfacon.pto.oi
         localizationDetails:
           enum:
             - LD13
@@ -1088,7 +1088,7 @@ components:
         - pm
       properties:
         "@type":
-          const: malafacon.amontpm.oc
+          const: malfacon.amontpm.oc
         localizationDetails:
           enum:
             - LD01
@@ -1112,7 +1112,7 @@ components:
         - pbo
       properties:
         "@type":
-          const: malafacon.pmpbo.oc
+          const: malfacon.pmpbo.oc
         localizationDetails:
           enum:
             - LD12
@@ -1148,7 +1148,7 @@ components:
         pbo:
           $ref: "#/components/schemas/PBO"
 
-    MalfaconOcCcfCable:
+    MalfaconOcCcf:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
       required:
@@ -1156,7 +1156,7 @@ components:
         - pto
       properties:
         "@type":
-          const: malafacon.ccfcable.oc
+          const: malfacon.ccf.oc
         localizationDetails:
           enum:
             - LD05
@@ -1187,14 +1187,14 @@ components:
         pto:
           $ref: "#/components/schemas/PTO"
 
-    MalfaconOcCcfPto:
+    MalfaconOcPto:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
       required:
         - pto
       properties:
         "@type":
-          const: malfacon.ccfpto.oc
+          const: malfacon.pto.oc
         localizationDetails:
           enum:
             - LD13
