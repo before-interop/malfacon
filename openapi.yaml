@@ -83,7 +83,7 @@ info:
 
     * `CREATING` → `ACKNOWLEDGED`: Ticket en cours de création.
 
-      Le créateur du ticket peut fournir des pièces jointes et des notes à ce moment.
+      Le créateur du ticket peut fournir des pièces jointes à ce moment.
 
     * `ACKNOWLEDGED` → `IN_PROGRESS`: Le ticket est recevable.
 
@@ -139,7 +139,7 @@ info:
     * `IN_PROGRESS` → `RESOLVED`: résolution du ticket
 
       * Si le ticket a le champ `resolutionOwner` à la valeur `OI`, **ce changement de status ne peut être effectué que par l'OI.**
-        * Le champ `statusChangeReason` doit être renseigné à la valeur `RESOLVED_OI`.
+        * Le champ `statusChangeReason` doit être renseigné à la valeur `RESOLVED_OI_ATTRIBUTABLE`, `RESOLVED_OI_NON_ATTRIBUTABLE` OU `RESOLVED_OI_CRITICAL`.
         * Le champ `resolutionDate` doit être renseigné avec la date de résolution de l'OI.
         * Une photo prouvant la résolution doit être fournie en pièce jointe.
 
@@ -198,7 +198,6 @@ info:
 
     * [TroubleTicket](https://ggrebert.github.io/before-interop-common/?urls.primaryName=TroubleTicket)
     * [Attachment](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Attachment)
-    * [Note](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Note)
     * [Event](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Event)
 
 servers:
@@ -219,8 +218,6 @@ servers:
 tags:
   - name: TroubleTicket
     description: TroubleTicket management
-  - name: Note
-    description: Note management
   - name: Attachment
     description: Attachment management
   - name: Event
@@ -407,86 +404,6 @@ paths:
         "404": *response404
         "412":
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-412
-        default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
-
-  /{malfaconId}/note:
-    parameters:
-      - $ref: "#/components/parameters/malfaconId"
-
-    get:
-      tags:
-        - Note
-        - OI
-      summary: Get all notes of a trouble ticket
-      description: Get all notes of a trouble ticket
-      operationId: getNotes
-      parameters: *searchAndPaginateParameters
-      responses:
-        "200":
-          description: The list of notes
-          headers:
-            X-Total-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
-            X-Result-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Note"
-        "400": *response400
-        "404": *response404
-        default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
-
-    head:
-      tags:
-        - Note
-        - OI
-      summary: Count the number of notes of a trouble ticket
-      description: Count the number of notes of a trouble ticket matching the given criteria.
-      operationId: countNotes
-      parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters
-      responses:
-        "200":
-          description: The number of notes
-          headers:
-            X-Total-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
-        "400": *response400
-        "404": *response404
-        default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
-
-    post:
-      tags:
-        - Note
-        - OI
-      summary: Create a note
-      description: This method allows to create a note.
-      operationId: createNote
-      requestBody:
-        description: The note to create
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Note"
-      responses:
-        "201":
-          description: The created note
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Note"
-          headers:
-            ETag:
-              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag
-        "400": *response400
-        "404": *response404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
 
@@ -696,7 +613,6 @@ components:
       anyOf:
         - $ref: "#/components/schemas/MalfaconOiPm"
         - $ref: "#/components/schemas/MalfaconOiAmontPm"
-        - $ref: "#/components/schemas/MalfaconOiPmPbo"
         - $ref: "#/components/schemas/MalfaconOiPbo"
         - $ref: "#/components/schemas/MalfaconOiCcfCable"
         - $ref: "#/components/schemas/MalfaconOiCcfPto"
@@ -705,7 +621,6 @@ components:
       oneOf:
         - $ref: "#/components/schemas/MalfaconOiPm"
         - $ref: "#/components/schemas/MalfaconOiAmontPm"
-        - $ref: "#/components/schemas/MalfaconOiPmPbo"
         - $ref: "#/components/schemas/MalfaconOiPbo"
         - $ref: "#/components/schemas/MalfaconOiCcfCable"
         - $ref: "#/components/schemas/MalfaconOiCcfPto"
@@ -748,6 +663,8 @@ components:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
         externalId:
           description: Référence du ticket créé dans le système de l'OC
+        codeInsee:
+          type: string
         codeFault:
           type: string
           description: |
@@ -807,11 +724,9 @@ components:
             | FD48 | tiroir OI dégradé                                                                      |
             | FD49 | type de pose/fixation non conforme aux préconisations OI                               |
 
-        volumetry:
+        quantity:
           description: |
             The volumetry of the malfacon.
-
-            TODO: améliorer la description
           type: integer
           example: 1
         localizationDetails:
@@ -898,43 +813,17 @@ components:
             - REJECTED
             - RESOLVED
           default: CREATING
-        statusChangeReason:
-          enum:
-            - ACKNOWLEDGED
-            - CHARGEABLE_ACCEPTED
-            - CONTESTATION
-            - CREATING
-            - CRITICAL_IN_PROGRESS
-            - DEFECT_CHARGEABLE
-            - DEFECT_COMMUNICATED_BY_OC
-            - DEFECT_UNCHARGEABLE
-            - DELAY_ANSWER_EXPIRED
-            - DELAY_RESOLUTION_OI_EXPIRED
-            - DELAY_VALIDATION_EXPIRED
-            - DUPLICATE
-            - INFORMATION_GIVEN
-            - INVALID
-            - LACK_OF_INFORMATION
-            - NON_CHARGEABLE_IN_PROGRESS
-            - ORDER_PUT_INTO_SERVICE_FOR_MORE_THAN_A_YEAR
-            - OTHER
-            - PARTIALLY_RESOLVED
-            - PHOTO_NOT_USABLE
-            - PM_ERROR
-            - REC_CANDIDATE
-            - RESOLUTION_ACCEPTED
-            - RESOLUTION_DATE_EXPIRED
-            - RESOLUTION_REFUSED
-            - RESOLVED_OC
-            - RESOLVED_OI
-            - UNKNOWN_RESSOURCE
-            - UNRESOLVED_TICKET
-            - WRONG_TICKET
-          default: CREATING
 
     MalfaconOcBase:
       allOf:
         - $ref: "#/components/schemas/MalfaconBase"
+      properties:
+        statusChangeReason:
+          enum:
+            - ACKNOWLEDGED
+            - CLOSED
+            - CREATING
+          default: CREATING
 
     MalfaconOiBase:
       allOf:
@@ -944,7 +833,7 @@ components:
         - ocNumber
         - resolutionOwner
       properties:
-        chargeable:
+        attributable:
           type: boolean
         ocNumber:
           description: Nombre d'OCs concernés par la malfaçon
@@ -956,11 +845,60 @@ components:
             - OI
             - OC
           default: OC
+        statusChangeReason:
+          enum:
+            - ACKNOWLEDGED
+            - ATTRIBUTABLE_ACCEPTED
+            - CANCELED
+            - CONTESTATION_ACCEPTED
+            - CONTESTATION_DUPLICATE
+            - CONTESTATION_EQUIPMENT_ERROR
+            - CONTESTATION_NOT_ALLOWED
+            - CONTESTATION_OC_ERROR
+            - CONTESTATION_OI_RESPONSABILITY
+            - CONTESTATION_ORDER_PUT_INTO_SERVICE_FOR_MORE_THAN_A_YEAR
+            - CONTESTATION_PHOTO_NOT_USABLE
+            - CONTESTATION_REFUSED
+            - CREATING
+            - CRITICAL
+            - INFORMATION_GIVEN
+            - INFORMATION_REQUEST
+            - INVALID FORMAT
+            - NON_ATTRIBUTABLE
+            - OC_RESOLUTION_DELAY_EXPIRED
+            - OI_DELAY_EXPIRED
+            - OI_RESOLUTION_IMPOSSIBLE
+            - OI_RESPONSE_DELAY_EXPIRED
+            - OI_VALIDATION_DELAY_EXPIRED
+            - RESOLUTION_REFUSED_EQUIPMENT_ERROR
+            - RESOLUTION_REFUSED_NOT_REPAIRED
+            - RESOLUTION_REFUSED_PARTIALLY_RESOLVED
+            - RESOLUTION_REFUSED_PHOTO_NOT_USABLE
+            - RESOLVED_OC
+            - RESOLVED_OC_VALIDATED
+            - RESOLVED_OI_ATTRIBUTABLE
+            - RESOLVED_OI_CRITICAL
+            - RESOLVED_OI_NON_ATTRIBUTABLE
+            - RESOLVED_OI_VALIDATED
+          default: CREATING
+        durationRulesType:
+          enum:
+            - WORKING_DAYS
+            - CALENDAR_DAYS
+        maxResolutionOcDuration:
+          properties:
+            value:
+              type: integer
+              description: Duration
+              readOnly: true
+            reason:
+              type: string
+              readOnly: true
         totalResolutionOcDuration:
           description: The OC resolution duration. Calculated only as long as ResolutionOwner = OC
           type: number
         expectedResolutionDate:
-          descritpion: The maximum OC resolution date, recalculated only during state changes taking into account the ticket creation date and successive pauses.
+          description: The maximum OC resolution date, recalculated only during state changes taking into account the ticket creation date and successive pauses.
           type: string
           format: date
         validationDueDate:
@@ -1026,27 +964,6 @@ components:
             - FD27
         pm:
           $ref: "#/components/schemas/PM"
-
-    MalfaconOiPmPbo:
-      allOf:
-        - $ref: "#/components/schemas/MalfaconOiBase"
-      required:
-        - pm
-        - pbo
-      properties:
-        "@type":
-          const: malfacon.pmpbo.oi
-        localizationDetails:
-          enum:
-            - LD12
-        codeFault:
-          enum:
-            - FD01
-            - FD15
-        pm:
-          $ref: "#/components/schemas/PM"
-        pbo:
-          $ref: "#/components/schemas/PBO"
 
     MalfaconOiPbo:
       allOf:
@@ -1306,16 +1223,51 @@ components:
 
         Extensions:
 
-        * `.jpg`
+        * `.csv`
+        * `.docx`
         * `.jpeg`
+        * `.jpg`
+        * `.ods`
+        * `.odt`
+        * `.pdf`
+        * `.png`
+        * `.svg`
+        * `.xlsx`
 
         Mime types:
 
+        * `application/pdf`
+        * `application/vnd.oasis.opendocument.spreadsheet`
+        * `application/vnd.oasis.opendocument.text`
+        * `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
+        * `application/vnd.openxmlformats-officedocument.wordprocessingml.document`
         * `image/jpeg`
+        * `image/jpg`
+        * `image/png`
+        * `image/svg+xml`
+        * `test/csv`
       properties:
+        proofType:
+          enum:
+            - ISSUE
+            - RESOLUTION
+          default: ISSUE
+        primary:
+          type: boolean
+          description: Specify if this is the main attachment. There can only be one primary attachment for each type.
+          default: true
         mimeType:
           enum:
+            - application/pdf
+            - application/vnd.oasis.opendocument.spreadsheet
+            - application/vnd.oasis.opendocument.text
+            - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+            - application/vnd.openxmlformats-officedocument.wordprocessingml.document
             - image/jpeg
+            - image/jpg
+            - image/png
+            - image/svg+xml
+            - test/csv
         status:
           enum:
             - PENDING
@@ -1337,19 +1289,6 @@ components:
         attachment:
           $ref: "#/components/schemas/Attachment"
 
-    Note:
-      allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Note.openapi.yaml#/components/schemas/Note
-      properties:
-        relatedEntity:
-          description: Reference to the malfacon
-          minItems: 1
-          maxItems: 1
-          readOnly: true
-          items:
-            allOf:
-              - $ref: "#/components/schemas/RelatedMalfacon"
-
     Event:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/CloudEvent.openapi.yaml#/components/schemas/CloudEvent
@@ -1365,7 +1304,6 @@ components:
           enum:
             - fr.interop.malfacon.create
             - fr.interop.malfacon.update
-            - fr.interop.malfacon.note.create
             - fr.interop.malfacon.attachment.create
             - fr.interop.malfacon.attachment.update
         datacontenttype:
@@ -1373,7 +1311,6 @@ components:
         data:
           oneOf:
             - $ref: "#/components/schemas/MalfaconOne"
-            - $ref: "#/components/schemas/Note"
             - $ref: "#/components/schemas/Attachment"
 
     RelatedMalfacon:
