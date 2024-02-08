@@ -22,16 +22,6 @@ Cette API permet la déclaration et le traitement d’une malfaçon grâce à de
 
 Une malfaçon est une non-conformité par rapport aux STAS (Spécification Technique d’Accès aux Services) ou règles de l’art, issue de travaux menés dans le cadre d'une prestation de production ou de SAV sur un accès (PM/PBO/PTO). Les malfaçons que l’on constate le plus souvent sont : un non-respect du cheminement de la jarretière, une non-conformité de la jarretière (couleur, diamètre, longueur…) mais aussi des déchets laissés sur place (sachet plastique, chute de jarretière…) ou des dégradations (serrure cassée…). La Malfaçon se distingue de la notion de dysfonctionnement dont est ici rappelée la définition Interop’Fibre : un dysfonctionnement est une problématique qui rend impossible l’adduction du réseau d’un OC au PM mis à disposition par un OI.
 
-Structurant :
-- Un signalisation est créée par typologie de malfaçon à l'OC imputable, sans regroupement par élément d’infra
-- et elle devra obligatoirement, sauf exception (cf ci-dessous) porter à la détection et à la résolution une photo au format JPEG prouvant la malfaçon ainsi que sa résolution. Il sera possible de joindre plusieurs photos à une signalisation mais une et une seule devra porter la notion de "photo principale" à la détection, et à la "résolution". Si l'OI ou l'OC attache une photo comme "photo principale", de détection ou résolution, alors qu'il en existe déjà une, alors le système enlèvera automatiquement la notion de principale à la photo précédente.
-
-Exception : Dans les cas ci-dessous, l'OI devra fournir la route optique constatée (obligatoire) et la route optique théorique (facultatif) au sein d'un "attachment", à la détection, et à la résolution :
-- PBO	/ ROUTE OPTIQUE /	Reprise sauvage Route Optique par casse soudure au PBO
-- PBO	/ ROUTE OPTIQUE	/ Raccordement de site non déployé dans IPE
-- PBO	/ ROUTE OPTIQUE	/ Non respect Route Optique communiquée
-- PM	 / ROUTE OPTIQUE	/ Non respect Route Optique communiquée
-
 Les signalisations peuvent être :
 1) De l'OI vers l'OC :
 
@@ -43,13 +33,23 @@ Cas 2 : "Malfaçon Critique"  ou "Malfaçon non imputable" à un seul OC : la re
 
 Dans ces deux sous-cas ci-dessous, l'OI corrige la malfaçon lui-même et facturera l'OC (ou les OC suivant le sous cas):
 
-Sous-Cas 2.1 : Malfaçon critique : il peut s'agir d'une signalisation imputable ou non imputable à un seul OC. C'est alors une notification à l'OC (ou aux OC) n’appelant pas action de sa/leur part car la reprise sera effectuée par l'OI compte-tenu de son aspect critique (c’est-à-dire pouvant présenter un danger grave et imminent pour les personnes et entrainer la responsabilité de l'OI à ce titre). L'aspect "Critique" de la malfaçon doit alors être conforme aux travaux Interop (cf onglet criticité du fichier excel listant les données de référence).
+Sous-Cas 2.1 : Malfaçon critique : il peut s'agir d'une signalisation imputable ou non imputable à un seul OC. C'est alors une notification à l'OC (ou aux OC) n’appelant pas action de sa/leur part car la reprise sera effectuée par l'OI compte-tenu de son aspect critique (c’est-à-dire pouvant présenter un danger grave et imminent pour les personnes et entrainer la responsabilité de l'OI à ce titre). L'aspect "Critique" de la malfaçon doit alors être conforme aux travaux Interop.
 
 Sous-Cas 2.2 : Malfaçon non imputable à un seul OC et non critique : c'est alors une notification à l'ensemble des OC concernés n’appelant pas d'action de leur part car la reprise sera effectuée par l'OI
 
 2) De l'OC vers l'OI :
 
 L'OC informe l'OI pour que celui-ci dépose une signalisation vers l'OC responsable. L’OC a l’origine de la remontée initiale ne suit pas le cycle de vie de la malfaçon et ne sera pas informé de la reprise de la malfaçon qu’il a signalée.  La signalisation de la malfaçon par un OC vers un OI est une remontée d’information qui n’implique pas d’engagement de l’OC sur son niveau de précision : cette signalisation constitue une information complémentaire pour l’OI dans le cadre de l’exploitation de son réseau.
+Structurant :
+- Un signalisation est créée par typologie de malfaçon à l'OC imputable, sans regroupement par élément d’infra
+- et elle doit obligatoirement, sauf exception (cf ci-dessous), porter à la détection et à la résolution une photo au format JPEG prouvant la malfaçon ainsi que sa résolution. Il sera possible de joindre plusieurs photos à une signalisation mais une et une seule devra porter la notion de "photo principale" à la détection, et à la "résolution". Si l'OI ou l'OC attache une photo comme "photo principale", de détection ou résolution, alors qu'il en existe déjà une, le système enlèvera automatiquement la notion de principale à la photo précédente qui portait cette mention.
+
+Exception : Dans les cas ci-dessous, la photo n'est pas obligatoire mais l'OI doit fournir la route optique constatée (obligatoire) et la route optique théorique (facultatif) au sein d'un "attachment", à la détection, et il doit en être de même à la résolution :
+- PBO	/ ROUTE OPTIQUE /	Reprise sauvage Route Optique par casse soudure au PBO
+- PBO	/ ROUTE OPTIQUE	/ Raccordement de site non déployé dans IPE
+- PBO	/ ROUTE OPTIQUE	/ Non respect Route Optique communiquée
+- PM	 / ROUTE OPTIQUE	/ Non respect Route Optique communiquée
+
 
 ## Swagger
 
@@ -67,7 +67,7 @@ Les différents types de malfaçons sont :
 Une pièce jointe ne peut être ajoutée à une malfaçon que dans les états : CREATING, IN_PROGRESS, PENDING et RESOLVED
 Ces pièces jointes pourront être de type : csv, jpeg, jpg, png, svg, pdf, ods, odt, xlsx, docx
 
-Il est également possible d'ajouter des commentaires lors de chaque transition (changement de statut) au sein du champs statusChangeDetails.
+Il est également possible d'ajouter un commentaire lors de chaque transition (changement de statut) au sein du champs statusChangeDetails.
 
 ## Liste des différents compteurs utilisés dans le process malfaçons lors d'une signalisation OI vers OC
 Le protocole Interop n’harmonise pas les délais car ils relèvent du domaine contractuel propre à chaque opérateur. Néanmoins, les opérateurs doivent mettre en place des compteurs pour les cas décrits ci-dessous. Les valeurs sont propres à chaque OC/OI et seront formalisées dans les contrats.
@@ -89,8 +89,8 @@ Ce délai de validation OI gèle le délai de reprise OC (totalResolutionOcDurat
 Une fois ce délai dépassé, la résolution est considérée comme automatiquement validée par l’OI et le ticket doit être clôturé. Une fois le ticket clôturé, l’OI ne pourra pas facturer l’OC s’il n’est pas satisfait de sa reprise. Il devra alors ouvrir un nouveau ticket, patienter le délai de reprise OC et, si de nouveau la reprise OC ne lui convient pas, exprimer le refus de validation dans le délai imparti pour ensuite reprendre la malfaçon et facturer l’OC.
 
 ### Délai max de reprise OI:
-Compteur totalResolutionOiDuration qui démarre au passage du ticket en résolution OI donc à in_Progress avec resolutionOwner=OI.
 Ce délai correspond au temps maximum alloué à l’OI pour résoudre la malfaçon.
+Il démarre lors du passage à IN_PROGRESS avec resolutionOwner=OI.
 
 ### Délai max de réponse OI :
 Est calculé lors d'une question posée par l'OC à l'OI (passage du ticket à Pending lorsque le porteur de résolution=OC)
@@ -124,6 +124,7 @@ L'OI a renseigné les champs :
 - severity (ne peut pas être Critical puisque attributable=Yes)
 - la/les références équipement de la Malfaçon (ref PM et/ou ref PB et/ou ref PTO)
 - ocNumber = 1
+- insee_code
 
 Règle de geston :
 - une signlisation portant sur la "présence de cordons à zéro non retirés" ne peut avoir une quantité < 5 que si il existe une autre signsalition sur le même élément d'infra déposé dans le "délai max de dépôt entre les tickets auprès d’un même OC sur un même élément d’infra"
@@ -140,7 +141,7 @@ La signalisation est alors complète et contient l'ensemble des informations pou
   - PBO	/ ROUTE OPTIQUE	/ Non respect Route Optique communiquée
   - PM / ROUTE OPTIQUE	/ Non respect Route Optique communiquée
 
-Le compteur de délai max de reprise démarre dès ce statut (ex 30 jours).
+Le compteur de délai max de reprise démarre dès ce statut.
 Le champs statusChangeReason = Acknowledged
 
 Possibilités de changement de status:
@@ -155,7 +156,7 @@ Le statusChangeReason est INVALID_FORMAT.
 
 Ce changement est :
 - soit effectué par  l'OC. Le champ statusChangeReason doit être renseigné avec Attributable_Accepted
-- soit par l'OI lorsque le délai de résolution OC est atteinte (. Dans ce cas, le resolutionOwner est mis à OI et le champs statusChangeReason à OC_RESOLUTION_DELAY_EXPIRED.
+- soit par l'OI lorsque le délai de résolution OC est atteinte. Dans ce cas, le resolutionOwner est mis à OI et le champs statusChangeReason à OC_RESOLUTION_DELAY_EXPIRED.
 
 #### IN_PROGRESS → IN_PROGRESS: l'OI prend en charge la résolution du ticket suite dépassement délai OC
 Ce changement de status ne peut être effectué que par l'OI et que si le délai de résolution par l'OC est dépassé.
@@ -215,7 +216,7 @@ Sur un ticket dont le champs resolutionOwner='OC', ce changement de status ne pe
 En complément :
 - le champs resolutionDate doit être renseigné
 - ainsi que le champs recoveryQuantity
-- et une photo obligatoire au format JPEG illustrant la résolution de la malfaçon, sauf pour les 4 cas route optique (cf. status Acknowledged). Il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de résolution de la signalisation
+- et une photo obligatoire au format JPEG illustrant la résolution de la malfaçon, sauf pour les 4 cas route optique où un attachment est attendu (cf. status Acknowledged). Pour les photos, il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de résolution de la signalisation
 
 #### ACKNOWLEDGED → CANCELLED : annulation du ticket par l'OI
 Ce changement de status ne peut être effectué que par l'OI.
@@ -224,8 +225,8 @@ Le statusChangeReason est CANCELED.
 #### IN_PROGRESS → CANCELLED : annulation du ticket par l'OI
 Ce changement de status ne peut être effectué que par l'OI.
 Le statusChangeReason peut être :
-OI_DELAY_EXPIRED : lorsque l'OI n'a pas répondu dans les temps aux questions / contestations OC
-CANCELED: autre cas
+- OI_DELAY_EXPIRED : lorsque l'OI n'a pas répondu dans les temps aux questions / contestations OC
+- CANCELED: autre cas donnant lieu à l'annulation par l'OI
 
 #### RESOLVED → CLOSED: cloture du ticket.
 Ce changement de status est effectué par l'OI. Le statusChangeReason peut être :
@@ -247,10 +248,6 @@ Le champ statusChangeReason doit être renseigné avec :.
 #### PENDING → CLOSED: absence de réponse OC à une demande OI
 Ce changement de status ne peut être effectué que par l'OI sur un ticket dont le ResolutionOwner='OI'.
 L'OI a questionné l'OC pour pouvoir réparer la signalisation. En absence de réponse OC dans les temps, cette signalisation est cloturée avec le statusChangeReason à OI_RESOLUTION_IMPOSSIBLE.
-
-#### PENDING → CLOSED: absence de réponse OC à une demande OI
-Ce changement de status ne peut être effectué que par l'OI sur un ticket dont le ResolutionOwner='OI'.
-Cette signalisation ne peut pas être reprise par l'OI et donc le statusChangeReason=OI_RESOLUTION_IMPOSSIBLE.
 
 # Cycle de vie d'une Malfaçon Non imputable ou Critique de l'OI vers OC
 ![Workflow](./statusOiOcNonImputCrit.drawio.svg)
@@ -275,6 +272,7 @@ L'OI a renseigné les champs :
 - la/les références équipement de la Malfaçon (ref PM et/ou ref PB et/ou ref PTO)
 - attributable : yes or no
 - nombre d'OC concerné
+- insee_code
 
 Le champs statusChangeReason = Creating
 
