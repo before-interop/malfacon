@@ -171,7 +171,8 @@ Ce changement de statut peut être effectué
 
 Lorsque cela est à l'initiative de l'OC : Cette transition a pour effet de geler le compteur de résolution OC. L'OI a alors un délai maximum pour apporter sa réponse. Le champ statusChangeReason doit être renseigné avec  :
 - INFORMATION_REQUEST: demande d'information
-ou un motif de contestation. L'OC ne pourra contester que 2 fois maximum une signalisation auprès de l'OI. Les motifs de contestation sont :
+  
+ou avec un motif de contestation. L'OC ne pourra contester que 2 fois maximum une signalisation auprès de l'OI. Les motifs de contestation sont :
 - CONTESTATION_PHOTO_NOT_USABLE: Photo non exploitable/flou/mal cadré
 - CONTESTATION_EQUIPMENT_ERROR: confusion sur l'équipement déclaré
 - CONTESTATION_DUPLICATE: le ticket est en conflit avec un autre ticket (non respect du délai max de dépôt entre les tickets auprès d’un même OC sur un même élément d’infra ). Le champ statusChangeDetails est obligatoire avec la référence du ticket en conflit.
