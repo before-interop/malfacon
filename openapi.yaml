@@ -15,9 +15,9 @@ info:
 
     ![Proxyfied architecture schema](https://raw.githubusercontent.com/before-interop/common/main/schema/architecture.drawio.svg)
 
-    * [TroubleTicket](https://ggrebert.github.io/before-interop-common/?urls.primaryName=TroubleTicket)
-    * [Attachment](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Attachment)
-    * [Event](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Event)
+    * [TroubleTicket](https://before-interop.github.io/common/?urls.primaryName=TroubleTicket)
+    * [Attachment](https://before-interop.github.io/common/?urls.primaryName=Attachment)
+    * [Event](https://before-interop.github.io/common/?urls.primaryName=Event)
 
 
     ## Pagination
@@ -706,10 +706,6 @@ components:
             - RESOLVED_OI_NON_ATTRIBUTABLE
             - RESOLVED_OI_VALIDATED
           default: CREATING
-        durationRulesType:
-          enum:
-            - WORKING_DAYS
-            - CALENDAR_DAYS
         maxResolutionOcDuration:
           properties:
             value:
