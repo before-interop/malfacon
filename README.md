@@ -684,11 +684,11 @@ sequenceDiagram
   participant OI
 
   OC->>OI: Creation Malfaçon (état = CREATING)
-  OC->>OI: Ajout d'une PJ (obligatoire)
-  OI->>OI: Contrôle de surface
-  OI->>OI: Contrôle métier (ex: consulter PJ...)
-  OI->>OI: Création du ticket ("ACKNOWLEDGED", statusChangeReason = Defect_Communicated_By_OC)
+  OC->>OI: Ajout d'une PJ principale (obligatoire)
+  OC->>OI: Ajout d'une PJ (secondaire) (obligatoire)
+  OC->>OI: Mise à jour status à Acknowledged
+  OI->>OI: Contrôle technique 
   OI->>OI: Cloture ticket (CLOSED)
-  OI->>OC: Notif (état = « CLOSED », statusChangeReason = Defect_Communicated_By_OC)
+  OI->>OC: Notif (état = « CLOSED »)
 ```
 
