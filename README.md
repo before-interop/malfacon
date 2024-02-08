@@ -4,11 +4,11 @@
 1. [Introduction](#introduction-api-malfaçon)
  ### 2. Malfaçon signalée par l'OI vers l'OC
  #### 2.1 Malfaçon "Imputable" signalée par l'OI vers l'OC
- 2.1.1 [Cycle de vie et règles de transition entre états](#imputable--cycle-de-vie-dune-malfaçon-oi-vers-oc)
+ 2.1.1 [Cycle de vie et règles de transition entre états](#cycle-de-vie-dune-malfaçon-imputable-oi-vers-oc-non-critique)
 
-2.1.2 [Gestion des compteurs](#liste-des-différents-compteurs-utilisés-dans-le-process-malfaçons)
+2.1.2 [Gestion des compteurs](#liste-des-différents-compteurs-utilisés-dans-le-process-malfaçons-lors-dune-signalisation-oi-vers-oc)
  #### 2.2 Malfaçon "Non Imputable" ou "Critique" signalée par l'OI vers l'OC
-2.2.1 [Cycle de vie et règles de transition entre états](#non-imputable-ou-critique--cycle-de-vie-dune-malfaçon-oi-vers-oc)
+2.2.1 [Cycle de vie et règles de transition entre états](#cycle-de-vie-dune-malfaçon-non-imputable-ou-critique-de-loi-vers-oc)
 #### 2.3 Diagrammes de séquence de cas d'utilisation de Malfaçons signalée par l'OI vers l'OC
 2.3.1 [Diagramme de séquence des 11 Cas d'utilisation](#cas-dutilisation-signalisation-oi)
 ### 3. Malfaçon signalée par l'OC vers l'OI
@@ -40,7 +40,8 @@ Sous-Cas 2.2 : Malfaçon non imputable à un seul OC et non critique : c'est alo
 2) De l'OC vers l'OI :
 
 L'OC informe l'OI pour que celui-ci dépose une signalisation vers l'OC responsable. L’OC a l’origine de la remontée initiale ne suit pas le cycle de vie de la malfaçon et ne sera pas informé de la reprise de la malfaçon qu’il a signalée.  La signalisation de la malfaçon par un OC vers un OI est une remontée d’information qui n’implique pas d’engagement de l’OC sur son niveau de précision : cette signalisation constitue une information complémentaire pour l’OI dans le cadre de l’exploitation de son réseau.
-Structurant :
+
+#### Important
 - Un signalisation est créée par typologie de malfaçon à l'OC imputable, sans regroupement par élément d’infra
 - et elle doit obligatoirement, sauf exception (cf ci-dessous), porter à la détection et à la résolution une photo au format JPEG prouvant la malfaçon ainsi que sa résolution. Il sera possible de joindre plusieurs photos à une signalisation mais une et une seule devra porter la notion de "photo principale" à la détection, et à la "résolution". Si l'OI ou l'OC attache une photo comme "photo principale", de détection ou résolution, alors qu'il en existe déjà une, le système enlèvera automatiquement la notion de principale à la photo précédente qui portait cette mention.
 
@@ -67,7 +68,7 @@ Les différents types de malfaçons sont :
 Une pièce jointe ne peut être ajoutée à une malfaçon que dans les états : CREATING, IN_PROGRESS, PENDING et RESOLVED
 Ces pièces jointes pourront être de type : csv, jpeg, jpg, png, svg, pdf, ods, odt, xlsx, docx
 
-Il est également possible d'ajouter un commentaire lors de chaque transition (changement de statut) au sein du champs statusChangeDetails.
+Il est également possible d'ajouter un commentaire lors de chaque transition (changement de statut) au sein du champs statusChangeDetails (obligatoire dans le cas de certaines transitions).
 
 ## Liste des différents compteurs utilisés dans le process malfaçons lors d'une signalisation OI vers OC
 Le protocole Interop n’harmonise pas les délais car ils relèvent du domaine contractuel propre à chaque opérateur. Néanmoins, les opérateurs doivent mettre en place des compteurs pour les cas décrits ci-dessous. Les valeurs sont propres à chaque OC/OI et seront formalisées dans les contrats.
@@ -85,7 +86,7 @@ Cas particulier pour les "gestions de crise" : suite à une demande OC, l'OI peu
 ### Délai max de validation OI :
 Est calculé lors de la réception par l’OI de la résolution envoyée par l’OC (passage du ticket à Resolved)
 Ce délai correspond au temps maximum alloué à l’OI pour valider ou non, la résolution par l’OC.
-Ce délai de validation OI gèle le délai de reprise OC (totalResolutionOcDuration) et laisse ainsi l’opportunité à l’OC de réitérer sa reprise dans les jours restants au compteur si sa reprise initiale n’est pas conforme.
+Ce délai de validation OI gèle le délai de reprise OC.
 Une fois ce délai dépassé, la résolution est considérée comme automatiquement validée par l’OI et le ticket doit être clôturé. Une fois le ticket clôturé, l’OI ne pourra pas facturer l’OC s’il n’est pas satisfait de sa reprise. Il devra alors ouvrir un nouveau ticket, patienter le délai de reprise OC et, si de nouveau la reprise OC ne lui convient pas, exprimer le refus de validation dans le délai imparti pour ensuite reprendre la malfaçon et facturer l’OC.
 
 ### Délai max de reprise OI:
@@ -114,7 +115,7 @@ Remarque : Elément d’infra = PM / PB et CCF
 Une signalisation est créée par l’OI et porte l’information ResolutionOwner = ‘OC’.
 A ce stade la signalisation est en cours de création.
 
-L'OI a renseigné les champs :
+L'OI doit renseigner les champs :
 - resolutionOwner = OC
 - attributable : yes
 - type
@@ -126,15 +127,15 @@ L'OI a renseigné les champs :
 - ocNumber = 1
 - insee_code
 
-Règle de geston :
-- une signlisation portant sur la "présence de cordons à zéro non retirés" ne peut avoir une quantité < 5 que si il existe une autre signsalition sur le même élément d'infra déposé dans le "délai max de dépôt entre les tickets auprès d’un même OC sur un même élément d’infra"
+Règle de gestion :
+- une signalisation portant sur la "présence de cordons à zéro non retirés" ne peut avoir une quantité < 5 que si il existe une autre signalisation sur le même élément d'infra déposé dans le "délai max de dépôt entre les tickets auprès d’un même OC sur un même élément d’infra"
 - Sinon l'OC sera en droit de la contester
 
 Le champs statusChangeReason = Creating
 
-#### Complétude : statut ACKNOWLEDGED
+#### CREATING → ACKNOWLEDGED : complétude
 La signalisation est alors complète et contient l'ensemble des informations pour l'analyse OC:
-- une photo au format JPEG est présente oligatoirement illustrant la malfaçon. Il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de détection de la signalisation
+- une photo au format JPEG est présente oligatoirement illustrant la malfaçon. Il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de détection de la signalisation (cf swagger: proofType (ISSUE/RESOLUTION) et primary (booleen)
 - sauf dans les cas ci-dessous où l'OI devra fournir la route optique constatée (obligatoire) et la route optique théorique (facultatif) :
   - PBO	/ ROUTE OPTIQUE /	Reprise sauvage Route Optique par casse soudure au PBO
   - PBO	/ ROUTE OPTIQUE	/ Raccordement de site non déployé dans IPE
@@ -143,8 +144,6 @@ La signalisation est alors complète et contient l'ensemble des informations pou
 
 Le compteur de délai max de reprise démarre dès ce statut.
 Le champs statusChangeReason = Acknowledged
-
-Possibilités de changement de status:
 
 #### ACKNOWLEDGED → REJECTED: Le ticket n'est pas jugé recevable par l'OC
 
@@ -165,17 +164,14 @@ L'OI doit alors :
 - modifier le champs resolutionOwner qui doit être renseigné à "OI"
 - Le champ statusChangeReason doit être renseigné avec OC_RESOLUTION_DELAY_EXPIRED
 
-#### IN_PROGRESS → PENDING: demande OC d'information complémentaire à l'OI, ou inversement - Contestation OC
+#### IN_PROGRESS → PENDING: demande d'information (OI/OC) ou contestation OC
 Ce changement de statut peut être effectué
 - par l'OC sur une malfaçon dont le ResolutionOwner='OC'
 - par l'OI sur une malfaçon dont le ResolutionOwner='OI'
 
-Lorsque cela est à l'initiative de l'OC :
-- Cette transition a pour effet de geler le compteur de résolution OC
-- L'OI a alors un délai maximum pour apporter sa réponse
-Le champ statusChangeReason doit être renseigné avec  :
+Lorsque cela est à l'initiative de l'OC : Cette transition a pour effet de geler le compteur de résolution OC. L'OI a alors un délai maximum pour apporter sa réponse. Le champ statusChangeReason doit être renseigné avec  :
 - INFORMATION_REQUEST: demande d'information
-- ou un motif de contestation.L'OC ne pourra contester que 2 fois maximum une signalisation auprès de l'OI. Les motifs de contestation sont :
+ou un motif de contestation. L'OC ne pourra contester que 2 fois maximum une signalisation auprès de l'OI. Les motifs de contestation sont :
 - CONTESTATION_PHOTO_NOT_USABLE: Photo non exploitable/flou/mal cadré
 - CONTESTATION_EQUIPMENT_ERROR: confusion sur l'équipement déclaré
 - CONTESTATION_DUPLICATE: le ticket est en conflit avec un autre ticket (non respect du délai max de dépôt entre les tickets auprès d’un même OC sur un même élément d’infra ). Le champ statusChangeDetails est obligatoire avec la référence du ticket en conflit.
@@ -185,9 +181,7 @@ Le champ statusChangeReason doit être renseigné avec  :
 - CONTESTATION_NOT_ALLOWED : autre cas. Le détail doit être fourni obligatoirement dans le statusChangeDetails
 L'OC peut fournir le détail des informations complémentaires attendues dans le champs statusChangeDetails (obligatoire pour CONTESTATION_NOT_ALLOWED).
 
-Lorsque cela est à l'initiative de l'OI :
-- L'OC a alors un délai maximum pour apporter sa réponse
-Le champ statusChangeReason doit être renseigné avec  :
+Lorsque cela est à l'initiative de l'OI : L'OC a alors un délai maximum pour apporter sa réponse. Le champ statusChangeReason doit être renseigné avec  :
 - INFORMATION_REQUEST: demande d'information
 
 #### PENDING → IN_PROGRESS: réponse OI à une demande d'information ou une contestation OC. Ou réponse OC à une demande OI
@@ -280,8 +274,6 @@ Le champs statusChangeReason = Creating
 A ce statut une photo au format JPEG est présente oligatoirement illustrant la malfaçon. Il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de détection de la signalisation.
 
 Le champs statusChangeReason = Acknowledged
-
-Possibilités de changement de status:
 
 #### ACKNOWLEDGED → IN_PROGRESS: Le ticket est en cours de résolution
 
@@ -519,7 +511,7 @@ sequenceDiagram
 ```
 
 ## Cas 8 : Demande d’information complémentaire de l’OI à l’OC suite à la première résolution OC
-Déclaration d'une malfaçon par l'OI à l’OC imputable et reprise par l’OC dans le délai max. de reprise OC. Lorsqu’il a effectué la reprise, l'OC passe le ticket en résolu avec en PJ n photos. L’OI refuse la correction en demandant des informations complémentaires à l’OC. L'OC les fournit en repassant la signlisation à Resolved. L'OI valide la résolution de l’OC et clôt le ticket.
+Déclaration d'une malfaçon par l'OI à l’OC imputable et reprise par l’OC dans le délai max. de reprise OC. Lorsqu’il a effectué la reprise, l'OC passe le ticket en résolu avec en PJ n photos. L’OI refuse la correction en demandant des informations complémentaires à l’OC. L'OC les fournit en repassant la signalisation à Resolved. L'OI valide la résolution de l’OC et clôt le ticket.
 
 
 ```mermaid
@@ -657,8 +649,6 @@ Le champs statusChangeReason = Creating
 ### Complétude : statut ACKNOWLEDGED
 La signalisation porte obligatoirement une photo illustrant la malfaçon.
 Le champs statusChangeReason = Acknowledged
-
-Possibilités de changement de status:
 
 #### ACKNOWLEDGED → CLOSED
 
