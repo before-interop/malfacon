@@ -99,7 +99,7 @@ L'OI a alors un délai fixé (maxPendingDate) pour apporter la réponse à l'OC 
 
 ### Délai max de réponse OC :
 Est calculé lors d'une question posée par l'OI à l'OC (passage du ticket à Pending lorsque le porteur de résolution=OI)
-L'OC a alors un délai fixé pour apporter la réponse à l'OI qui est en attente de celle-ci. Si cette date est dépassée, le ticket passe alors automatiquement à Closed avec application de pénalités.
+L'OC a alors un délai fixé pour apporter la réponse à l'OI qui est en attente de celle-ci. Si cette date est dépassée, le ticket passe alors automatiquement à Closed.
 
 ### Délai max de dépôt entre les tickets auprès d’un même OC sur un même élément d’infra (Gestion des compléments de signalisations) :
 Il ne s'agit pas ici d'un compteur, mais plutôt d'une règle de gestion.
@@ -211,6 +211,11 @@ En complément :
 - le champs resolutionDate doit être renseigné
 - ainsi que le champs recoveryQuantity
 - et une photo obligatoire au format JPEG illustrant la résolution de la malfaçon, sauf pour les 4 cas route optique où un attachment est attendu (cf. status Acknowledged). Pour les photos, il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de résolution de la signalisation
+
+#### IN_PROGRESS → CLOSED: résolution du ticket impossible par l'OI
+
+Sur un ticket dont le champs resolutionOwner='OI', ce changement de status ne peut être effectué que par l'OI. 
+Le champ statusChangeReason doit être renseigné avec OI_RESOLUTION_IMPOSSIBLE.
 
 #### ACKNOWLEDGED → CANCELLED : annulation du ticket par l'OI
 Ce changement de status ne peut être effectué que par l'OI.
