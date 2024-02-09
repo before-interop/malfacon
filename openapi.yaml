@@ -642,6 +642,8 @@ components:
     MalfaconOcBase:
       allOf:
         - $ref: "#/components/schemas/MalfaconBase"
+      required:
+        - statusChangeReason
       properties:
         statusChangeReason:
           enum:
@@ -657,6 +659,7 @@ components:
         - attributable
         - ocNumber
         - resolutionOwner
+        - statusChangeReason
       properties:
         attributable:
           type: boolean
