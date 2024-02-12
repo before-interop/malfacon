@@ -441,7 +441,6 @@ components:
         - $ref: "#/components/schemas/MalfaconOiAmontPm"
         - $ref: "#/components/schemas/MalfaconOiPbo"
         - $ref: "#/components/schemas/MalfaconOiCcf"
-        - $ref: "#/components/schemas/MalfaconOiPto"
 
     MalfaconOiOne:
       oneOf:
@@ -449,7 +448,6 @@ components:
         - $ref: "#/components/schemas/MalfaconOiAmontPm"
         - $ref: "#/components/schemas/MalfaconOiPbo"
         - $ref: "#/components/schemas/MalfaconOiCcf"
-        - $ref: "#/components/schemas/MalfaconOiPto"
 
     MalfaconOcAny:
       anyOf:
@@ -823,9 +821,6 @@ components:
     MalfaconOiCcf:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
-      required:
-        - pbo
-        - pto
       properties:
         "@type":
           const: malfacon.ccf.oi
@@ -834,13 +829,18 @@ components:
             - LD05
             - LD06
             - LD10
+            - LD13
+            - LD14
         codeFault:
           enum:
             - FD02
             - FD03
+            - FD10
             - FD13
             - FD37
             - FD38
+            - FD40
+            - FD43
         refOrder:
           description: Référence de la commande
           type: string
@@ -849,29 +849,6 @@ components:
           $ref: "#/components/schemas/Localization"
         pbo:
           $ref: "#/components/schemas/PBO"
-        pto:
-          $ref: "#/components/schemas/PTO"
-
-    MalfaconOiPto:
-      allOf:
-        - $ref: "#/components/schemas/MalfaconOiBase"
-      required:
-        - pto
-      properties:
-        "@type":
-          const: malfacon.pto.oi
-        localizationDetails:
-          enum:
-            - LD13
-            - LD14
-        codeFault:
-          enum:
-            - FD10
-            - FD40
-            - FD43
-        localization:
-          description: Localisation GPS de la PTO
-          $ref: "#/components/schemas/Localization"
         pto:
           $ref: "#/components/schemas/PTO"
 
