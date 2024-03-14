@@ -711,13 +711,13 @@ components:
           properties:
             value:
               type: integer
-              description: Duration
+              description: Duration in seconds
               readOnly: true
             reason:
               type: string
               readOnly: true
         totalResolutionOcDuration:
-          description: The OC resolution duration. Calculated only as long as ResolutionOwner = OC
+          description: The OC resolution duration in seconds. Calculated only as long as ResolutionOwner = OC
           type: number
         expectedResolutionDate:
           description: The maximum OC resolution date, recalculated only during state changes taking into account the ticket creation date and successive pauses.
