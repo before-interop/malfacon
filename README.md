@@ -212,7 +212,6 @@ ou avec un motif de contestation. L'OC ne pourra contester que 2 fois maximum un
 - CONTESTATION_EQUIPMENT_ERROR: confusion sur l'équipement déclaré
 - CONTESTATION_DUPLICATE: le ticket est en conflit avec un autre ticket (non respect du délai max de dépôt entre les tickets auprès d'un même OC sur un même élément d'infra ). Le champ statusChangeDetails est obligatoire avec la référence du ticket en conflit.
 - CONTESTATION_ORDER_PUT_INTO_SERVICE_FOR_MORE_THAN_A_YEAR : la commande d'accès date d'il y a plus d'un an. Ne s'applique qu'à des signalisations CCF.
-- CONTESTATION_OI_RESPONSABILITY: jugé comme sous responsabilité OI (ex: candidat à la REC, tambours....)
 - CONTESTATION_OC_ERROR: OC non concerné
 - CONTESTATION_NOT_ALLOWED : autre cas. Le détail doit être fourni obligatoirement dans le statusChangeDetails
 
