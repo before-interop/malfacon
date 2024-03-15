@@ -552,6 +552,8 @@ components:
             The volumetry of the malfacon.
           type: integer
           example: 1
+        localization:
+          description: Localisation de la malfacon.
         localizationDetails:
           type: string
           description: |
