@@ -194,7 +194,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MalfaconOne"
+              $ref: "#/components/schemas/MalfaconUpdate"
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/parameters/If-Match
       responses:
@@ -465,6 +465,11 @@ components:
         - $ref: "#/components/schemas/MalfaconOcPbo"
         - $ref: "#/components/schemas/MalfaconOcCcf"
 
+    MalfaconUpdate:
+      oneOf:
+        - $ref: "#/components/schemas/MalfaconOcUpdate"
+        - $ref: "#/components/schemas/MalfaconOiUpdate"
+
     MalfaconBase:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
@@ -650,6 +655,22 @@ components:
             - CREATING
           default: CREATING
 
+    MalfaconOcUpdate:
+      required:
+        - codeInsee
+        - status
+        - statusChangeDetails
+        - statusChangeReason
+      properties:
+        codeInsee:
+          $ref: "#/components/schemas/MalfaconBase/properties/codeInsee"
+        status:
+          $ref: "#/components/schemas/MalfaconBase/properties/status"
+        statusChangeDetails:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/StatusEntity.openapi.yaml#/components/schemas/StatusEntity/properties/statusChangeDetails
+        statusChangeReason:
+          $ref: "#/components/schemas/MalfaconOcBase/properties/statusChangeReason"
+
     MalfaconOiBase:
       allOf:
         - $ref: "#/components/schemas/MalfaconBase"
@@ -731,6 +752,25 @@ components:
           description: The deadline for pending status
           type: string
           format: date
+
+    MalfaconOiUpdate:
+      required:
+        - codeInsee
+        - status
+        - resolutionOwner
+        - statusChangeDetails
+        - statusChangeReason
+      properties:
+        codeInsee:
+          $ref: "#/components/schemas/MalfaconBase/properties/codeInsee"
+        status:
+          $ref: "#/components/schemas/MalfaconBase/properties/status"
+        resolutionOwner:
+          $ref: "#/components/schemas/MalfaconOiBase/properties/resolutionOwner"
+        statusChangeDetails:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/StatusEntity.openapi.yaml#/components/schemas/StatusEntity/properties/statusChangeDetails
+        statusChangeReason:
+          $ref: "#/components/schemas/MalfaconOiBase/properties/statusChangeReason"
 
     MalfaconOiPm:
       allOf:
@@ -1089,6 +1129,7 @@ components:
         data:
           oneOf:
             - $ref: "#/components/schemas/MalfaconOne"
+            - $ref: "#/components/schemas/MalfaconUpdate"
             - $ref: "#/components/schemas/Attachment"
 
     RelatedMalfacon:
