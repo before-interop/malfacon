@@ -469,18 +469,18 @@ components:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
       required:
-        - codeOi
-        - codeOc
+        - code_oi
+        - code_oc
         - "@type"
         - severity
         - quantity
         - localizationDetails
         - codeFault
       properties:
-        codeOi:
+        code_oi:
           description: Code ARCEP de l'OI.
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
-        codeOc:
+        code_oc:
           description: Code ARCEP de l'OC.
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
         externalId:
