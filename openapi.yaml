@@ -689,7 +689,7 @@ components:
             - CRITICAL
             - INFORMATION_GIVEN
             - INFORMATION_REQUEST
-            - INVALID FORMAT
+            - INVALID_FORMAT
             - NON_ATTRIBUTABLE
             - OC_RESOLUTION_DELAY_EXPIRED
             - OI_DELAY_EXPIRED
