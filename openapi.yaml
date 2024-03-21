@@ -582,6 +582,7 @@ components:
 
         "@type":
           readOnly: false
+          description: Localisation de la malfacon.
         "@baseType":
           default: Malfacon
           const: Malfacon
