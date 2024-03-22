@@ -844,9 +844,6 @@ components:
         refOrder:
           description: Référence de la commande
           type: string
-        localization:
-          description: Localisation GPS du câble
-          $ref: "#/components/schemas/Localization"
         pbo:
           $ref: "#/components/schemas/PBO"
         pto:
@@ -980,16 +977,10 @@ components:
         refOrder:
           description: Référence de la commande
           type: string
-        localization:
-          description: Localisation GPS du câble
-          $ref: "#/components/schemas/Localization"
         pbo:
           $ref: "#/components/schemas/PBO"
         pto:
           $ref: "#/components/schemas/PTO"
-
-    Localization:
-      $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
 
     Attachment:
       allOf:
