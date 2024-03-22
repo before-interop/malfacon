@@ -431,7 +431,7 @@ components:
         - $ref: "#/components/schemas/MalfaconOcAny"
 
     MalfaconOne:
-      anyOf:
+      oneOf:
         - $ref: "#/components/schemas/MalfaconOiOne"
         - $ref: "#/components/schemas/MalfaconOcOne"
 
