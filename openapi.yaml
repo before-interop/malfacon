@@ -125,14 +125,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MalfaconOiOne"
+              $ref: "#/components/schemas/MalfaconOne"
       responses:
         "201": &troubleTicket201
           description: The created malfacon
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MalfaconOiOne"
+                $ref: "#/components/schemas/MalfaconOne"
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag
