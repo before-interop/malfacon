@@ -278,6 +278,7 @@ Ce changement de status est effectué par l'OI. Le statusChangeReason peut être
 - RESOLVED_OC_VALIDATED
 - RESOLVED_OI_VALIDATED
 - OI_VALIDATION_DELAY_EXPIRED : passage automatique suite au dépassement du délai de validation OI sur une résolution OC
+- OI_RESOLUTION_RENUNCIATION : clôture sans reprise par l'OI
 
 #### RESOLVED → IN_PROGRESS: refus OI de la résolution OC du ticket
 
