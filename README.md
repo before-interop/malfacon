@@ -116,7 +116,7 @@ Il démarre lors du passage à IN_PROGRESS avec resolutionOwner=OI.
 ### Délai max de réponse OI
 
 Est calculé lors d'une question posée par l'OC à l'OI (passage du ticket à Pending lorsque le porteur de résolution=OC)
-L'OI a alors un délai fixé (maxPendingDate) pour apporter la réponse à l'OC qui est en attente de celle-ci. Si cette date est dépassée, le ticket passe alors automatiquement en Cancelled.
+L'OI a alors un délai fixé (maxPendingDate) pour apporter la réponse à l'OC qui est en attente de celle-ci. Si cette date est dépassée, le ticket passe alors automatiquement en Canceled.
 
 ### Délai max de réponse OC
 
@@ -258,12 +258,12 @@ En complément:
 Sur un ticket dont le champs resolutionOwner='OI', ce changement de status ne peut être effectué que par l'OI.
 Le champ statusChangeReason doit être renseigné avec OI_RESOLUTION_IMPOSSIBLE.
 
-#### ACKNOWLEDGED → CANCELLED : annulation du ticket par l'OI
+#### ACKNOWLEDGED → CANCELED : annulation du ticket par l'OI
 
 Ce changement de status ne peut être effectué que par l'OI.
 Le statusChangeReason est CANCELED.
 
-#### IN_PROGRESS → CANCELLED : annulation du ticket par l'OI
+#### IN_PROGRESS → CANCELED : annulation du ticket par l'OI
 
 Ce changement de status ne peut être effectué que par l'OI.
 Le statusChangeReason peut être:
@@ -341,11 +341,11 @@ Ce changement de statut est effectué par  l'OI et le champ statusChangeReason d
 - statusChangeReason = "NON_ATTRIBUTABLE"
 - statusChangeReason = "CRITICAL"
 
-#### ACKNOWLEDGED → CANCELLED : annulation du ticket par l'OI
+#### ACKNOWLEDGED → CANCELED : annulation du ticket par l'OI
 
-Ce changement de status est effectué par l'OI. Le champs statusChangeReason = Cancelled
+Ce changement de status est effectué par l'OI. Le champs statusChangeReason = Canceled
 
-#### IN_PROGRESS → CANCELLED : annulation du ticket par l'OI
+#### IN_PROGRESS → CANCELED : annulation du ticket par l'OI
 
 Ce changement de status est effectué par l'OI et correspond au dépassement du délai de reprise OI.
 Le statusChangeReason = 'OI_DELAY_EXPIRED' ou "CANCELED"
@@ -491,7 +491,7 @@ sequenceDiagram
   OI->>OI: Dépassement du compteur du délai de reprise OC
   OI->>OC: Notif (status = « IN PROGRESS », statusChangeReason= Resolution_Date_Expired, ResolutionOwner=OI)
   OI->>OI: Annuler ticket (status = CANCELED, statusChangeReason = « Canceled »)
-  OI->>OC: Notif (état = CANCELLED, statusChangeReason = « Canceled »)
+  OI->>OC: Notif (état = CANCELED, statusChangeReason = « Canceled »)
 ```
 
 ## Cas 5 : Demande d'information complémentaire de l'OC à l'OI suite à la réception du ticket
@@ -629,8 +629,8 @@ sequenceDiagram
   OC->>OI: Notif (status = PENDING, statusChangeReason=CONTESTATION_OC_ERROR)
   OI->>OI: Gel du compteur du délai de reprise OC
   OI->>OI: Analyse de la contestation OC
-  OI->>OI: Annuler ticket (status = CANCELLED, statusChangeReason = CONTESTATION_ACCEPTED)
-  OI->>OC: Notif (état = CANCELLED, statusChangeReason = CONTESTATION_ACCEPTED)
+  OI->>OI: Annuler ticket (status = CANCELED, statusChangeReason = CONTESTATION_ACCEPTED)
+  OI->>OC: Notif (état = CANCELED, statusChangeReason = CONTESTATION_ACCEPTED)
 ```
 
 ## Cas 9 : Annulation d'un ticket par l'OI
@@ -649,8 +649,8 @@ sequenceDiagram
   OI->>OI: Démarrage du compteur du délai de reprise OC
   OC->>OC: Contrôle de surface
   OC->>OC: Contrôle métier (ex: consulter PJ, délai entre tickets etc...)
-  OI->>OI: Annuler ticket (status = CANCELLED, statusChangeReason = CANCELED)
-  OI->>OC: Notif (état = CANCELLED, statusChangeReason = CANCELED)
+  OI->>OI: Annuler ticket (status = CANCELED, statusChangeReason = CANCELED)
+  OI->>OC: Notif (état = CANCELED, statusChangeReason = CANCELED)
 ```
 
 ## Cas 10 : Malfaçon non-imputable (hors REC)

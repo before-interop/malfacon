@@ -628,7 +628,7 @@ components:
             ![Malfacon status diagram](./statusOiOcImput.drawio.svg)
           enum:
             - ACKNOWLEDGED
-            - CANCELLED
+            - CANCELED
             - CLOSED
             - CREATING
             - IN_PROGRESS
