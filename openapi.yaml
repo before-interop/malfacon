@@ -692,7 +692,6 @@ components:
             - INVALID_FORMAT
             - NON_ATTRIBUTABLE
             - OC_RESOLUTION_DELAY_EXPIRED
-            - OI_DELAY_EXPIRED
             - OI_RESOLUTION_IMPOSSIBLE
             - OI_RESPONSE_DELAY_EXPIRED
             - OI_VALIDATION_DELAY_EXPIRED

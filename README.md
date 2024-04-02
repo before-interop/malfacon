@@ -108,11 +108,6 @@ Ce délai correspond au temps maximum alloué à l'OI pour valider ou non, la r�
 Ce délai de validation OI gèle le délai de reprise OC.
 Une fois ce délai dépassé, la résolution est considérée comme automatiquement validée par l'OI et le ticket doit être clôturé. Une fois le ticket clôturé, l'OI ne pourra pas facturer l'OC s'il n'est pas satisfait de sa reprise. Il devra alors ouvrir un nouveau ticket, patienter le délai de reprise OC et, si de nouveau la reprise OC ne lui convient pas, exprimer le refus de validation dans le délai imparti pour ensuite reprendre la malfaçon et facturer l'OC.
 
-### Délai max de reprise OI
-
-Ce délai correspond au temps maximum alloué à l'OI pour résoudre la malfaçon.
-Il démarre lors du passage à IN_PROGRESS avec resolutionOwner=OI.
-
 ### Délai max de réponse OI
 
 Est calculé lors d'une question posée par l'OC à l'OI (passage du ticket à Pending lorsque le porteur de résolution=OC)
@@ -301,11 +296,6 @@ L'OI a questionné l'OC pour pouvoir réparer la signalisation. En absence de r�
 
 ![Workflow](./statusOiOcNonImputCrit.drawio.svg)
 
-### Délai max de reprise OI
-
-Compteur totalResolutionOiDuration qui démarre au passage du ticket en résolution OI donc à in_Progress avec resolutionOwner=OI.
-Ce délai correspond au temps maximum alloué à l'OI pour résoudre la malfaçon.
-
 # Cycle de vie d'une Malfaçon Non imputable ou Critique de l'OI vers OC
 
 #### Initialisation : statut CREATING
@@ -348,7 +338,7 @@ Ce changement de status est effectué par l'OI. Le champs statusChangeReason = C
 #### IN_PROGRESS → CANCELLED : annulation du ticket par l'OI
 
 Ce changement de status est effectué par l'OI et correspond au dépassement du délai de reprise OI.
-Le statusChangeReason = 'OI_DELAY_EXPIRED' ou "CANCELED"
+Le statusChangeReason = "CANCELED"
 
 #### IN_PROGRESS → RESOLVED: résolution du ticket
 
