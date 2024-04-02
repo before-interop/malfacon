@@ -723,8 +723,19 @@ components:
         attributable:
           type: boolean
         ocNumber:
-          description: Nombre d'OCs concernés par la malfaçon
+          description: |
+            Nombre d'OCs concernés par la malfaçon.
+            OcNumber doit être supérieur ou égal à 1 et obligatoire
+          type: integer
+          readOnly: true
+          minimum: 1
+        activationRate:
+          description: Le taux d'activation est un pourcentage représentant la part de lignes activées par l'OC sur l'élément de réseau (PM ou PBO).
           type: number
+          minimum: 0
+          exclusiveMinimum: true
+          maximum: 100
+          readOnly: true
         resolutionOwner:
           type: string
           readOnly: true
