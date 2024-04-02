@@ -55,7 +55,7 @@ L'OC informe l'OI pour que celui-ci dépose une signalisation vers l'OC responsa
 ## Important
 
 - Un signalisation est créée par typologie de malfaçon à l'OC imputable, sans regroupement par élément d'infra
-- et elle doit obligatoirement, sauf exception (cf ci-dessous), porter à la détection et à la résolution une photo au format JPEG prouvant la malfaçon ainsi que sa résolution. Il sera possible de joindre plusieurs photos à une signalisation mais une et une seule devra porter la notion de "photo principale" à la détection, et à la "résolution". Si l'OI ou l'OC attache une photo comme "photo principale", de détection ou résolution, alors qu'il en existe déjà une, le système enlèvera automatiquement la notion de principale à la photo précédente qui portait cette mention.
+- et elle doit obligatoirement, sauf exception (cf ci-dessous), porter à la détection et à la résolution une photo au format JPEG ou PNG prouvant la malfaçon ainsi que sa résolution. Il sera possible de joindre plusieurs photos à une signalisation mais une et une seule devra porter la notion de "photo principale" à la détection, et à la "résolution". Si l'OI ou l'OC attache une photo comme "photo principale", de détection ou résolution, alors qu'il en existe déjà une, le système enlèvera automatiquement la notion de principale à la photo précédente qui portait cette mention.
 
 Exception : Dans les cas ci-dessous, la photo n'est pas obligatoire mais l'OI doit fournir la route optique constatée (obligatoire) et la route optique théorique (facultatif) au sein d'un "attachment", à la détection, et il doit en être de même à la résolution :
 
@@ -163,7 +163,7 @@ Le champs statusChangeReason = Creating
 
 La signalisation est alors complète et contient l'ensemble des informations pour l'analyse OC:
 
-- une photo au format JPEG est présente oligatoirement illustrant la malfaçon. Il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de détection de la signalisation (cf swagger: proofType (ISSUE/RESOLUTION) et primary (booleen)
+- une photo au format JPEG ou PNG est présente oligatoirement illustrant la malfaçon. Il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de détection de la signalisation (cf swagger: proofType (ISSUE/RESOLUTION) et primary (booleen)
 - sauf dans les cas ci-dessous où l'OI devra fournir la route optique constatée (obligatoire) et la route optique théorique (facultatif) :
   - PBO / ROUTE OPTIQUE / Reprise sauvage Route Optique par casse soudure au PBO
   - PBO / ROUTE OPTIQUE / Raccordement de site non déployé dans IPE
@@ -251,7 +251,7 @@ En complément:
 
 - le champs resolutionDate doit être renseigné
 - ainsi que le champs recoveryQuantity
-- et une photo obligatoire au format JPEG illustrant la résolution de la malfaçon, sauf pour les 4 cas route optique où un attachment est attendu (cf. status Acknowledged). Pour les photos, il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de résolution de la signalisation
+- et une photo obligatoire au format JPEG ou PNG illustrant la résolution de la malfaçon, sauf pour les 4 cas route optique où un attachment est attendu (cf. status Acknowledged). Pour les photos, il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de résolution de la signalisation
 
 #### IN_PROGRESS → CLOSED: résolution du ticket impossible par l'OI
 
@@ -331,7 +331,7 @@ Le champs statusChangeReason = Creating
 
 #### Complétude : statut ACKNOWLEDGED
 
-A ce statut une photo au format JPEG est présente oligatoirement illustrant la malfaçon. Il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de détection de la signalisation.
+A ce statut une photo au format JPEG ou PNG est présente oligatoirement illustrant la malfaçon. Il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de détection de la signalisation.
 
 Le champs statusChangeReason = Acknowledged
 
@@ -362,7 +362,7 @@ En complément:
 
 - le champs resolutionDate doit être renseigné
 - ainsi que le champs recoveryQuantity
-- et une photo obligatoire au format JPEG illustrant la résolution de la malfaçon
+- et une photo obligatoire au format JPEG ou PNG illustrant la résolution de la malfaçon
 
 #### RESOLVED → CLOSED
 
