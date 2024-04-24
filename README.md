@@ -151,8 +151,9 @@ L'OI doit renseigner les champs :
 
 Règle de gestion:
 
-- une signalisation portant sur la "présence de cordons à zéro non retirés" ne peut avoir une quantité < 5 que si il existe une autre signalisation sur le même élément d'infra déposé dans le "délai max de dépôt entre les tickets auprès d'un même OC sur un même élément d'infra"
-- Sinon l'OC sera en droit de la contester
+- une signalisation portant sur la "présence de cordons à zéro non retirés" ne peut avoir une quantité < 5 que si il existe une autre signalisation sur le même élément d'infra déposé dans le "délai max de dépôt entre les tickets auprès d'un même OC sur un même élément d'infra". Sinon l'OC sera en droit de la contester
+- Toute signalisation à l'état creating depuis 24h doit être supprimée.
+- Aucune notification ne doit être faite sur l'état creating.
 
 Le champs statusChangeReason = Creating
 
@@ -322,6 +323,11 @@ L'OI a renseigné les champs :
 - insee_code
 
 Le champs statusChangeReason = Creating
+
+Règle de gestion:
+
+- Toute signalisation à l'état creating depuis 24h doit être supprimée.
+- Aucune notification ne doit être faite sur l'état creating.
 
 #### Complétude : statut ACKNOWLEDGED
 
@@ -717,6 +723,11 @@ L'OC a renseigné les champs:
 - la/les références équipements de la Malfaçon (ref PM et/ou ref PB et/ou ref PTO)
 
 Le champs statusChangeReason = Creating
+
+Règle de gestion:
+
+- Toute signalisation à l'état creating depuis 24h doit être supprimée.
+- Aucune notification ne doit être faite sur l'état creating.
 
 ### Complétude : statut ACKNOWLEDGED
 
