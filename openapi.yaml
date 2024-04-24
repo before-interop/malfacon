@@ -424,38 +424,22 @@ components:
   schemas:
     MalfaconAny:
       anyOf:
-        - $ref: "#/components/schemas/MalfaconOiAny"
-        - $ref: "#/components/schemas/MalfaconOcAny"
-
-    MalfaconOne:
-      oneOf:
-        - $ref: "#/components/schemas/MalfaconOiOne"
-        - $ref: "#/components/schemas/MalfaconOcOne"
-
-    MalfaconOiAny:
-      anyOf:
         - $ref: "#/components/schemas/MalfaconOiPm"
         - $ref: "#/components/schemas/MalfaconOiAmontPm"
         - $ref: "#/components/schemas/MalfaconOiPbo"
         - $ref: "#/components/schemas/MalfaconOiCcf"
-
-    MalfaconOiOne:
-      oneOf:
-        - $ref: "#/components/schemas/MalfaconOiPm"
-        - $ref: "#/components/schemas/MalfaconOiAmontPm"
-        - $ref: "#/components/schemas/MalfaconOiPbo"
-        - $ref: "#/components/schemas/MalfaconOiCcf"
-
-    MalfaconOcAny:
-      anyOf:
         - $ref: "#/components/schemas/MalfaconOcPm"
         - $ref: "#/components/schemas/MalfaconOcAmontPm"
         - $ref: "#/components/schemas/MalfaconOcPmPbo"
         - $ref: "#/components/schemas/MalfaconOcPbo"
         - $ref: "#/components/schemas/MalfaconOcCcf"
 
-    MalfaconOcOne:
+    MalfaconOne:
       oneOf:
+        - $ref: "#/components/schemas/MalfaconOiPm"
+        - $ref: "#/components/schemas/MalfaconOiAmontPm"
+        - $ref: "#/components/schemas/MalfaconOiPbo"
+        - $ref: "#/components/schemas/MalfaconOiCcf"
         - $ref: "#/components/schemas/MalfaconOcPm"
         - $ref: "#/components/schemas/MalfaconOcAmontPm"
         - $ref: "#/components/schemas/MalfaconOcPmPbo"
