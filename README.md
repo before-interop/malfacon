@@ -123,7 +123,7 @@ L'OC a alors un délai fixé pour apporter la réponse à l'OI qui est en attent
 ### Délai max de dépôt entre les tickets auprès d'un même OC sur un même élément d'infra (Gestion des compléments de signalisations)
 
 Il ne s'agit pas ici d'un compteur, mais plutôt d'une règle de gestion.
-Afin d'optimiser les interventions terrains, l'OI doit veiller à signaler l'ensemble des malfaçons auprès d'un même OC sur un « même élément d'infra* » dans un « délai max de dépôt entre les tickets ».
+Afin d'optimiser les interventions terrains, l'OI doit veiller à signaler l'ensemble des malfaçons auprès d'un même OC sur un « même élément d'infra* » dans la même journée, et donc au plus tard à 23h59».
 
 Tout ticket au-delà pourra être rejeté par l'OC dès lors qu'il existe déjà un ticket en cours sur cet élément d'infra.
 
