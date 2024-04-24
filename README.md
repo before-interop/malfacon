@@ -38,11 +38,11 @@ Les signalisations peuvent être:
 
 Cas 1 : Malfaçon imputable de l'OI vers l'OC : reprise attendue de la part de l'OC
 
-Il s'agit alors de Malfaçon non critique imputable à un seul OC : c'est alors une notification appelant action corrective de la part de l'OC destinataire. Si l'OC ne corrige pas dans les délais attendus, alors l'OI effectue la correction lui-même et facturera l'OC pour cela.
+Il s'agit alors de Malfaçon non critique imputable à un seul OC : c'est alors une notification appelant action corrective de la part de l'OC destinataire. Si l'OC ne corrige pas dans les délais attendus, alors l'OI effectue la correction lui-même.
 
 Cas 2 : "Malfaçon Critique"  ou "Malfaçon non imputable" à un seul OC : la reprise est effectuée par l'OI
 
-Dans ces deux sous-cas ci-dessous, l'OI corrige la malfaçon lui-même et facturera l'OC (ou les OC suivant le sous cas):
+Dans ces deux sous-cas ci-dessous, l'OI corrige la malfaçon lui-même :
 
 Sous-Cas 2.1 : Malfaçon critique : il peut s'agir d'une signalisation imputable ou non imputable à un seul OC. C'est alors une notification à l'OC (ou aux OC) n'appelant pas action de sa/leur part car la reprise sera effectuée par l'OI compte-tenu de son aspect critique (c'est-à-dire pouvant présenter un danger grave et imminent pour les personnes et entrainer la responsabilité de l'OI à ce titre). L'aspect "Critique" de la malfaçon doit alors être conforme aux travaux Interop.
 
@@ -106,7 +106,7 @@ Cas particulier pour les "gestions de crise": suite à une demande OC, l'OI peut
 Est calculé lors de la réception par l'OI de la résolution envoyée par l'OC (passage du ticket à Resolved)
 Ce délai correspond au temps maximum alloué à l'OI pour valider ou non, la résolution par l'OC.
 Ce délai de validation OI gèle le délai de reprise OC.
-Une fois ce délai dépassé, la résolution est considérée comme automatiquement validée par l'OI et le ticket doit être clôturé. Une fois le ticket clôturé, l'OI ne pourra pas facturer l'OC s'il n'est pas satisfait de sa reprise. Il devra alors ouvrir un nouveau ticket, patienter le délai de reprise OC et, si de nouveau la reprise OC ne lui convient pas, exprimer le refus de validation dans le délai imparti pour ensuite reprendre la malfaçon et facturer l'OC.
+Une fois ce délai dépassé, la résolution est considérée comme automatiquement validée par l'OI et le ticket doit être clôturé. L'OI devra alors ouvrir un nouveau ticket, patienter le délai de reprise OC et, si de nouveau la reprise OC ne lui convient pas, exprimer le refus de validation dans le délai imparti pour ensuite reprendre la malfaçon.
 
 ### Délai max de réponse OI
 
@@ -362,7 +362,7 @@ Le champ statusChangeReason doit alors être renseigné avec la valeur RESOLVED_
 
 # Cas d'utilisation Signalisation OI
 
-Ces diagrammes se concentrent sur la signalisation et la correction des malfaçons. Toute malfaçon corrigée par l'OI donnera lieu à une facturation vers l'OC ou les OC concernés (si non-imputable), mettant en œuvre les processus de facturation OI et de certification OC existants.
+Ces diagrammes se concentrent sur la signalisation et la correction des malfaçons.
 Les cas d'utilisation détaillés par la suite sont les suivants :
 
 #### Cas 1 : Cas nominal, Malfaçon imputable résolue par l'OC et validée par l'OI
@@ -436,9 +436,9 @@ sequenceDiagram
 
 ## Cas 3 : Malfaçon imputable avec reprise par OI suite au dépassement du délai de reprise OC, résolue par l'OI
 
-Déclaration d'une malfaçon par l'OI à l'OC imputable. L'OC ne reprend pas dans le délai max. de reprise OC. L'OI notifie l'OC qu'il reprend la main. Quand l'OI a effectué la reprise, il clôt le ticket avec en PJ n photos et facture l'OC.
+Déclaration d'une malfaçon par l'OI à l'OC imputable. L'OC ne reprend pas dans le délai max. de reprise OC. L'OI notifie l'OC qu'il reprend la main. Quand l'OI a effectué la reprise, il clôt le ticket avec en PJ n photos.
 L'OC ne valide pas la recevabilité du ticket ni sa résolution.
-Si litige ou contestation, cela sera traité hors du cycle de vie du ticket lors de la certification des factures.
+Si litige ou contestation, cela sera traité hors du cycle de vie du ticket.
 
 ```mermaid
 sequenceDiagram
@@ -464,7 +464,7 @@ sequenceDiagram
 
 ## Cas 4 : Malfaçon imputable avec reprise par OI suite au dépassement du délai de reprise OC MAIS non résolue par l'OI
 
-Déclaration d'une malfaçon par l'OI à l'OC imputable. L'OC ne reprend pas dans le délai max. de reprise OC. L'OI notifie l'OC  qu'il reprend la main. L'OI n'effectue pas la reprise et clôture le ticket en non résolu. La malfaçon n'est pas facturée.
+Déclaration d'une malfaçon par l'OI à l'OC imputable. L'OC ne reprend pas dans le délai max. de reprise OC. L'OI notifie l'OC  qu'il reprend la main. L'OI n'effectue pas la reprise et clôture le ticket en non résolu.
 
 ```mermaid
 sequenceDiagram
@@ -646,10 +646,10 @@ sequenceDiagram
 
 ## Cas 10 : Malfaçon non-imputable (hors REC)
 
- L'OI signale la malfaçon à chaque OC présent sur l'infrastructure concernée pour information et le nombre d'OC présent afin que chacun connaisse sa quote-part. La malfaçon est reprise directement par l'OI qui clôt le ticket avec en PJ n photos et facture les OC au prorata.
+ L'OI signale la malfaçon à chaque OC présent sur l'infrastructure concernée pour information et le nombre d'OC présent afin que chacun connaisse sa quote-part. La malfaçon est reprise directement par l'OI qui clôt le ticket avec en PJ n photos.
 La résolution est portée par l'OI.
 L'OC ne valide pas la recevabilité du ticket ni sa résolution.
-Si litige ou contestation, cela sera traité hors du cycle de vie du ticket lors de la certification des factures.
+Si litige ou contestation, cela sera traité hors du cycle de vie du ticket.
 
 ```mermaid
 sequenceDiagram
@@ -671,10 +671,10 @@ sequenceDiagram
 
 ## Cas 11 : Malfaçon critique
 
-L'OI signale la malfaçon critique à l'OC pour information. La malfaçon est reprise directement par l'OI qui clôt le ticket avec en PJ n photos et facture l'OC.
+L'OI signale la malfaçon critique à l'OC pour information. La malfaçon est reprise directement par l'OI qui clôt le ticket avec en PJ n photos.
 La résolution est portée par l'OI.
 L'OC ne valide pas la recevabilité du ticket ni sa résolution.
-Si litige ou contestation, cela sera traité hors du cycle de vie du ticket lors de la certification des factures.
+Si litige ou contestation, cela sera traité hors du cycle de vie du ticket.
 Pas de regroupement d'intervention OI car sévérité Critique nécessitant d'intervenir au plus tôt.
 
 ```mermaid
