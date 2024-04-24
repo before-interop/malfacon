@@ -101,7 +101,7 @@ Ce délai peut cependant s'allonger suite à l'application de « gels »:
 
 L'allongement de ce délai pourra être réalisé par l'OI aux états In Progress et Pending via le champs maxResolutionOcDuration (value/reason).
 
-Cas particulier pour les "gestions de crise": suite à une demande OC, l'OI peut accepter d'allonger ponctuellement ce délai de résolution OC sur une période. Dans ce cas la nouvelle valeur sera mise en en remplacement de l'ancienne avec une information expliquant qu'elle a été mise à jour au cours de son cycle de vie pour raison de crise. Le filtrage des signalisations candidates à cette gestion de crise pourra être effectuée à partir du code_insee (information obligatoire d'une signalisation).
+Cas particulier pour les "gestions de situations exceptionnelles": suite à une demande OC, l'OI peut accepter d'allonger ponctuellement ce délai de résolution OC sur une période. Dans ce cas la nouvelle valeur sera mise en en remplacement de l'ancienne avec une information expliquant qu'elle a été mise à jour au cours de son cycle de vie pour raison de situations exceptionnelles. Le filtrage des signalisations candidates à cette gestion de situations exceptionnelles pourra être effectuée à partir du code_insee (information obligatoire d'une signalisation).
 
 ### Délai max de validation OI
 
