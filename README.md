@@ -99,6 +99,8 @@ Ce délai peut cependant s'allonger suite à l'application de « gels »:
 - Quand l'OC demande des compléments d'informations à l'OI pour traiter la malfaçon, le compteur de reprise OC est gelé le temps que l'OI réponde à la sollicitation.
 - Lorsque l'OC a effectué la reprise de la malfaçon (passage du ticket à Resolved), le compteur est gelé le temps que l'OI analyse la reprise OC. En cas de rejet de résolution, le compteur redémarrera là où il en était et l'OC pourra réitérer sa reprise dans les jours restants.
 
+L'allongement de ce délai pourra être réalisé par l'OI aux états In Progress et Pending via le champs maxResolutionOcDuration (value/reason).
+
 Cas particulier pour les "gestions de crise": suite à une demande OC, l'OI peut accepter d'allonger ponctuellement ce délai de résolution OC sur une période. Dans ce cas la nouvelle valeur sera mise en en remplacement de l'ancienne avec une information expliquant qu'elle a été mise à jour au cours de son cycle de vie pour raison de crise. Le filtrage des signalisations candidates à cette gestion de crise pourra être effectuée à partir du code_insee (information obligatoire d'une signalisation).
 
 ### Délai max de validation OI
@@ -180,6 +182,8 @@ Ce changement est:
 
 - soit effectué par  l'OC. Le champ statusChangeReason doit être renseigné avec Attributable_Accepted
 - soit par l'OI lorsque le délai de résolution OC est atteinte. Dans ce cas, le resolutionOwner est mis à OI et le champs statusChangeReason à OC_RESOLUTION_DELAY_EXPIRED.
+
+L'OC peut renseigner l'identifiant du ticket au sein de son propre SI dans le champs External Id
 
 #### IN_PROGRESS → IN_PROGRESS: l'OI prend en charge la résolution du ticket suite dépassement délai OC
 
@@ -331,6 +335,8 @@ Ce changement de statut est effectué par  l'OI et le champ statusChangeReason d
 
 - statusChangeReason = "NON_ATTRIBUTABLE"
 - statusChangeReason = "CRITICAL"
+
+L'OC peut renseigner l'identifiant du ticket au sein de son propre SI dans le champs External Id
 
 #### ACKNOWLEDGED → CANCELED : annulation du ticket par l'OI
 
