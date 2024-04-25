@@ -15,6 +15,7 @@ info:
 
     * [TroubleTicket](https://before-interop.github.io/common/?urls.primaryName=TroubleTicket)
     * [Attachment](https://before-interop.github.io/common/?urls.primaryName=Attachment)
+    * [Note](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Note)
     * [Event](https://before-interop.github.io/common/?urls.primaryName=Event)
 
     ## Pagination
@@ -41,6 +42,8 @@ servers:
 tags:
   - name: TroubleTicket
     description: TroubleTicket management
+  - name: Note
+    description: Note management
   - name: Attachment
     description: Attachment management
   - name: Event
@@ -227,6 +230,83 @@ paths:
         "404": *response404
         "412":
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-412
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+  /{malfaconId}/note:
+    parameters:
+      - $ref: "#/components/parameters/malfaconId"
+
+    get:
+      tags:
+        - Note
+        - OI
+      summary: Get all notes of a trouble ticket
+      description: Get all notes of a trouble ticket
+      parameters: *searchAndPaginateParameters
+      responses:
+        "200":
+          description: The list of notes
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+            X-Result-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Note"
+        "400": *response400
+        "404": *response404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+    head:
+      tags:
+        - Note
+        - OI
+      summary: Count the number of notes of a trouble ticket
+      description: Count the number of notes of a trouble ticket matching the given criteria.
+      parameters:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        "200":
+          description: The number of notes
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+        "400": *response400
+        "404": *response404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+
+    post:
+      tags:
+        - Note
+        - OI
+      summary: Create a note for a trouble ticket
+      description: Create a note for a trouble ticket
+      requestBody:
+        description: The note to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Note"
+      responses:
+        "201":
+          description: The created note
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+          headers:
+            ETag:
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag
+        "400": *response400
+        "404": *response404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
 
@@ -972,6 +1052,22 @@ components:
     Localization:
       $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
 
+    Note:
+      allOf:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Note.openapi.yaml#/components/schemas/Note
+      properties:
+        relatedEntity:
+          description: |
+            Relation entre la note et la malfaçon.
+            Ce champ est renseigné par l'OI lors de la création de la note.
+          type: array
+          minItems: 1
+          maxItems: 1
+          readOnly: true
+          items:
+            allOf:
+              - $ref: "#/components/schemas/RelatedMalfacon"
+
     Attachment:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
@@ -1063,6 +1159,7 @@ components:
           enum:
             - fr.interop.malfacon.create
             - fr.interop.malfacon.update
+            - fr.interop.malfacon.note.create
             - fr.interop.malfacon.attachment.create
             - fr.interop.malfacon.attachment.update
         datacontenttype:
@@ -1070,6 +1167,7 @@ components:
         data:
           oneOf:
             - $ref: "#/components/schemas/MalfaconOne"
+            - $ref: "#/components/schemas/Note"
             - $ref: "#/components/schemas/Attachment"
 
     RelatedMalfacon:
