@@ -608,6 +608,8 @@ components:
             | FD47 | taille SMOOVE non conforme                                                             |
             | FD48 | tiroir OI dégradé                                                                      |
             | FD49 | type de pose/fixation non conforme aux préconisations OI                               |
+            | FD50 | dégradation autres                                                                     |
+            | FD51 | entrée cable pbo non conforme aux STAS                                                 |
 
         quantity:
           description: |
@@ -837,12 +839,14 @@ components:
             - LD02
             - LD04
             - LD09
+            - LD15
+            - LD16
             - LD17
         codeFault:
           enum:
             - FD06
-            - FD09
-            - FD12
+            - FD10
+            - FD13
             - FD14
             - FD17
             - FD18
@@ -852,9 +856,10 @@ components:
             - FD22
             - FD26
             - FD31
+            - FD32
             - FD36
             - FD41
-            - FD42
+            - FD50
         pm:
           $ref: "#/components/schemas/PM"
 
@@ -899,7 +904,6 @@ components:
             - LD15
         codeFault:
           enum:
-            - FD04
             - FD05
             - FD15
             - FD16
@@ -932,13 +936,17 @@ components:
         codeFault:
           enum:
             - FD02
-            - FD03
-            - FD10
-            - FD13
-            - FD37
-            - FD38
+            - FD09
+            - FD12
+            - FD15
+            - FD25
+            - FD33
+            - FD34
             - FD40
             - FD43
+            - FD45
+            - FD49
+            - FD51
         refOrder:
           description: Référence de la commande
           type: string
@@ -970,15 +978,15 @@ components:
           enum:
             - FD06
             - FD07
-            - FD14
             - FD18
             - FD19
             - FD20
             - FD21
             - FD22
             - FD24
-            - FD31
+            - FD32
             - FD42
+            - FD50
         pm:
           $ref: "#/components/schemas/PM"
 
@@ -1051,7 +1059,6 @@ components:
             - FD28
             - FD29
             - FD30
-            - FD34
         pbo:
           $ref: "#/components/schemas/PBO"
 
@@ -1068,23 +1075,14 @@ components:
           const: CCF
         localizationDetails:
           enum:
-            - LD05
             - LD06
-            - LD10
         codeFault:
           enum:
             - FD02
             - FD03
-            - FD10
-            - FD13
-            - FD15
-            - FD25
-            - FD34
-            - FD35
+            - FD12
             - FD37
             - FD38
-            - FD45
-            - FD49
         refOrder:
           description: Référence de la commande
           type: string
