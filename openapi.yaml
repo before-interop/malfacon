@@ -547,9 +547,6 @@ components:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
         externalId:
           description: Référence du ticket créé dans le système de l'OC
-        codeInsee:
-          type: string
-          required: true
         codeFault:
           type: string
           description: |
