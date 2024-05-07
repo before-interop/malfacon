@@ -25,7 +25,7 @@ info:
     * La valeur par défaut d'une page est `limit=50` et `offset=0`.
     * La valeur maximale de `limit` est `100`.
 servers:
-  - url: "{protocol}://{host}:{port}{basePath}/malfacon"
+  - url: "{protocol}://{host}:{port}{basePath}"
     variables:
       protocol:
         enum:
@@ -54,7 +54,7 @@ tags:
     description: OC endpoints
 
 paths:
-  /:
+  /malfacon:
     get:
       tags:
         - TroubleTicket
@@ -149,7 +149,7 @@ paths:
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Error.openapi.yaml#/components/schemas/Error
 
-  /{malfaconId}:
+  /malfacon/{malfaconId}:
     parameters:
       - $ref: "#/components/parameters/malfaconId"
 
@@ -233,7 +233,7 @@ paths:
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
 
-  /{malfaconId}/note:
+  /malfacon/{malfaconId}/note:
     parameters:
       - $ref: "#/components/parameters/malfaconId"
 
@@ -310,7 +310,7 @@ paths:
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
 
-  /{malfaconId}/attachment:
+  /malfacon/{malfaconId}/attachment:
     parameters:
       - $ref: "#/components/parameters/malfaconId"
 
@@ -390,7 +390,7 @@ paths:
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
 
-  /{malfaconId}/attachment/{attachmentId}/content:
+  /malfacon/{malfaconId}/attachment/{attachmentId}/content:
     parameters:
       - $ref: "#/components/parameters/malfaconId"
       - $ref: "#/components/parameters/attachmentId"
@@ -419,7 +419,7 @@ paths:
         "412":
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-412
 
-  /event:
+  /malfacon/event:
     get:
       tags:
         - Event
@@ -615,8 +615,8 @@ components:
           example: 1
         recoveryQuantity:
           description: |
-            Ce champs indique la quantité de malfaçon reprise. 
-            C'est un entier qui doit être renseignée au moment du passage en Resolved, par l'OC ou par l'OI suivant le cas de gestion, 
+            Ce champs indique la quantité de malfaçon reprise.
+            C'est un entier qui doit être renseignée au moment du passage en Resolved, par l'OC ou par l'OI suivant le cas de gestion,
             et donc la valeur doit être >= au champs quantity renseigné à l'initialisation du ticket.
           type: integer
         localizationDetails:
