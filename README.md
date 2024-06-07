@@ -38,7 +38,7 @@ Les signalisations peuvent être:
 
 Cas 1 : Malfaçon imputable de l'OI vers l'OC : reprise attendue de la part de l'OC
 
-Il s'agit alors de Malfaçon non critique imputable à un seul OC : c'est alors une notification appelant action corrective de la part de l'OC destinataire. Si l'OC ne corrige pas dans les délais attendus, alors l'OI effectue la correction lui-même.
+Il s'agit alors de Malfaçon non critique imputable à un seul OC : c'est alors une notification appelant action corrective de la part de l'OC destinataire. Si l'OC ne corrige pas dans les délais attendus, alors l'OI peut effectuer la correction lui-même.
 
 Cas 2 : "Malfaçon Critique"  ou "Malfaçon non imputable" à un seul OC : la reprise est effectuée par l'OI
 
@@ -50,7 +50,7 @@ Sous-Cas 2.2 : Malfaçon non imputable à un seul OC et non critique : c'est alo
 
 2) De l'OC vers l'OI :
 
-L'OC informe l'OI pour que celui-ci dépose une signalisation vers l'OC responsable. L'OC a l'origine de la remontée initiale ne suit pas le cycle de vie de la malfaçon et ne sera pas informé de la reprise de la malfaçon qu'il a signalée.  La signalisation de la malfaçon par un OC vers un OI est une remontée d'information qui n'implique pas d'engagement de l'OC sur son niveau de précision : cette signalisation constitue une information complémentaire pour l'OI dans le cadre de l'exploitation de son réseau.
+L'OC informe l'OI d’une malfaçon/ dégradation constatée sur le terrain responsable. L'OC a l'origine de la remontée initiale ne suit pas le cycle de vie de la malfaçon et ne sera pas informé de la reprise de la malfaçon qu'il a signalée.  La signalisation de la malfaçon par un OC vers un OI est une remontée d'information qui n'implique pas d'engagement de l'OC sur son niveau de précision : cette signalisation constitue une information complémentaire pour l'OI dans le cadre de l'exploitation de son réseau.
 
 ## Important
 
@@ -82,6 +82,8 @@ Les différents types de malfaçons sont :
 
 Une pièce jointe ne peut être ajoutée à une malfaçon que dans les états : CREATING, IN_PROGRESS, PENDING et RESOLVED
 Ces pièces jointes pourront être de type : csv, jpeg, jpg, png, svg, pdf, ods, odt, xlsx, docx
+
+Le format Jpeg est attendu pour toutes les malfaçons analysables par IA via photo. Les autres formats ne sont autorisés que dans les cas d’exceptions cités au chapitre précédent.  
 
 Il est également possible d'ajouter un commentaire lors de chaque transition (changement de statut) au sein du champs statusChangeDetails (obligatoire dans le cas de certaines transitions).
 
@@ -127,7 +129,7 @@ Afin d'optimiser les interventions terrains, l'OI doit veiller à signaler l'ens
 
 Tout ticket au-delà pourra être rejeté par l'OC dès lors qu'il existe déjà un ticket en cours sur cet élément d'infra.
 
-Remarque : Elément d'infra = PM / PB et CCF
+Remarque : Elément d'infra correspondant aux catégories du fichier référentiel malfaçon = PM / PB et CCF
 
 # Détail des transitions d'une Malfaçon Imputable OI vers OC non critique
 

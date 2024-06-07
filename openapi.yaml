@@ -535,6 +535,7 @@ components:
         - "@type"
         - severity
         - quantity
+        - localization
         - localizationDetails
         - codeFault
       properties:
@@ -546,9 +547,6 @@ components:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
         externalId:
           description: Référence du ticket créé dans le système de l'OC
-        codeInsee:
-          type: string
-          required: true
         codeFault:
           type: string
           description: |
@@ -607,6 +605,8 @@ components:
             | FD47 | taille SMOOVE non conforme                                                             |
             | FD48 | tiroir OI dégradé                                                                      |
             | FD49 | type de pose/fixation non conforme aux préconisations OI                               |
+            | FD50 | dégradation autres                                                                     |
+            | FD51 | entrée cable pbo non conforme aux STAS                                                 |
 
         quantity:
           description: |
@@ -619,6 +619,17 @@ components:
             C'est un entier qui doit être renseignée au moment du passage en Resolved, par l'OC ou par l'OI suivant le cas de gestion,
             et donc la valeur doit être >= au champs quantity renseigné à l'initialisation du ticket.
           type: integer
+        Localization:
+          description: | 
+            Ce champs permet de connaitre la localisation de la malfaçon
+            valeur possible :
+            | localisation |                                                                                |
+            | AMONT_PM     |
+            | CCF          |
+            | PBO          |
+            | PM           |
+            | PM_PBO       |
+          readOnly: true
         localizationDetails:
           type: string
           description: |
@@ -818,17 +829,21 @@ components:
       properties:
         "@type":
           const: malfacon.pm.oi
+        localization:
+          const: PM
         localizationDetails:
           enum:
             - LD02
             - LD04
             - LD09
+            - LD15
+            - LD16
             - LD17
         codeFault:
           enum:
             - FD06
-            - FD09
-            - FD12
+            - FD10
+            - FD13
             - FD14
             - FD17
             - FD18
@@ -838,9 +853,10 @@ components:
             - FD22
             - FD26
             - FD31
+            - FD32
             - FD36
             - FD41
-            - FD42
+            - FD50
         pm:
           $ref: "#/components/schemas/PM"
 
@@ -852,6 +868,8 @@ components:
       properties:
         "@type":
           const: malfacon.oi.amontpm
+        localization:
+          const: AMONT_PM
         localizationDetails:
           enum:
             - LD08
@@ -873,6 +891,8 @@ components:
       properties:
         "@type":
           const: malfacon.pbo.oi
+        localization:
+          const: PBO
         localizationDetails:
           enum:
             - LD03
@@ -881,7 +901,6 @@ components:
             - LD15
         codeFault:
           enum:
-            - FD04
             - FD05
             - FD15
             - FD16
@@ -902,6 +921,8 @@ components:
       properties:
         "@type":
           const: malfacon.ccf.oi
+        localization:
+          const: CCF
         localizationDetails:
           enum:
             - LD05
@@ -912,19 +933,23 @@ components:
         codeFault:
           enum:
             - FD02
-            - FD03
-            - FD10
-            - FD13
-            - FD37
-            - FD38
+            - FD09
+            - FD12
+            - FD15
+            - FD25
+            - FD33
+            - FD34
             - FD40
             - FD43
+            - FD45
+            - FD49
+            - FD51
         refOrder:
           description: Référence de la commande
           type: string
-        localization:
+        geographicLocation:
           description: Localisation GPS du câble
-          $ref: "#/components/schemas/Localization"
+          $ref: "#/components/schemas/GeographicLocation"
         pbo:
           $ref: "#/components/schemas/PBO"
         pto:
@@ -938,6 +963,8 @@ components:
       properties:
         "@type":
           const: malfacon.pm.oc
+        localization:
+          const: PM
         localizationDetails:
           enum:
             - LD02
@@ -948,15 +975,15 @@ components:
           enum:
             - FD06
             - FD07
-            - FD14
             - FD18
             - FD19
             - FD20
             - FD21
             - FD22
             - FD24
-            - FD31
+            - FD32
             - FD42
+            - FD50
         pm:
           $ref: "#/components/schemas/PM"
 
@@ -968,6 +995,8 @@ components:
       properties:
         "@type":
           const: malfacon.amontpm.oc
+        localization:
+          const: AMONT_PM
         localizationDetails:
           enum:
             - LD01
@@ -992,6 +1021,8 @@ components:
       properties:
         "@type":
           const: malfacon.pmpbo.oc
+        localization:
+          const: PM_PBO
         localizationDetails:
           enum:
             - LD12
@@ -1010,6 +1041,8 @@ components:
       properties:
         "@type":
           const: malfacon.pbo.oc
+        localization:
+          const: PBO
         localizationDetails:
           enum:
             - LD03
@@ -1023,7 +1056,6 @@ components:
             - FD28
             - FD29
             - FD30
-            - FD34
         pbo:
           $ref: "#/components/schemas/PBO"
 
@@ -1036,37 +1068,30 @@ components:
       properties:
         "@type":
           const: malfacon.ccf.oc
+        localization:
+          const: CCF
         localizationDetails:
           enum:
-            - LD05
             - LD06
-            - LD10
         codeFault:
           enum:
             - FD02
             - FD03
-            - FD10
-            - FD13
-            - FD15
-            - FD25
-            - FD34
-            - FD35
+            - FD12
             - FD37
             - FD38
-            - FD45
-            - FD49
         refOrder:
           description: Référence de la commande
           type: string
-        localization:
+        geographicLocation:
           description: Localisation GPS du câble
-          $ref: "#/components/schemas/Localization"
+          $ref: "#/components/schemas/GeographicLocation"
         pbo:
           $ref: "#/components/schemas/PBO"
         pto:
           $ref: "#/components/schemas/PTO"
 
-    Localization:
+    geographicLocation:
       $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
 
     Note:
