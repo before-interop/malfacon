@@ -1,11 +1,11 @@
-openapi: 3.1.0
+openapi: 3.0.3
 
 info:
   title: Malfacon API
   version: 2.0.0
   license:
     name: Apache 2.0
-    identifier: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
   description: |
     Cet outil permet la déclaration et le traitement d'une malfaçon grâce à des flux normalisés.
 
@@ -61,7 +61,7 @@ paths:
         - OI
       summary: Get all trouble tickets
       description: Get all trouble tickets
-      operationId: getTroubleTickets
+      operationId: getMalfacons
       parameters: &searchAndPaginateParameters
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/limit
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/offset
@@ -81,14 +81,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/MalfaconAny"
+                  $ref: "#/components/schemas/MalfaconBase"
         "400": &response400
-          description: |
-            **Bad Request**
-
-            This error occurs when a query parameter or the body is invalid.
-
-            * The `reason` field of the error response can contain information about the error.
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
@@ -99,7 +93,7 @@ paths:
         - OI
       summary: Count the number of trouble tickets
       description: Count the number of trouble tickets matching the given criteria.
-      operationId: countTroubleTickets
+      operationId: countMalfacons
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
       responses:
@@ -118,21 +112,21 @@ paths:
         - OI
       summary: Create a trouble ticket
       description: Create a trouble ticket
-      operationId: createTroubleTicket
+      operationId: createMalfacon
       requestBody:
         description: The malfacon to create
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MalfaconOne"
+              $ref: "#/components/schemas/MalfaconBase"
       responses:
         "201": &troubleTicket201
           description: The created malfacon
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MalfaconOne"
+                $ref: "#/components/schemas/MalfaconBase"
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
@@ -159,7 +153,7 @@ paths:
         - OI
       summary: Get a trouble ticket
       description: Get a trouble ticket
-      operationId: getTroubleTicket
+      operationId: getMalfacon
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/fields.openapi.yaml#/components/parameters/fields
       responses:
@@ -168,15 +162,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MalfaconOne"
+                $ref: "#/components/schemas/MalfaconBase"
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
         "404": &response404
-          description: |
-            **Not Found**
-
-            This error occurs when the resource does not exist or is not visible by the user.
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Error.openapi.yaml#/components/schemas/Error
@@ -187,14 +177,14 @@ paths:
         - OI
       summary: Update a trouble ticket
       description: Update a trouble ticket
-      operationId: updateTroubleTicket
+      operationId: updateMalfacon
       requestBody:
         description: The trouble ticket to update
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MalfaconOne"
+              $ref: "#/components/schemas/MalfaconBase"
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/parameters/If-Match
       responses:
@@ -213,14 +203,14 @@ paths:
         - OI
       summary: Partially update a trouble ticket
       description: Partially update a trouble ticket
-      operationId: patchTroubleTicket
+      operationId: patchMalfacon
       requestBody:
         description: The data to update
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MalfaconOne"
+              $ref: "#/components/schemas/MalfaconBase"
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/parameters/If-Match
       responses:
@@ -243,6 +233,7 @@ paths:
         - OI
       summary: Get all notes of a trouble ticket
       description: Get all notes of a trouble ticket
+      operationId: getMalFaconNotes
       parameters: *searchAndPaginateParameters
       responses:
         "200":
@@ -269,6 +260,7 @@ paths:
         - OI
       summary: Count the number of notes of a trouble ticket
       description: Count the number of notes of a trouble ticket matching the given criteria.
+      operationId: countMalFaconNotes
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
       responses:
@@ -288,6 +280,7 @@ paths:
         - OI
       summary: Create a note for a trouble ticket
       description: Create a note for a trouble ticket
+      operationId: createMalFaconNote
       requestBody:
         description: The note to create
         required: true
@@ -320,7 +313,7 @@ paths:
         - OI
       summary: List attachments
       description: Get all attachments of a trouble ticket
-      operationId: getAttachments
+      operationId: getMalfaconAttachments
       parameters: *searchAndPaginateParameters
       responses:
         "200":
@@ -347,7 +340,7 @@ paths:
         - OI
       summary: Get the number of attachments
       description: This method returns the number of attachments matching the criteria.
-      operationId: countAttachments
+      operationId: countMalfaconAttachments
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
       responses:
@@ -367,7 +360,7 @@ paths:
         - OI
       summary: Create a attachment
       description: This method allows to create a attachment.
-      operationId: createAttachment
+      operationId: createMalfaconAttachment
       requestBody:
         description: The attachment to create
         required: true
@@ -401,7 +394,7 @@ paths:
         - OI
       summary: Download the content of an attachment
       description: This method allows to download the content of an attachment.
-      operationId: downloadAttachment
+      operationId: downloadMalfaconAttachment
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Match
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/parameters/If-None-Match
@@ -426,6 +419,7 @@ paths:
         - OI
       summary: Get all events of all trouble tickets
       description: Get all events of all trouble tickets
+      operationId: getMalfaconEvents
       parameters: *searchAndPaginateParameters
       responses:
         "200":
@@ -451,6 +445,7 @@ paths:
         - OI
       summary: Count the number of events of all trouble tickets
       description: Count the number of events of all trouble tickets matching the given criteria.
+      operationId: countMalfaconEvents
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
       responses:
@@ -469,6 +464,7 @@ paths:
         - OC
       summary: Receive an event for a trouble ticket
       description: Receive an event for a trouble ticket
+      operationId: receiveMalfaconEvent
       requestBody:
         description: The event to receive
         required: true
@@ -477,243 +473,146 @@ paths:
             schema:
               $ref: "#/components/schemas/Event"
       responses:
+        "200":
+          description: The event has been received
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "204":
+          description: The event has been received
+
         default:
           description: |
             L'événement a été reçu avec succès.
 
             La réponse n'a pas l'obligation de contenir un body.
             Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
-        4xx:
+        "400": *response400
+        "403": *response403
+        "404": *response404
+        "500":
           description: |
-            Erreur lors de la réception de l'événement.
+            **Internal Server Error**
 
-            L'OI ne doit pas retransmettre l'événement à l'OC.
+            This error occurs when the server encountered an unexpected condition that prevented it from fulfilling the request.
 
-            La réponse n'a pas l'obligation de contenir un body.
-            Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
-        5xx:
+            * The `reason` field of the error response can contain information about the error.
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-500
+        "501":
           description: |
-            Erreur lors de la réception de l'événement.
+            **Not Implemented**
 
-            L'OI peut retransmettre l'événement à l'OC.
+            This error occurs when the server does not support the functionality required to fulfill the request.
 
-            La réponse n'a pas l'obligation de contenir un body.
-            Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
+            * The `reason` field of the error response can contain information about the error.
 
 components:
   schemas:
-    MalfaconAny:
-      anyOf:
-        - $ref: "#/components/schemas/MalfaconOiPm"
-        - $ref: "#/components/schemas/MalfaconOiAmontPm"
-        - $ref: "#/components/schemas/MalfaconOiPbo"
-        - $ref: "#/components/schemas/MalfaconOiCcf"
-        - $ref: "#/components/schemas/MalfaconOcPm"
-        - $ref: "#/components/schemas/MalfaconOcAmontPm"
-        - $ref: "#/components/schemas/MalfaconOcPmPbo"
-        - $ref: "#/components/schemas/MalfaconOcPbo"
-        - $ref: "#/components/schemas/MalfaconOcCcf"
-
-    MalfaconOne:
-      oneOf:
-        - $ref: "#/components/schemas/MalfaconOiPm"
-        - $ref: "#/components/schemas/MalfaconOiAmontPm"
-        - $ref: "#/components/schemas/MalfaconOiPbo"
-        - $ref: "#/components/schemas/MalfaconOiCcf"
-        - $ref: "#/components/schemas/MalfaconOcPm"
-        - $ref: "#/components/schemas/MalfaconOcAmontPm"
-        - $ref: "#/components/schemas/MalfaconOcPmPbo"
-        - $ref: "#/components/schemas/MalfaconOcPbo"
-        - $ref: "#/components/schemas/MalfaconOcCcf"
 
     MalfaconBase:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
-      required:
-        - code_oi
-        - code_oc
-        - "@type"
-        - severity
-        - quantity
-        - localization
-        - localizationDetails
-        - codeFault
-      properties:
-        code_oi:
-          description: Code ARCEP de l'OI.
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
-        code_oc:
-          description: Code ARCEP de l'OC.
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
-        externalId:
-          description: Référence du ticket créé dans le système de l'OC
-        codeFault:
-          type: string
-          description: |
-            Code du défaut de la malfacon.
+        - discriminator:
+            propertyName: "@type"
+            mapping:
+              "malfacon.pm.oi": "#/components/schemas/MalfaconOiPm"
+              "malfacon.oi.amontpm": "#/components/schemas/MalfaconOiAmontPm"
+              "malfacon.pbo.oi": "#/components/schemas/MalfaconOiPbo"
+              "malfacon.ccf.oi": "#/components/schemas/MalfaconOiCcf"
+              "malfacon.pm.oc": "#/components/schemas/MalfaconOcPm"
+              "malfacon.amontpm.oc": "#/components/schemas/MalfaconOcAmontPm"
+              "malfacon.pmpbo.oc": "#/components/schemas/MalfaconOcPmPbo"
+              "malfacon.pbo.oc": "#/components/schemas/MalfaconOcPbo"
+              "malfacon.ccf.oc": "#/components/schemas/MalfaconOcCcf"
+          type: object
+          required:
+            - code_oi
+            - code_oc
+            - "@type"
+            - severity
+            - quantity
+          properties:
+            code_oi: #Code ARCEP de l'OI.
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
+            code_oc: #Code ARCEP de l'OC.
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
+            externalId:
+              description: Référence du ticket créé dans le système de l'OC
+              type: string
+            quantity:
+              description: |
+                The volumetry of the malfacon.
+              type: integer
+              example: 1
+            recoveryQuantity:
+              description: |
+                Ce champs indique la quantité de malfaçon reprise.
+                C'est un entier qui doit être renseignée au moment du passage en Resolved, par l'OC ou par l'OI suivant le cas de gestion,
+                et donc la valeur doit être >= au champs quantity renseigné à l'initialisation du ticket.
+              type: integer
 
-            Liste des valeurs possibles:
+            "@type":
+              type: string
+              readOnly: false
+            "@baseType":
+              default: "Malfacon"
+              type: string
+            severity:
+              description: |
+                The severity of the malfacon
 
-            | Code | valeur                                                                                 |
-            | ---- | -------------------------------------------------------------------------------------- |
-            | FD01 | absence de gaine demi-lune pour protéger câble PBO aérien, poteau ou façade            |
-            | FD02 | absence protection obligatoire gaine fendue, demi-lune, …                              |
-            | FD03 | bilan optique non conforme aux STAS                                                    |
-            | FD04 | boîtier PBO non/mal étiqueté hors échec production                                     |
-            | FD05 | boîtier PBO non/mal refermé, non/mal refixé,…                                          |
-            | FD06 | bouchon absent                                                                         |
-            | FD07 | brassage existant encombrant le cheminement                                            |
-            | FD08 | brassage OC non conforme                                                               |
-            | FD09 | caractéristiques tiroir non conforme aux STAS                                          |
-            | FD10 | caractéristiques non conformes aux STAS                                                |
-            | FD11 | cheminement câble OC/OI non conforme                                                   |
-            | FD12 | cheminement non conforme aux STAS                                                      |
-            | FD13 | cheminement non conforme surplomb domaine privé, …                                     |
-            | FD14 | cordon non conforme aux STAS caractéristiques techniques                               |
-            | FD15 | dégradation                                                                            |
-            | FD16 | dégradation du support PBO poteau                                                      |
-            | FD17 | dégradation majeure                                                                    |
-            | FD18 | dégradation porte                                                                      |
-            | FD19 | dégradation serrure                                                                    |
-            | FD20 | dégradation tambours                                                                   |
-            | FD21 | dégradation tiroirs cassés                                                             |
-            | FD22 | environnement nettoyage déchets, fermeture                                             |
-            | FD23 | épissure non conforme dénudage, protection de soudure                                  |
-            | FD24 | étiquetage du PM non conforme hors échec de production                                 |
-            | FD25 | étiquetage non conforme aux STAS                                                       |
-            | FD26 | implantation ou étiquetage non conforme aux STAS                                       |
-            | FD27 | implantation tiroir OC/OI ou étiquetage non conforme                                   |
-            | FD28 | localisation non conforme aux données OI commande accès hors échec production          |
-            | FD29 | lovage fibre non conforme aux STAS                                                     |
-            | FD30 | lovage câble en chambre ou poteau non conforme aux STAS                                |
-            | FD31 | mauvaise fixation                                                                      |
-            | FD32 | mauvaise fixation ou fermeture dégradée                                                |
-            | FD33 | modularité du câble CCF non conforme                                                   |
-            | FD34 | nettoyage chantier                                                                     |
-            | FD35 | entrée de cable PBO non conforme aux STAS                                              |
-            | FD36 | non respect Route Optique communiquée                                                  |
-            | FD37 | non utilisable pas d'autorisation de cheminement                                       |
-            | FD38 | non utilisable risque de surplomb, sécurisé                                            |
-            | FD39 | passage de câble non conforme                                                          |
-            | FD40 | pose non conforme implantation ou fixation                                             |
-            | FD41 | présence de cordons à zéro non retirés                                                 |
-            | FD42 | présence de cordons non conformes                                                      |
-            | FD43 | PTO mal ou non étiquetée                                                               |
-            | FD44 | raccordement de site non déployé dans IPE                                              |
-            | FD45 | rebouchage non effectué                                                                |
-            | FD46 | reprise sauvage Route Optique par casse soudure au PBO                                 |
-            | FD47 | taille SMOOVE non conforme                                                             |
-            | FD48 | tiroir OI dégradé                                                                      |
-            | FD49 | type de pose/fixation non conforme aux préconisations OI                               |
-            | FD50 | dégradation autres                                                                     |
-            | FD51 | entrée cable pbo non conforme aux STAS                                                 |
+                Allowed values are:
 
-        quantity:
-          description: |
-            The volumetry of the malfacon.
-          type: integer
-          example: 1
-        recoveryQuantity:
-          description: |
-            Ce champs indique la quantité de malfaçon reprise.
-            C'est un entier qui doit être renseignée au moment du passage en Resolved, par l'OC ou par l'OI suivant le cas de gestion,
-            et donc la valeur doit être >= au champs quantity renseigné à l'initialisation du ticket.
-          type: integer
-        Localization:
-          description: |
-            Ce champs permet de connaitre la localisation de la malfaçon
-            valeur possible :
-            | localisation |                                                                                |
-            | AMONT_PM     |
-            | CCF          |
-            | PBO          |
-            | PM           |
-            | PM_PBO       |
-          readOnly: true
-        localizationDetails:
-          type: string
-          description: |
-            Détails de localisation de la malfacon
+                * `CRITICAL`
 
-            Liste des valeurs possibles:
+                  Si la malfaçon représente un danger grave est imminent pour les personnes,
+                  l'OI se réserve le droit d'effectuer la reprise ou à minima sécurise les lieux
+                  et demande à l'OC d'intervenir.
 
-            | Code | valeur                                                                                 |
-            | ---- | -------------------------------------------------------------------------------------- |
-            | LD01 | AMONT_PM_INSTALLATION                                                                  |
-            | LD02 | ARMOIRE                                                                                |
-            | LD03 | BOITIER                                                                                |
-            | LD04 | BRASSAGE_OC                                                                            |
-            | LD05 | CABLE_CARACTERISTIQUE                                                                  |
-            | LD06 | CABLE_INSTALLATION                                                                     |
-            | LD07 | CASSETTE                                                                               |
-            | LD08 | COLLECTE_LIEN_PM_PRDM                                                                  |
-            | LD09 | CONNECTEUR_TIROIR_ZAPM                                                                 |
-            | LD10 | ENTREE_DE_CABLE_PBO                                                                    |
-            | LD11 | PBO_ENVIRONNEMENT                                                                      |
-            | LD12 | PM_PBO_INSTALLATION                                                                    |
-            | LD13 | PTO_CARACTERISTIQUE                                                                    |
-            | LD14 | PTO_INSTALLATION                                                                       |
-            | LD15 | ROUTE_OPTIQUE                                                                          |
-            | LD16 | TIROIR_OC                                                                              |
-            | LD17 | TIROIR_ZAPM                                                                            |
-            | LD18 | ADDUCTION_OC                                                                           |
+                  De son côté, l'OC se doit de signaler à l'OI toute malfaçon
+                  représentant un danger grave et imminent pour les personnes.
 
-        "@type":
-          readOnly: false
-        "@baseType":
-          default: Malfacon
-          const: Malfacon
-        severity:
-          description: |
-            The severity of the malfacon
+                * `MAJOR`
 
-            Allowed values are:
+                  La malfaçon signifie une détérioration du site technique ou un risque d'intéruption
+                  massive de service (dérangement collectif) ou un empêchement à produire
+                  de nouveaux client (depuis le passage de commande jusqu'au raccordement).
 
-            * `CRITICAL`
+                  Exemples:
 
-              Si la malfaçon représente un danger grave est imminent pour les personnes,
-              l'OI se réserve le droit d'effectuer la reprise ou à minima sécurise les lieux
-              et demande à l'OC d'intervenir.
+                  * défaut d'étanchéité sur PB
+                  * PM ouvert
+                  * site insalubre
+                  * brassage encombrant
+                  * données de localisation erronées
 
-              De son côté, l'OC se doit de signaler à l'OI toute malfaçon
-              représentant un danger grave et imminent pour les personnes.
+                * `MINOR`
 
-            * `MAJOR`
+                  Les autres non conformités à corriger.
+              enum:
+                - CRITICAL
+                - MAJOR
+                - MINOR
+            status:
+              description: |
+                Status de la malfacon.
 
-              La malfaçon signifie une détérioration du site technique ou un risque d'intéruption
-              massive de service (dérangement collectif) ou un empêchement à produire
-              de nouveaux client (depuis le passage de commande jusqu'au raccordement).
-
-              Exemples:
-
-              * défaut d'étanchéité sur PB
-              * PM ouvert
-              * site insalubre
-              * brassage encombrant
-              * données de localisation erronées
-
-            * `MINOR`
-
-              Les autres non conformités à corriger.
-          enum:
-            - CRITICAL
-            - MAJOR
-            - MINOR
-        status:
-          description: |
-            Status de la malfacon.
-
-            ![Malfacon status diagram](./statusOiOcImput.drawio.svg)
-          enum:
-            - ACKNOWLEDGED
-            - CANCELED
-            - CLOSED
-            - CREATING
-            - IN_PROGRESS
-            - PENDING
-            - REJECTED
-            - RESOLVED
-          default: CREATING
+                ![Malfacon status diagram](./statusOiOcImput.drawio.svg)
+              enum:
+                - ACKNOWLEDGED
+                - CANCELED
+                - CLOSED
+                - CREATING
+                - IN_PROGRESS
+                - PENDING
+                - REJECTED
+                - RESOLVED
+              default: CREATING
 
     MalfaconOcBase:
       allOf:
@@ -797,14 +696,9 @@ components:
             - RESOLVED_OI_VALIDATED
           default: CREATING
         maxResolutionOcDuration:
-          properties:
-            value:
-              type: integer
-              description: Duration in seconds
-              readOnly: true
-            reason:
-              type: string
-              readOnly: true
+          type: object
+          $ref: "#/components/schemas/MaxResolutionOcDuration"
+
         totalResolutionOcDuration:
           description: The OC resolution duration in seconds. Calculated only as long as ResolutionOwner = OC
           type: number
@@ -821,17 +715,30 @@ components:
           type: string
           format: date
 
+    MaxResolutionOcDuration:
+      type: object
+      properties:
+        value:
+          type: integer
+          description: Duration in seconds
+          readOnly: true
+        reason:
+          type: string
+          readOnly: true
+
     MalfaconOiPm:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
       required:
         - pm
+        - codeFault
+        - localizationDetails
       properties:
-        "@type":
-          const: malfacon.pm.oi
         localization:
-          const: PM
+          type: string
+          default: "PM"
         localizationDetails:
+          type: string
           enum:
             - LD02
             - LD04
@@ -840,6 +747,7 @@ components:
             - LD16
             - LD17
         codeFault:
+          type: string
           enum:
             - FD06
             - FD10
@@ -865,16 +773,19 @@ components:
         - $ref: "#/components/schemas/MalfaconOiBase"
       required:
         - pm
+        - codeFault
+        - localizationDetails
       properties:
-        "@type":
-          const: malfacon.oi.amontpm
         localization:
-          const: AMONT_PM
+          type: string
+          default: "AMONT_PM"
         localizationDetails:
+          type: string
           enum:
             - LD08
             - LD18
         codeFault:
+          type: string
           enum:
             - FD06
             - FD08
@@ -888,18 +799,21 @@ components:
         - $ref: "#/components/schemas/MalfaconOiBase"
       required:
         - pbo
+        - codeFault
+        - localizationDetails
       properties:
-        "@type":
-          const: malfacon.pbo.oi
         localization:
-          const: PBO
+          type: string
+          default: "PBO"
         localizationDetails:
+          type: string
           enum:
             - LD03
             - LD07
             - LD11
             - LD15
         codeFault:
+          type: string
           enum:
             - FD05
             - FD15
@@ -918,12 +832,15 @@ components:
     MalfaconOiCcf:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
+      required:
+        - codeFault
+        - localizationDetails
       properties:
-        "@type":
-          const: malfacon.ccf.oi
         localization:
-          const: CCF
+          type: string
+          default: "CCF"
         localizationDetails:
+          type: string
           enum:
             - LD05
             - LD06
@@ -931,6 +848,7 @@ components:
             - LD13
             - LD14
         codeFault:
+          type: string
           enum:
             - FD02
             - FD09
@@ -947,8 +865,7 @@ components:
         refOrder:
           description: Référence de la commande
           type: string
-        geographicLocation:
-          description: Localisation GPS du câble
+        geographicLocation: # Localisation GPS du câble
           $ref: "#/components/schemas/GeographicLocation"
         pbo:
           $ref: "#/components/schemas/PBO"
@@ -960,18 +877,21 @@ components:
         - $ref: "#/components/schemas/MalfaconOcBase"
       required:
         - pm
+        - codeFault
+        - localizationDetails
       properties:
-        "@type":
-          const: malfacon.pm.oc
         localization:
-          const: PM
+          type: string
+          default: "PM"
         localizationDetails:
+          type: string
           enum:
             - LD02
             - LD04
             - LD09
             - LD17
         codeFault:
+          type: string
           enum:
             - FD06
             - FD07
@@ -992,17 +912,20 @@ components:
         - $ref: "#/components/schemas/MalfaconOcBase"
       required:
         - pm
+        - codeFault
+        - localizationDetails
       properties:
-        "@type":
-          const: malfacon.amontpm.oc
         localization:
-          const: AMONT_PM
+          type: string
+          default: "AMONT_PM"
         localizationDetails:
+          type: string
           enum:
             - LD01
             - LD08
             - LD18
         codeFault:
+          type: string
           enum:
             - FD06
             - FD11
@@ -1018,15 +941,18 @@ components:
       required:
         - pm
         - pbo
+        - codeFault
+        - localizationDetails
       properties:
-        "@type":
-          const: malfacon.pmpbo.oc
         localization:
-          const: PM_PBO
+          type: string
+          default: "PM_PBO"
         localizationDetails:
+          type: string
           enum:
             - LD12
         codeFault:
+          type: string
           enum:
             - FD01
             - FD15
@@ -1038,17 +964,21 @@ components:
     MalfaconOcPbo:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
+      required:
+        - codeFault
+        - localizationDetails
       properties:
-        "@type":
-          const: malfacon.pbo.oc
         localization:
-          const: PBO
+          type: string
+          default: "PBO"
         localizationDetails:
+          type: string
           enum:
             - LD03
             - LD07
             - LD11
         codeFault:
+          type: string
           enum:
             - FD04
             - FD15
@@ -1065,15 +995,18 @@ components:
       required:
         - pbo
         - pto
+        - codeFault
+        - localizationDetails
       properties:
-        "@type":
-          const: malfacon.ccf.oc
         localization:
-          const: CCF
+          type: string
+          default: "CCF"
         localizationDetails:
+          type: string
           enum:
             - LD06
         codeFault:
+          type: string
           enum:
             - FD02
             - FD03
@@ -1083,15 +1016,14 @@ components:
         refOrder:
           description: Référence de la commande
           type: string
-        geographicLocation:
-          description: Localisation GPS du câble
+        geographicLocation: # Localisation GPS du câble
           $ref: "#/components/schemas/GeographicLocation"
         pbo:
           $ref: "#/components/schemas/PBO"
         pto:
           $ref: "#/components/schemas/PTO"
 
-    geographicLocation:
+    GeographicLocation:
       $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
 
     Note:
@@ -1189,37 +1121,60 @@ components:
     Event:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/CloudEvent.openapi.yaml#/components/schemas/CloudEvent
-      required:
-        - time
-        - subject
-      properties:
-        subject:
-          description: Identifiant unique de la malfaçon.
-          type: string
-          format: uuid
-        type:
-          enum:
-            - fr.interop.malfacon.create
-            - fr.interop.malfacon.update
-            - fr.interop.malfacon.note.create
-            - fr.interop.malfacon.attachment.create
-            - fr.interop.malfacon.attachment.update
-        datacontenttype:
-          const: application/json
-        data:
-          oneOf:
-            - $ref: "#/components/schemas/MalfaconOne"
-            - $ref: "#/components/schemas/Note"
-            - $ref: "#/components/schemas/Attachment"
+        - required:
+          - time
+          - subject
+          - type
+          discriminator:
+            propertyName: type
+            mapping:
+              "fr.interop.malfacon.create": "#/components/schemas/EventMalfacon"
+              "fr.interop.malfacon.update": "#/components/schemas/EventMalfacon"
+              "fr.interop.malfacon.note.create": "#/components/schemas/EventMalfaconNote"
+              "fr.interop.malfacon.attachment.create": "#/components/schemas/EventMalfaconAttachment"
+              "fr.interop.malfacon.attachment.update": "#/components/schemas/EventMalfaconAttachment"
+          properties:
+            subject:
+              description: Identifiant unique de la malfaçon.
+              type: string
+              format: uuid
+            type:
+              type: string
+            datacontenttype:
+              type: string
+              default: "application/json"
+
+    EventMalfacon:
+      allOf:
+        - $ref: "#/components/schemas/Event"
+        - properties:
+            data:
+              $ref: "#/components/schemas/MalfaconBase"
+
+    EventMalfaconNote:
+      allOf:
+        - $ref: "#/components/schemas/Event"
+        - properties:
+            data:
+              $ref: "#/components/schemas/Note"
+
+    EventMalfaconAttachment:
+      allOf:
+        - $ref: "#/components/schemas/Event"
+        - properties:
+            data:
+              $ref: "#/components/schemas/Attachment"
 
     RelatedMalfacon:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
       properties:
         "@referredType":
-          const: "Malfacon"
+          type: string
+          default: "Malfacon"
         role:
-          const: "troubleTicket"
+          type: string
+          default: "troubleTicket"
 
     PM:
       $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PM
