@@ -365,19 +365,32 @@ paths:
         description: The attachment to create
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
-              $ref: "#/components/schemas/AttachmentFormData"
+              allOf:
+                - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment"
+              required:
+                - size
+                - sha256
       responses:
-        "201":
-          description: The created attachment
+        "200":
+          description: |
+            The attachment metadata.
+
+            You have to use the generated `id` to upload the content of the attachment with the `PUT /attachment/{id}/content` method
+            and finalize the creation of the attachment with the `PATCH /attachment/{id}/content` method.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Attachment"
+                allOf:
+                  - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment"
           headers:
             ETag:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
+              $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag"
+            X-Chunk-Size:
+              description: The size max in octet allowed for a chunk
+              schema:
+                type: integer
         "400": *response400
         "404": *response404
         default:
@@ -410,8 +423,54 @@ paths:
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
         "412":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-412
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-412
+    put:
+      tags:
+        - Attachment
+        - OI
+      summary: upload a chunk of the content of an attachment
+      description: This method allows to upload a chunk of the content of an attachment.
+      requestBody:
+        description: The chunk of the content of the attachment
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+                - metadata
+              properties:
+                file:
+                  format: binary
+                  description: The file to upload
+                  type: string
+                metadata:
+                  $ref: "#/components/schemas/Chunk"
+      responses:
+        "200":
+          description: The chunk has been uploaded
+        "404": *response404
+        "413":
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-413
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
+    post:
+      tags:
+        - Attachment
+        - OI
+      summary: Finalize the creation of the content of an attachment
+      description: |
+        This method allows to finalize the creation of the content of an attachment.
 
+        The server will aggregate all the chunks uploaded and validate the content of the attachment
+        in an asynchronous way.
+      responses:
+        "200":
+          description: The chunk has been uploaded
+        "404": *response404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
   /malfacon/event:
     get:
       tags:
