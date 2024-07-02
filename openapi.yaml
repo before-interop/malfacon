@@ -233,7 +233,7 @@ paths:
         - OI
       summary: Get all notes of a trouble ticket
       description: Get all notes of a trouble ticket
-      operationId: getMalFaconNotes
+      operationId: getMalfaconNotes
       parameters: *searchAndPaginateParameters
       responses:
         "200":
@@ -260,7 +260,7 @@ paths:
         - OI
       summary: Count the number of notes of a trouble ticket
       description: Count the number of notes of a trouble ticket matching the given criteria.
-      operationId: countMalFaconNotes
+      operationId: countMalfaconNotes
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
       responses:
@@ -280,7 +280,7 @@ paths:
         - OI
       summary: Create a note for a trouble ticket
       description: Create a note for a trouble ticket
-      operationId: createMalFaconNote
+      operationId: createMalfaconNote
       requestBody:
         description: The note to create
         required: true
