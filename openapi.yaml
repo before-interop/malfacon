@@ -496,9 +496,9 @@ paths:
           description: |
             **Internal Server Error**
 
-            This error occurs when the server encountered an unexpected condition that prevented it from fulfilling the request.
+            Cette erreur se produit lorsque le serveur a rencontré une condition inattendue qui l'a empêché de répondre à la demande.
 
-            * The `reason` field of the error response can contain information about the error.
+            * Le champ reason de la réponse d'erreur peut contenir des informations sur l'erreur.
           content:
             application/json:
               schema:
@@ -507,9 +507,9 @@ paths:
           description: |
             **Not Implemented**
 
-            This error occurs when the server does not support the functionality required to fulfill the request.
+            Cette erreur se produit lorsque le serveur ne prend pas en charge la fonctionnalité nécessaire pour répondre à la demande
 
-            * The `reason` field of the error response can contain information about the error.
+            * Le champ reason de la réponse d'erreur peut contenir des informations sur l'erreur.
 
 components:
   schemas:
