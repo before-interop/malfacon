@@ -57,8 +57,24 @@ L'OC informe l'OI d’une malfaçon/ dégradation constatée sur le terrain resp
 - Un signalisation est créée par typologie de malfaçon à l'OC imputable, sans regroupement par élément d'infra
 - et elle doit obligatoirement, sauf exception (cf ci-dessous), porter à la détection et à la résolution une photo au format JPEG ou PNG prouvant la malfaçon ainsi que sa résolution. Il sera possible de joindre plusieurs photos à une signalisation mais une et une seule devra porter la notion de "photo principale" à la détection, et à la "résolution". Si l'OI ou l'OC attache une photo comme "photo principale", de détection ou résolution, alors qu'il en existe déjà une, le système enlèvera automatiquement la notion de principale à la photo précédente qui portait cette mention.
 
-Exception : Dans les cas ci-dessous, la photo n'est pas obligatoire mais l'OI doit fournir la route optique constatée (obligatoire) et la route optique théorique (facultatif) au sein d'un "attachment", à la détection, et il doit en être de même à la résolution :
+Exception : Dans le cas des routes optiques, la photo n'est pas obligatoire.
 
+Les informations à fournir sont :
+
+- A la détection, l’OI fournit :
+  - La route optique constatée (obligatoire)
+  - la route optique théorique (facultatif),
+  - la référence de la PTO attendue (facultatif)
+  - la référence de l’ONT (n° de série ou adresse MAC)  (facultatif)
+  - et un attachment (facultatif)
+
+- A la résolution, l’OC fournit :
+  - la route optique finale (obligatoire)
+  - le numéro de décharge (facultatif)
+  - le commentaire (facultatif)
+  - et un attachement (facultatif)
+
+Les cas de route optique sont :
 - PBO / ROUTE OPTIQUE / Reprise sauvage Route Optique par casse soudure au PBO
 - PBO / ROUTE OPTIQUE / Raccordement de site non déployé dans IPE
 - PBO / ROUTE OPTIQUE / Non respect Route Optique communiquée
@@ -164,7 +180,7 @@ Le champs statusChangeReason = Creating
 La signalisation est alors complète et contient l'ensemble des informations pour l'analyse OC:
 
 - une photo au format JPEG ou PNG est présente oligatoirement illustrant la malfaçon. Il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de détection de la signalisation (cf swagger: proofType (ISSUE/RESOLUTION) et primary (booleen)
-- sauf dans les cas ci-dessous où l'OI devra fournir la route optique constatée (obligatoire) et la route optique théorique (facultatif) :
+- sauf dans les cas ci-dessous où l'OI devra fournir la route optique constatée (obligatoire),  la route optique théorique (facultatif), la référence de la PTO attendue (facultatif), la référence de l’ONT (n° de série ou adresse MAC)  (facultatif) et un attachment (facultatif) :
   - PBO / ROUTE OPTIQUE / Reprise sauvage Route Optique par casse soudure au PBO
   - PBO / ROUTE OPTIQUE / Raccordement de site non déployé dans IPE
   - PBO / ROUTE OPTIQUE / Non respect Route Optique communiquée
@@ -253,7 +269,13 @@ En complément:
 
 - le champs resolutionDate doit être renseigné
 - ainsi que le champs recoveryQuantity
-- et une photo obligatoire au format JPEG ou PNG illustrant la résolution de la malfaçon, sauf pour les 4 cas route optique où un attachment est attendu (cf. status Acknowledged). Pour les photos, il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de résolution de la signalisation
+- et une photo obligatoire au format JPEG ou PNG illustrant la résolution de la malfaçon, où un attachment est attendu (cf. status Acknowledged). Pour les photos, il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de résolution de la signalisation
+
+sauf dans les cas ci-dessous où l'OC devra fournir la route optique finale (obligatoire), le numéro de décharge (facultatif), le commentaire (facultatif) et un attachement (facultatif) :
+- PBO / ROUTE OPTIQUE / Reprise sauvage Route Optique par casse soudure au PBO
+- PBO / ROUTE OPTIQUE / Raccordement de site non déployé dans IPE
+- PBO / ROUTE OPTIQUE / Non respect Route Optique communiquée
+- PM / ROUTE OPTIQUE / Non respect Route Optique communiquée
 
 #### IN_PROGRESS → CLOSED: résolution du ticket impossible par l'OI
 
@@ -333,7 +355,7 @@ Règle de gestion:
 
 #### Complétude : statut ACKNOWLEDGED
 
-A ce statut une photo au format JPEG ou PNG est présente oligatoirement illustrant la malfaçon. Il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de détection de la signalisation.
+A ce statut une photo au format JPEG ou PNG est présente obligatoirement illustrant la malfaçon, sauf cas des routes optiques. Il est possible d'en joindre plusieurs mais dans tous les cas une, et une seule photo, doit porter une information spécifique indiquant que c'est la photo principale de détection de la signalisation.
 
 Le champs statusChangeReason = Acknowledged
 
