@@ -554,7 +554,6 @@ components:
                 C'est un entier qui doit être renseignée au moment du passage en Resolved, par l'OC ou par l'OI suivant le cas de gestion,
                 et donc la valeur doit être >= au champs quantity renseigné à l'initialisation du ticket.
               type: integer
-
             "@type":
               type: string
               readOnly: false
@@ -562,6 +561,7 @@ components:
               default: "Malfacon"
               type: string
             severity:
+              type: string
               description: |
                 The severity of the malfacon
 
@@ -598,6 +598,7 @@ components:
                 - MAJOR
                 - MINOR
             status:
+              type: string
               description: |
                 Status de la malfacon.
 
@@ -616,103 +617,103 @@ components:
     MalfaconOcBase:
       allOf:
         - $ref: "#/components/schemas/MalfaconBase"
-      required:
-        - statusChangeReason
-      properties:
-        statusChangeReason:
-          enum:
-            - ACKNOWLEDGED
-            - CLOSED
-            - CREATING
-          default: CREATING
+        - required:
+            - statusChangeReason
+          properties:
+            statusChangeReason:
+              type: string
+              enum:
+                - ACKNOWLEDGED
+                - CLOSED
+                - CREATING
+              default: CREATING
 
     MalfaconOiBase:
       allOf:
         - $ref: "#/components/schemas/MalfaconBase"
-      required:
-        - attributable
-        - ocNumber
-        - resolutionOwner
-        - statusChangeReason
-      properties:
-        attributable:
-          type: boolean
-        ocNumber:
-          description: |
-            Nombre d'OCs concernés par la malfaçon.
-            OcNumber doit être supérieur ou égal à 1 et obligatoire
-          type: integer
-          readOnly: true
-          minimum: 1
-        activationRate:
-          description: Le taux d'activation est un pourcentage représentant la part de lignes activées par l'OC sur l'élément de réseau (PM ou PBO).
-          type: number
-          minimum: 0
-          exclusiveMinimum: true
-          maximum: 100
-          readOnly: true
-        resolutionOwner:
-          type: string
-          readOnly: true
-          enum:
-            - OI
-            - OC
-          default: OC
-        statusChangeReason:
-          enum:
-            - ACKNOWLEDGED
-            - ATTRIBUTABLE_ACCEPTED
-            - CANCELED
-            - CONTESTATION_ACCEPTED
-            - CONTESTATION_DUPLICATE
-            - CONTESTATION_EQUIPMENT_ERROR
-            - CONTESTATION_NOT_ALLOWED
-            - CONTESTATION_OC_ERROR
-            - CONTESTATION_OI_RESPONSABILITY
-            - CONTESTATION_ORDER_PUT_INTO_SERVICE_FOR_MORE_THAN_A_YEAR
-            - CONTESTATION_PHOTO_NOT_USABLE
-            - CONTESTATION_REFUSED
-            - CREATING
-            - CRITICAL
-            - INFORMATION_GIVEN
-            - INFORMATION_REQUEST
-            - INVALID_FORMAT
-            - NON_ATTRIBUTABLE
-            - OC_RESOLUTION_DELAY_EXPIRED
-            - OI_RESOLUTION_IMPOSSIBLE
-            - OI_RESOLUTION_RENUNCIATION
-            - OI_RESPONSE_DELAY_EXPIRED
-            - OI_VALIDATION_DELAY_EXPIRED
-            - RESOLUTION_REFUSED_EQUIPMENT_ERROR
-            - RESOLUTION_REFUSED_NOT_REPAIRED
-            - RESOLUTION_REFUSED_PARTIALLY_RESOLVED
-            - RESOLUTION_REFUSED_PHOTO_NOT_USABLE
-            - RESOLVED_OC
-            - RESOLVED_OC_VALIDATED
-            - RESOLVED_OI_ATTRIBUTABLE
-            - RESOLVED_OI_CRITICAL
-            - RESOLVED_OI_NON_ATTRIBUTABLE
-            - RESOLVED_OI_VALIDATED
-          default: CREATING
-        maxResolutionOcDuration:
-          type: object
-          $ref: "#/components/schemas/MaxResolutionOcDuration"
-
-        totalResolutionOcDuration:
-          description: The OC resolution duration in seconds. Calculated only as long as ResolutionOwner = OC
-          type: number
-        expectedResolutionDate:
-          description: The maximum OC resolution date, recalculated only during state changes taking into account the ticket creation date and successive pauses.
-          type: string
-          format: date
-        validationDueDate:
-          description: The deadline for validation status
-          type: string
-          format: date
-        pendingDueDate:
-          description: The deadline for pending status
-          type: string
-          format: date
+        - required:
+            - attributable
+            - ocNumber
+            - resolutionOwner
+            - statusChangeReason
+          properties:
+            attributable:
+              type: boolean
+            ocNumber:
+              description: |
+                Nombre d'OCs concernés par la malfaçon.
+                OcNumber doit être supérieur ou égal à 1 et obligatoire
+              type: integer
+              readOnly: true
+              minimum: 1
+            activationRate:
+              description: Le taux d'activation est un pourcentage représentant la part de lignes activées par l'OC sur l'élément de réseau (PM ou PBO).
+              type: number
+              minimum: 0
+              exclusiveMinimum: true
+              maximum: 100
+              readOnly: true
+            resolutionOwner:
+              type: string
+              readOnly: true
+              enum:
+                - OI
+                - OC
+              default: OC
+            statusChangeReason:
+              type: string
+              enum:
+                - ACKNOWLEDGED
+                - ATTRIBUTABLE_ACCEPTED
+                - CANCELED
+                - CONTESTATION_ACCEPTED
+                - CONTESTATION_DUPLICATE
+                - CONTESTATION_EQUIPMENT_ERROR
+                - CONTESTATION_NOT_ALLOWED
+                - CONTESTATION_OC_ERROR
+                - CONTESTATION_OI_RESPONSABILITY
+                - CONTESTATION_ORDER_PUT_INTO_SERVICE_FOR_MORE_THAN_A_YEAR
+                - CONTESTATION_PHOTO_NOT_USABLE
+                - CONTESTATION_REFUSED
+                - CREATING
+                - CRITICAL
+                - INFORMATION_GIVEN
+                - INFORMATION_REQUEST
+                - INVALID_FORMAT
+                - NON_ATTRIBUTABLE
+                - OC_RESOLUTION_DELAY_EXPIRED
+                - OI_RESOLUTION_IMPOSSIBLE
+                - OI_RESOLUTION_RENUNCIATION
+                - OI_RESPONSE_DELAY_EXPIRED
+                - OI_VALIDATION_DELAY_EXPIRED
+                - RESOLUTION_REFUSED_EQUIPMENT_ERROR
+                - RESOLUTION_REFUSED_NOT_REPAIRED
+                - RESOLUTION_REFUSED_PARTIALLY_RESOLVED
+                - RESOLUTION_REFUSED_PHOTO_NOT_USABLE
+                - RESOLVED_OC
+                - RESOLVED_OC_VALIDATED
+                - RESOLVED_OI_ATTRIBUTABLE
+                - RESOLVED_OI_CRITICAL
+                - RESOLVED_OI_NON_ATTRIBUTABLE
+                - RESOLVED_OI_VALIDATED
+              default: CREATING
+            maxResolutionOcDuration:
+              $ref: "#/components/schemas/MaxResolutionOcDuration"
+            totalResolutionOcDuration:
+              description: The OC resolution duration in seconds. Calculated only as long as ResolutionOwner = OC
+              type: number
+            expectedResolutionDate:
+              description: The maximum OC resolution date, recalculated only during state changes taking into account the ticket creation date and successive pauses.
+              type: string
+              format: date
+            validationDueDate:
+              description: The deadline for validation status
+              type: string
+              format: date
+            pendingDueDate:
+              description: The deadline for pending status
+              type: string
+              format: date
 
     MaxResolutionOcDuration:
       type: object
@@ -728,305 +729,305 @@ components:
     MalfaconOiPm:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
-      required:
-        - pm
-        - codeFault
-        - localizationDetails
-      properties:
-        localization:
-          type: string
-          default: "PM"
-        localizationDetails:
-          type: string
-          enum:
-            - LD02
-            - LD04
-            - LD09
-            - LD15
-            - LD16
-            - LD17
-        codeFault:
-          type: string
-          enum:
-            - FD06
-            - FD10
-            - FD13
-            - FD14
-            - FD17
-            - FD18
-            - FD19
-            - FD20
-            - FD21
-            - FD22
-            - FD26
-            - FD31
-            - FD32
-            - FD36
-            - FD41
-            - FD50
-        pm:
-          $ref: "#/components/schemas/PM"
-        opticalRoute:
-          type: array
-          items:
-            $ref: "#/components/schemas/MalfaconOpticalRoutePM"
+        - required:
+            - pm
+            - codeFault
+            - localizationDetails
+          properties:
+            localization:
+              type: string
+              default: "PM"
+            localizationDetails:
+              type: string
+              enum:
+                - LD02
+                - LD04
+                - LD09
+                - LD15
+                - LD16
+                - LD17
+            codeFault:
+              type: string
+              enum:
+                - FD06
+                - FD10
+                - FD13
+                - FD14
+                - FD17
+                - FD18
+                - FD19
+                - FD20
+                - FD21
+                - FD22
+                - FD26
+                - FD31
+                - FD32
+                - FD36
+                - FD41
+                - FD50
+            pm:
+              $ref: "#/components/schemas/PM"
+            opticalRoute:
+              type: array
+              items:
+                $ref: "#/components/schemas/MalfaconOpticalRoutePM"
     MalfaconOiAmontPm:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
-      required:
-        - pm
-        - codeFault
-        - localizationDetails
-      properties:
-        localization:
-          type: string
-          default: "AMONT_PM"
-        localizationDetails:
-          type: string
-          enum:
-            - LD08
-            - LD18
-        codeFault:
-          type: string
-          enum:
-            - FD06
-            - FD08
-            - FD11
-            - FD27
-        pm:
-          $ref: "#/components/schemas/PM"
+        - required:
+            - pm
+            - codeFault
+            - localizationDetails
+          properties:
+            localization:
+              type: string
+              default: "AMONT_PM"
+            localizationDetails:
+              type: string
+              enum:
+                - LD08
+                - LD18
+            codeFault:
+              type: string
+              enum:
+                - FD06
+                - FD08
+                - FD11
+                - FD27
+            pm:
+              $ref: "#/components/schemas/PM"
 
     MalfaconOiPbo:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
-      required:
-        - pbo
-        - codeFault
-        - localizationDetails
-      properties:
-        localization:
-          type: string
-          default: "PBO"
-        localizationDetails:
-          type: string
-          enum:
-            - LD03
-            - LD07
-            - LD11
-            - LD15
-        codeFault:
-          type: string
-          enum:
-            - FD05
-            - FD15
-            - FD16
-            - FD23
-            - FD29
-            - FD30
-            - FD34
-            - FD36
-            - FD44
-            - FD46
-            - FD47
-        pbo:
-          $ref: "#/components/schemas/PBO"
-        opticalRoute:
-          type: array
-          items:
-            $ref: "#/components/schemas/MalfaconOpticalRoutePBO"
+        - required:
+            - pbo
+            - codeFault
+            - localizationDetails
+          properties:
+            localization:
+              type: string
+              default: "PBO"
+            localizationDetails:
+              type: string
+              enum:
+                - LD03
+                - LD07
+                - LD11
+                - LD15
+            codeFault:
+              type: string
+              enum:
+                - FD05
+                - FD15
+                - FD16
+                - FD23
+                - FD29
+                - FD30
+                - FD34
+                - FD36
+                - FD44
+                - FD46
+                - FD47
+            pbo:
+              $ref: "#/components/schemas/PBO"
+            opticalRoute:
+              type: array
+              items:
+                $ref: "#/components/schemas/MalfaconOpticalRoutePBO"
     MalfaconOiCcf:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
-      required:
-        - codeFault
-        - localizationDetails
-      properties:
-        localization:
-          type: string
-          default: "CCF"
-        localizationDetails:
-          type: string
-          enum:
-            - LD05
-            - LD06
-            - LD10
-            - LD13
-            - LD14
-        codeFault:
-          type: string
-          enum:
-            - FD02
-            - FD09
-            - FD12
-            - FD15
-            - FD25
-            - FD33
-            - FD34
-            - FD40
-            - FD43
-            - FD45
-            - FD49
-            - FD51
-        refOrder:
-          description: Référence de la commande
-          type: string
-        geographicLocation: # Localisation GPS du câble
-          $ref: "#/components/schemas/GeographicLocation"
-        pbo:
-          $ref: "#/components/schemas/PBO"
-        pto:
-          $ref: "#/components/schemas/PTO"
+        - required:
+            - codeFault
+            - localizationDetails
+          properties:
+            localization:
+              type: string
+              default: "CCF"
+            localizationDetails:
+              type: string
+              enum:
+                - LD05
+                - LD06
+                - LD10
+                - LD13
+                - LD14
+            codeFault:
+              type: string
+              enum:
+                - FD02
+                - FD09
+                - FD12
+                - FD15
+                - FD25
+                - FD33
+                - FD34
+                - FD40
+                - FD43
+                - FD45
+                - FD49
+                - FD51
+            refOrder:
+              description: Référence de la commande
+              type: string
+            geographicLocation: # Localisation GPS du câble
+              $ref: "#/components/schemas/GeographicLocation"
+            pbo:
+              $ref: "#/components/schemas/PBO"
+            pto:
+              $ref: "#/components/schemas/PTO"
 
     MalfaconOcPm:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
-      required:
-        - pm
-        - codeFault
-        - localizationDetails
-      properties:
-        localization:
-          type: string
-          default: "PM"
-        localizationDetails:
-          type: string
-          enum:
-            - LD02
-            - LD04
-            - LD09
-            - LD17
-        codeFault:
-          type: string
-          enum:
-            - FD06
-            - FD07
-            - FD18
-            - FD19
-            - FD20
-            - FD21
-            - FD22
-            - FD24
-            - FD32
-            - FD42
-            - FD50
-        pm:
-          $ref: "#/components/schemas/PM"
+        - required:
+            - pm
+            - codeFault
+            - localizationDetails
+          properties:
+            localization:
+              type: string
+              default: "PM"
+            localizationDetails:
+              type: string
+              enum:
+                - LD02
+                - LD04
+                - LD09
+                - LD17
+            codeFault:
+              type: string
+              enum:
+                - FD06
+                - FD07
+                - FD18
+                - FD19
+                - FD20
+                - FD21
+                - FD22
+                - FD24
+                - FD32
+                - FD42
+                - FD50
+            pm:
+              $ref: "#/components/schemas/PM"
 
     MalfaconOcAmontPm:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
-      required:
-        - pm
-        - codeFault
-        - localizationDetails
-      properties:
-        localization:
-          type: string
-          default: "AMONT_PM"
-        localizationDetails:
-          type: string
-          enum:
-            - LD01
-            - LD08
-            - LD18
-        codeFault:
-          type: string
-          enum:
-            - FD06
-            - FD11
-            - FD27
-            - FD39
-            - FD48
-        pm:
-          $ref: "#/components/schemas/PM"
+        - required:
+            - pm
+            - codeFault
+            - localizationDetails
+          properties:
+            localization:
+              type: string
+              default: "AMONT_PM"
+            localizationDetails:
+              type: string
+              enum:
+                - LD01
+                - LD08
+                - LD18
+            codeFault:
+              type: string
+              enum:
+                - FD06
+                - FD11
+                - FD27
+                - FD39
+                - FD48
+            pm:
+              $ref: "#/components/schemas/PM"
 
     MalfaconOcPmPbo:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
-      required:
-        - pm
-        - pbo
-        - codeFault
-        - localizationDetails
-      properties:
-        localization:
-          type: string
-          default: "PM_PBO"
-        localizationDetails:
-          type: string
-          enum:
-            - LD12
-        codeFault:
-          type: string
-          enum:
-            - FD01
-            - FD15
-        pm:
-          $ref: "#/components/schemas/PM"
-        pbo:
-          $ref: "#/components/schemas/PBO"
+        - required:
+            - pm
+            - pbo
+            - codeFault
+            - localizationDetails
+          properties:
+            localization:
+              type: string
+              default: "PM_PBO"
+            localizationDetails:
+              type: string
+              enum:
+                - LD12
+            codeFault:
+              type: string
+              enum:
+                - FD01
+                - FD15
+            pm:
+              $ref: "#/components/schemas/PM"
+            pbo:
+              $ref: "#/components/schemas/PBO"
 
     MalfaconOcPbo:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
-      required:
-        - codeFault
-        - localizationDetails
-      properties:
-        localization:
-          type: string
-          default: "PBO"
-        localizationDetails:
-          type: string
-          enum:
-            - LD03
-            - LD07
-            - LD11
-        codeFault:
-          type: string
-          enum:
-            - FD04
-            - FD15
-            - FD16
-            - FD28
-            - FD29
-            - FD30
-        pbo:
-          $ref: "#/components/schemas/PBO"
+        - required:
+            - codeFault
+            - localizationDetails
+          properties:
+            localization:
+              type: string
+              default: "PBO"
+            localizationDetails:
+              type: string
+              enum:
+                - LD03
+                - LD07
+                - LD11
+            codeFault:
+              type: string
+              enum:
+                - FD04
+                - FD15
+                - FD16
+                - FD28
+                - FD29
+                - FD30
+            pbo:
+              $ref: "#/components/schemas/PBO"
 
     MalfaconOcCcf:
       allOf:
         - $ref: "#/components/schemas/MalfaconOcBase"
-      required:
-        - pbo
-        - pto
-        - codeFault
-        - localizationDetails
-      properties:
-        localization:
-          type: string
-          default: "CCF"
-        localizationDetails:
-          type: string
-          enum:
-            - LD06
-        codeFault:
-          type: string
-          enum:
-            - FD02
-            - FD03
-            - FD12
-            - FD37
-            - FD38
-        refOrder:
-          description: Référence de la commande
-          type: string
-        geographicLocation: # Localisation GPS du câble
-          $ref: "#/components/schemas/GeographicLocation"
-        pbo:
-          $ref: "#/components/schemas/PBO"
-        pto:
-          $ref: "#/components/schemas/PTO"
+        - required:
+            - pbo
+            - pto
+            - codeFault
+            - localizationDetails
+          properties:
+            localization:
+              type: string
+              default: "CCF"
+            localizationDetails:
+              type: string
+              enum:
+                - LD06
+            codeFault:
+              type: string
+              enum:
+                - FD02
+                - FD03
+                - FD12
+                - FD37
+                - FD38
+            refOrder:
+              description: Référence de la commande
+              type: string
+            geographicLocation: # Localisation GPS du câble
+              $ref: "#/components/schemas/GeographicLocation"
+            pbo:
+              $ref: "#/components/schemas/PBO"
+            pto:
+              $ref: "#/components/schemas/PTO"
 
     GeographicLocation:
       $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
@@ -1034,94 +1035,98 @@ components:
     Note:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Note.openapi.yaml#/components/schemas/Note
-      properties:
-        relatedEntity:
-          description: |
-            Relation entre la note et la malfaçon.
-            Ce champ est renseigné par l'OI lors de la création de la note.
-          type: array
-          minItems: 1
-          maxItems: 1
-          readOnly: true
-          items:
-            allOf:
-              - $ref: "#/components/schemas/RelatedMalfacon"
+        - properties:
+            relatedEntity:
+              description: |
+                Relation entre la note et la malfaçon.
+                Ce champ est renseigné par l'OI lors de la création de la note.
+              type: array
+              minItems: 1
+              maxItems: 1
+              readOnly: true
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RelatedMalfacon"
 
     Attachment:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
-      description: |
-        An attachment is a file that is attached to an entity.
+        - description: |
+            An attachment is a file that is attached to an entity.
 
-        Only JPEG images are allowed.
+            Only JPEG images are allowed.
 
-        Extensions:
+            Extensions:
 
-        * `.csv`
-        * `.docx`
-        * `.jpeg`
-        * `.jpg`
-        * `.ods`
-        * `.odt`
-        * `.pdf`
-        * `.png`
-        * `.svg`
-        * `.xlsx`
+            * `.csv`
+            * `.docx`
+            * `.jpeg`
+            * `.jpg`
+            * `.ods`
+            * `.odt`
+            * `.pdf`
+            * `.png`
+            * `.svg`
+            * `.xlsx`
 
-        Mime types:
+            Mime types:
 
-        * `application/pdf`
-        * `application/vnd.oasis.opendocument.spreadsheet`
-        * `application/vnd.oasis.opendocument.text`
-        * `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
-        * `application/vnd.openxmlformats-officedocument.wordprocessingml.document`
-        * `image/jpeg`
-        * `image/jpg`
-        * `image/png`
-        * `image/svg+xml`
-        * `test/csv`
-      properties:
-        proofType:
-          enum:
-            - ISSUE
-            - RESOLUTION
-          default: ISSUE
-        primary:
-          type: boolean
-          description: Specify if this is the main attachment. There can only be one primary attachment for each type.
-          default: true
-        mimeType:
-          enum:
-            - application/pdf
-            - application/vnd.oasis.opendocument.spreadsheet
-            - application/vnd.oasis.opendocument.text
-            - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-            - application/vnd.openxmlformats-officedocument.wordprocessingml.document
-            - image/jpeg
-            - image/jpg
-            - image/png
-            - image/svg+xml
-            - test/csv
-        status:
-          enum:
-            - PENDING
-            - VALIDATED
-            - REJECTED
-        relatedEntity:
-          description: Reference to the malfacon
-          minItems: 1
-          maxItems: 1
-          readOnly: true
-          items:
-            allOf:
-              - $ref: "#/components/schemas/RelatedMalfacon"
+            * `application/pdf`
+            * `application/vnd.oasis.opendocument.spreadsheet`
+            * `application/vnd.oasis.opendocument.text`
+            * `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
+            * `application/vnd.openxmlformats-officedocument.wordprocessingml.document`
+            * `image/jpeg`
+            * `image/jpg`
+            * `image/png`
+            * `image/svg+xml`
+            * `test/csv`
+          properties:
+            proofType:
+              type: string
+              enum:
+                - ISSUE
+                - RESOLUTION
+              default: ISSUE
+            primary:
+              type: boolean
+              description: Specify if this is the main attachment. There can only be one primary attachment for each type.
+              default: true
+            mimeType:
+              type: string
+              enum:
+                - application/pdf
+                - application/vnd.oasis.opendocument.spreadsheet
+                - application/vnd.oasis.opendocument.text
+                - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                - image/jpeg
+                - image/jpg
+                - image/png
+                - image/svg+xml
+                - test/csv
+            status:
+              type: string
+              enum:
+                - PENDING
+                - VALIDATED
+                - REJECTED
+            relatedEntity:
+              type: array
+              description: Reference to the malfacon
+              minItems: 1
+              maxItems: 1
+              readOnly: true
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RelatedMalfacon"
 
     AttachmentFormData:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData
-      properties:
-        attachment:
-          $ref: "#/components/schemas/Attachment"
+        - properties:
+            attachment:
+              $ref: "#/components/schemas/Attachment"
 
     Event:
       allOf:
@@ -1173,13 +1178,13 @@ components:
     RelatedMalfacon:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
-      properties:
-        "@referredType":
-          type: string
-          default: "Malfacon"
-        role:
-          type: string
-          default: "troubleTicket"
+        - properties:
+            "@referredType":
+              type: string
+              default: "Malfacon"
+            role:
+              type: string
+              default: "troubleTicket"
 
     PM:
       $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PM
