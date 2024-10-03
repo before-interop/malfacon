@@ -513,7 +513,6 @@ paths:
 
 components:
   schemas:
-
     MalfaconBase:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
@@ -767,7 +766,10 @@ components:
             - FD50
         pm:
           $ref: "#/components/schemas/PM"
-
+        opticalRoute:
+          type: array
+          items:
+            $ref: "#/components/schemas/MalfaconOpticalRoutePM"
     MalfaconOiAmontPm:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
@@ -828,7 +830,10 @@ components:
             - FD47
         pbo:
           $ref: "#/components/schemas/PBO"
-
+        opticalRoute:
+          type: array
+          items:
+            $ref: "#/components/schemas/MalfaconOpticalRoutePBO"
     MalfaconOiCcf:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
@@ -1122,9 +1127,9 @@ components:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/CloudEvent.openapi.yaml#/components/schemas/CloudEvent
         - required:
-          - time
-          - subject
-          - type
+            - time
+            - subject
+            - type
           discriminator:
             propertyName: type
             mapping:
@@ -1184,6 +1189,112 @@ components:
 
     PTO:
       $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
+
+    MalfaconOpticalRoutePlanned:
+      required:
+        - name
+        - position
+        - noteTube
+        - noteFiber
+      allOf:
+        - $ref: "#/components/schemas/OpticalRoute"
+        - properties:
+            "@type":
+              example: MalfaconOpticalRoutePlanned
+            referencePTO:
+              description: Référence du PTO
+              type: string
+            referenceVIA:
+              description: Référence du VIA
+              type: string
+
+    MalfaconOpticalRouteObservedPBO:
+      required:
+        - noteTube
+        - noteFiber
+      allOf:
+        - $ref: "#/components/schemas/OpticalRoute"
+        - properties:
+            "@type":
+              example: MalfaconOpticalRouteObserved
+
+    MalfaconOpticalRouteObservedPM:
+      required:
+        - name
+        - position
+      allOf:
+        - $ref: "#/components/schemas/OpticalRoute"
+        - properties:
+            "@type":
+              example: MalfaconOpticalRouteObservedPM
+            referenceONT:
+              description: n° de série ou adresse Mac de l’ONT
+              type: string
+
+    MalfaconOpticalRouteFinal:
+      required:
+        - name
+        - position
+        - noteTube
+        - noteFiber
+      description: |
+        n’est pas obligatoire pour l’OI mais doit être renseignée par l’OC quand il corrige
+      allOf:
+        - $ref: "#/components/schemas/OpticalRoute"
+        - properties:
+            "@type":
+              example: MalfaconOpticalRouteFinal
+            dechargeNumber:
+              description: n° de décharge issue de la demande de mutation
+              type: string
+            note:
+              description: explication des corrections apportées, ou blocage rencontré, par l’OC
+              type: string
+
+    MalfaconOpticalRoutePM:
+      description: Pour les routes optiques obligatoire, il faut mettre la valeur "UNKNOWN" pour les champs inconnus qui sont obligatoires.
+      required:
+        - observed
+        - planned
+      properties:
+        planned:
+          $ref: "#/components/schemas/MalfaconOpticalRoutePlanned"
+        observed:
+          $ref: "#/components/schemas/MalfaconOpticalRouteObservedPM"
+        final:
+          $ref: "#/components/schemas/MalfaconOpticalRouteFinal"
+
+    MalfaconOpticalRoutePBO:
+      description: Pour les routes optiques obligatoire, il faut mettre la valeur "UNKNOWN" pour les champs inconnus qui sont obligatoires.
+      required:
+        - observed
+        - planned
+      properties:
+        planned:
+          $ref: "#/components/schemas/MalfaconOpticalRoutePlanned"
+        observed:
+          $ref: "#/components/schemas/MalfaconOpticalRouteObservedPBO"
+        final:
+          $ref: "#/components/schemas/MalfaconOpticalRouteFinal"
+
+    OpticalRoute:
+      properties:
+        "@baseType":
+          example: OpticalRoute
+        "@type":
+          example: OpticalRoute
+        name:
+          description: Nom du module PM
+          type: string
+        noteFiber:
+          description: ajout d'information concernant la fibre
+          type: string
+        noteTube:
+          description: ajout d'information concernant le tube
+          type: string
+        position:
+          description: Position du module PM
+          type: string
 
   parameters:
     malfaconId:
