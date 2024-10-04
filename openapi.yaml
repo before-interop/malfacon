@@ -1196,15 +1196,11 @@ components:
       $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
 
     MalfaconOpticalRoutePlanned:
-      required:
-        - name
-        - position
-        - noteTube
-        - noteFiber
       allOf:
         - $ref: "#/components/schemas/OpticalRoute"
         - properties:
             "@type":
+              type: string
               example: MalfaconOpticalRoutePlanned
             referencePTO:
               description: Référence du PTO
@@ -1212,29 +1208,36 @@ components:
             referenceVIA:
               description: Référence du VIA
               type: string
+          required:
+            - name
+            - position
+            - noteTube
+            - noteFiber
 
     MalfaconOpticalRouteObservedPBO:
-      required:
-        - noteTube
-        - noteFiber
       allOf:
         - $ref: "#/components/schemas/OpticalRoute"
         - properties:
             "@type":
+              type: string
               example: MalfaconOpticalRouteObserved
+          required:
+            - noteTube
+            - noteFiber
 
     MalfaconOpticalRouteObservedPM:
-      required:
-        - name
-        - position
       allOf:
         - $ref: "#/components/schemas/OpticalRoute"
         - properties:
             "@type":
+              type: string
               example: MalfaconOpticalRouteObservedPM
             referenceONT:
               description: n° de série ou adresse Mac de l’ONT
               type: string
+          required:
+            - name
+            - position
 
     MalfaconOpticalRouteFinal:
       required:
@@ -1249,6 +1252,7 @@ components:
         - properties:
             "@type":
               example: MalfaconOpticalRouteFinal
+              type: string
             dechargeNumber:
               description: n° de décharge issue de la demande de mutation
               type: string
@@ -1257,7 +1261,7 @@ components:
               type: string
 
     MalfaconOpticalRoutePM:
-      description: Pour les routes optiques obligatoire, il faut mettre la valeur "UNKNOWN" pour les champs inconnus qui sont obligatoires.
+      description: Pour les routes optiques obligatoires, il faut mettre la valeur "UNKNOWN" pour les champs inconnus qui sont obligatoires.
       required:
         - observed
         - planned
@@ -1285,8 +1289,10 @@ components:
     OpticalRoute:
       properties:
         "@baseType":
+          type: string
           example: OpticalRoute
         "@type":
+          type: string
           example: OpticalRoute
         name:
           description: Nom du module PM
