@@ -367,11 +367,7 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment"
-              required:
-                - size
-                - sha256
+              $ref: "#/components/schemas/AttachmentMalfacon"
       responses:
         "200":
           description: |
@@ -382,8 +378,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment"
+                $ref: "#/components/schemas/AttachmentMalfacon"
           headers:
             ETag:
               $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag"
@@ -436,17 +431,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              required:
-                - file
-                - metadata
-              properties:
-                file:
-                  format: binary
-                  description: The file to upload
-                  type: string
-                metadata:
-                  $ref: "#/components/schemas/Chunk"
+              $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentChunkForm"
       responses:
         "200":
           description: The chunk has been uploaded
@@ -1106,81 +1091,74 @@ components:
             allOf:
               - $ref: "#/components/schemas/RelatedMalfacon"
 
-    Attachment:
+    AttachmentMalfacon:
       allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
-      description: |
-        An attachment is a file that is attached to an entity.
+        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMultipart
+        - description: |
+            An attachment is a file that is attached to an entity.
 
-        Only JPEG images are allowed.
+            Only JPEG images are allowed.
 
-        Extensions:
+            Extensions:
 
-        * `.csv`
-        * `.docx`
-        * `.jpeg`
-        * `.jpg`
-        * `.ods`
-        * `.odt`
-        * `.pdf`
-        * `.png`
-        * `.svg`
-        * `.xlsx`
+            * `.csv`
+            * `.docx`
+            * `.jpeg`
+            * `.jpg`
+            * `.ods`
+            * `.odt`
+            * `.pdf`
+            * `.png`
+            * `.svg`
+            * `.xlsx`
 
-        Mime types:
+            Mime types:
 
-        * `application/pdf`
-        * `application/vnd.oasis.opendocument.spreadsheet`
-        * `application/vnd.oasis.opendocument.text`
-        * `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
-        * `application/vnd.openxmlformats-officedocument.wordprocessingml.document`
-        * `image/jpeg`
-        * `image/jpg`
-        * `image/png`
-        * `image/svg+xml`
-        * `test/csv`
-      properties:
-        proofType:
-          enum:
-            - ISSUE
-            - RESOLUTION
-          default: ISSUE
-        primary:
-          type: boolean
-          description: Specify if this is the main attachment. There can only be one primary attachment for each type.
-          default: true
-        mimeType:
-          enum:
-            - application/pdf
-            - application/vnd.oasis.opendocument.spreadsheet
-            - application/vnd.oasis.opendocument.text
-            - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-            - application/vnd.openxmlformats-officedocument.wordprocessingml.document
-            - image/jpeg
-            - image/jpg
-            - image/png
-            - image/svg+xml
-            - test/csv
-        status:
-          enum:
-            - PENDING
-            - VALIDATED
-            - REJECTED
-        relatedEntity:
-          description: Reference to the malfacon
-          minItems: 1
-          maxItems: 1
-          readOnly: true
-          items:
-            allOf:
-              - $ref: "#/components/schemas/RelatedMalfacon"
-
-    AttachmentFormData:
-      allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData
-      properties:
-        attachment:
-          $ref: "#/components/schemas/Attachment"
+            * `application/pdf`
+            * `application/vnd.oasis.opendocument.spreadsheet`
+            * `application/vnd.oasis.opendocument.text`
+            * `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
+            * `application/vnd.openxmlformats-officedocument.wordprocessingml.document`
+            * `image/jpeg`
+            * `image/jpg`
+            * `image/png`
+            * `image/svg+xml`
+            * `test/csv`
+          properties:
+            proofType:
+              enum:
+                - ISSUE
+                - RESOLUTION
+              default: ISSUE
+            primary:
+              type: boolean
+              description: Specify if this is the main attachment. There can only be one primary attachment for each type.
+              default: true
+            mimeType:
+              enum:
+                - application/pdf
+                - application/vnd.oasis.opendocument.spreadsheet
+                - application/vnd.oasis.opendocument.text
+                - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                - image/jpeg
+                - image/jpg
+                - image/png
+                - image/svg+xml
+                - test/csv
+            status:
+              enum:
+                - PENDING
+                - VALIDATED
+                - REJECTED
+            relatedEntity:
+              description: Reference to the malfacon
+              minItems: 1
+              maxItems: 1
+              readOnly: true
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RelatedMalfacon"
 
     Event:
       allOf:
