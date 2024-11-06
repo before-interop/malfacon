@@ -830,6 +830,8 @@ components:
             - FD47
         pbo:
           $ref: "#/components/schemas/PBO"
+        pm:
+          $ref: "#/components/schemas/PM"
         opticalRoute:
           type: array
           items:
