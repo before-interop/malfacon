@@ -739,6 +739,20 @@ components:
               default: "PM"
             localizationDetails:
               type: string
+              description: |
+                Détails de localisation de la malfacon
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | LD02 | ARMOIRE                                                                                |
+                | LD04 | BRASSAGE_OC                                                                            |
+                | LD09 | CONNECTEUR_TIROIR_ZAPM                                                                 |
+                | LD15 | ROUTE_OPTIQUE                                                                          |
+                | LD16 | TIROIR_OC                                                                              |
+                | LD17 | TIROIR_ZAPM                                                                            |
+
               enum:
                 - LD02
                 - LD04
@@ -748,6 +762,29 @@ components:
                 - LD17
             codeFault:
               type: string
+              description: |
+                Code du défaut de la malfacon.
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | FD06 | bouchon absent                                                                         |
+                | FD10 | caractéristiques non conformes aux STAS                                                |
+                | FD13 | cheminement non conforme surplomb domaine privé, …                                     |
+                | FD14 | cordon non conforme aux STAS caractéristiques techniques                               |
+                | FD17 | dégradation majeure                                                                    |
+                | FD18 | dégradation porte                                                                      |
+                | FD19 | dégradation serrure                                                                    |
+                | FD20 | dégradation tambours                                                                   |
+                | FD21 | dégradation tiroirs cassés                                                             |
+                | FD22 | environnement nettoyage déchets, fermeture                                             |
+                | FD26 | implantation ou étiquetage non conforme aux STAS                                       |
+                | FD31 | mauvaise fixation                                                                      |
+                | FD32 | mauvaise fixation ou fermeture dégradée                                                |
+                | FD36 | non respect Route Optique communiquée                                                  |
+                | FD41 | présence de cordons à zéro non retirés                                                 |
+                | FD50 | dégradation autres                                                                     |
               enum:
                 - FD06
                 - FD10
@@ -788,11 +825,33 @@ components:
               default: "AMONT_PM"
             localizationDetails:
               type: string
+              description: |
+                Détails de localisation de la malfacon
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | LD08 | COLLECTE_LIEN_PM_PRDM                                                                  |
+                | LD18 | ADDUCTION_OC                                                                           |
+
               enum:
                 - LD08
                 - LD18
             codeFault:
               type: string
+              description: |
+                Code du défaut de la malfacon.
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | FD06 | bouchon absent                                                                         |
+                | FD08 | brassage OC non conforme                                                               |
+                | FD11 | cheminement câble OC/OI non conforme                                                   |
+                | FD27 | implantation tiroir OC/OI ou étiquetage non conforme                                   |
+
               enum:
                 - FD06
                 - FD08
@@ -817,6 +876,17 @@ components:
               default: "PBO"
             localizationDetails:
               type: string
+              description: |
+                Détails de localisation de la malfacon
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | LD03 | BOITIER                                                                                |
+                | LD07 | CASSETTE                                                                               |
+                | LD11 | PBO_ENVIRONNEMENT                                                                      |
+                | LD15 | ROUTE_OPTIQUE                                                                          |
               enum:
                 - LD03
                 - LD07
@@ -824,6 +894,24 @@ components:
                 - LD15
             codeFault:
               type: string
+              description: |
+                Code du défaut de la malfacon.
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | FD05 | boîtier PBO non/mal refermé, non/mal refixé,…                                          |
+                | FD15 | dégradation                                                                            |
+                | FD16 | dégradation du support PBO poteau                                                      |
+                | FD23 | épissure non conforme dénudage, protection de soudure                                  |
+                | FD29 | lovage fibre non conforme aux STAS                                                     |
+                | FD30 | lovage câble en chambre ou poteau non conforme aux STAS                                |
+                | FD34 | nettoyage chantier                                                                     |
+                | FD36 | non respect Route Optique communiquée                                                  |
+                | FD44 | raccordement de site non déployé dans IPE                                              |
+                | FD46 | reprise sauvage Route Optique par casse soudure au PBO                                 |
+                | FD47 | taille SMOOVE non conforme                                                             |
               enum:
                 - FD05
                 - FD15
@@ -858,6 +946,18 @@ components:
               default: "CCF"
             localizationDetails:
               type: string
+              description: |
+                Détails de localisation de la malfacon
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | LD05 | CABLE_CARACTERISTIQUE                                                                  |
+                | LD06 | CABLE_INSTALLATION                                                                     |
+                | LD10 | ENTREE_DE_CABLE_PBO                                                                    |
+                | LD13 | PTO_CARACTERISTIQUE                                                                    |
+                | LD14 | PTO_INSTALLATION                                                                       |
               enum:
                 - LD05
                 - LD06
@@ -866,6 +966,25 @@ components:
                 - LD14
             codeFault:
               type: string
+              description: |
+                Code du défaut de la malfacon.
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | FD02 | absence protection obligatoire gaine fendue, demi-lune, …                              |
+                | FD09 | caractéristiques tiroir non conforme aux STAS                                          |
+                | FD12 | cheminement non conforme aux STAS                                                      |
+                | FD15 | dégradation                                                                            |
+                | FD25 | étiquetage non conforme aux STAS                                                       |
+                | FD33 | modularité du câble CCF non conforme                                                   |
+                | FD34 | nettoyage chantier                                                                     |
+                | FD40 | pose non conforme implantation ou fixation                                             |
+                | FD43 | PTO mal ou non étiquetée                                                               |
+                | FD45 | rebouchage non effectué                                                                |
+                | FD49 | type de pose/fixation non conforme aux préconisations OI                               |
+                | FD51 | entrée cable pbo non conforme aux STAS                                                 |
               enum:
                 - FD02
                 - FD09
@@ -902,6 +1021,17 @@ components:
               default: "PM"
             localizationDetails:
               type: string
+              description: |
+                Détails de localisation de la malfacon
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | LD02 | ARMOIRE                                                                                |
+                | LD04 | BRASSAGE_OC                                                                            |
+                | LD09 | CONNECTEUR_TIROIR_ZAPM                                                                 |
+                | LD17 | TIROIR_ZAPM                                                                            |
               enum:
                 - LD02
                 - LD04
@@ -909,6 +1039,24 @@ components:
                 - LD17
             codeFault:
               type: string
+              description: |
+                Code du défaut de la malfacon.
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | FD06 | bouchon absent                                                                         |
+                | FD07 | brassage existant encombrant le cheminement                                            |
+                | FD18 | dégradation porte                                                                      |
+                | FD19 | dégradation serrure                                                                    |
+                | FD20 | dégradation tambours                                                                   |
+                | FD21 | dégradation tiroirs cassés                                                             |
+                | FD22 | environnement nettoyage déchets, fermeture                                             |
+                | FD24 | étiquetage du PM non conforme hors échec de production                                 |
+                | FD32 | mauvaise fixation ou fermeture dégradée                                                |
+                | FD42 | présence de cordons non conformes                                                      |
+                | FD50 | dégradation autres                                                                     |
               enum:
                 - FD06
                 - FD07
@@ -937,12 +1085,36 @@ components:
               default: "AMONT_PM"
             localizationDetails:
               type: string
+              description: |
+                Détails de localisation de la malfacon
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | LD01 | AMONT_PM_INSTALLATION                                                                  |
+                | LD08 | COLLECTE_LIEN_PM_PRDM                                                                  |
+                | LD18 | ADDUCTION_OC                                                                           |
+
               enum:
                 - LD01
                 - LD08
                 - LD18
             codeFault:
               type: string
+              description: |
+                Code du défaut de la malfacon.
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | FD06 | bouchon absent                                                                         |
+                | FD11 | cheminement câble OC/OI non conforme                                                   |
+                | FD27 | implantation tiroir OC/OI ou étiquetage non conforme                                   |
+                | FD39 | passage de câble non conforme                                                          |
+                | FD48 | tiroir OI dégradé                                                                      |
+
               enum:
                 - FD06
                 - FD11
@@ -966,10 +1138,29 @@ components:
               default: "PM_PBO"
             localizationDetails:
               type: string
+              description: |
+                Détails de localisation de la malfacon
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | LD12 | PM_PBO_INSTALLATION                                                                    |
+
               enum:
                 - LD12
             codeFault:
               type: string
+              description: |
+                Code du défaut de la malfacon.
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | FD01 | absence de gaine demi-lune pour protéger câble PBO aérien, poteau ou façade            |
+                | FD15 | dégradation                                                                            |
+
               enum:
                 - FD01
                 - FD15
@@ -990,12 +1181,37 @@ components:
               default: "PBO"
             localizationDetails:
               type: string
+              description: |
+                Détails de localisation de la malfacon
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | LD03 | BOITIER                                                                                |
+                | LD07 | CASSETTE                                                                               |
+                | LD11 | PBO_ENVIRONNEMENT                                                                      |
+
               enum:
                 - LD03
                 - LD07
                 - LD11
             codeFault:
               type: string
+               description: |
+                Code du défaut de la malfacon.
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | FD04 | boîtier PBO non/mal étiqueté hors échec production                                     |
+                | FD15 | dégradation                                                                            |
+                | FD16 | dégradation du support PBO poteau                                                      |
+                | FD28 | localisation non conforme aux données OI commande accès hors échec production          |
+                | FD29 | lovage fibre non conforme aux STAS                                                     |
+                | FD30 | lovage câble en chambre ou poteau non conforme aux STAS                                |
+
               enum:
                 - FD04
                 - FD15
@@ -1022,10 +1238,32 @@ components:
               default: "CCF"
             localizationDetails:
               type: string
+              description: |
+                Détails de localisation de la malfacon
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | LD06 | CABLE_INSTALLATION                                                                     |
+
               enum:
                 - LD06
             codeFault:
               type: string
+              description: |
+                Code du défaut de la malfacon.
+
+                Liste des valeurs possibles:
+
+                | Code | valeur                                                                                 |
+                | ---- | -------------------------------------------------------------------------------------- |
+                | FD02 | absence protection obligatoire gaine fendue, demi-lune, …                              |
+                | FD03 | bilan optique non conforme aux STAS                                                    |
+                | FD12 | cheminement non conforme aux STAS                                                      |
+                | FD37 | non utilisable pas d'autorisation de cheminement                                       |
+                | FD38 | non utilisable risque de surplomb, sécurisé                                            |
+
               enum:
                 - FD02
                 - FD03
