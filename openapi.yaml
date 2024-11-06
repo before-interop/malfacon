@@ -1204,8 +1204,8 @@ components:
             referencePTO:
               description: Référence du PTO
               type: string
-            referenceVIA:
-              description: Référence du VIA
+            referencePrestationPrise:
+              description: Référence Prestation Prise
               type: string
 
     MalfaconOpticalRouteObservedPBO:
