@@ -771,6 +771,10 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/MalfaconOpticalRoutePM"
+            garterColour:
+              type: string
+              enum: ["GRIS", "ROUGE", "ROSE", "BLEU_AQUA", "VERT", "ORANGE", "JAUNE"]
+
     MalfaconOiAmontPm:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
@@ -796,6 +800,9 @@ components:
                 - FD27
             pm:
               $ref: "#/components/schemas/PM"
+            garterColour:
+              type: string
+              enum: ["GRIS", "ROUGE", "ROSE", "BLEU_AQUA", "VERT", "ORANGE", "JAUNE"]
 
     MalfaconOiPbo:
       allOf:
@@ -835,6 +842,9 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/MalfaconOpticalRoutePBO"
+            refOrder:
+              type: string
+
     MalfaconOiCcf:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
@@ -994,6 +1004,8 @@ components:
                 - FD30
             pbo:
               $ref: "#/components/schemas/PBO"
+            pm:
+              $ref: "#/components/schemas/PM"
 
     MalfaconOcCcf:
       allOf:
