@@ -842,7 +842,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/MalfaconOpticalRoutePBO"
-            refOrder:
+            referencePrestationPrise:
+              description: Référence Prestation Prise
               type: string
 
     MalfaconOiCcf:
