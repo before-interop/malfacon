@@ -867,9 +867,6 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/MalfaconOpticalRoutePM"
-            garterColour:
-              type: string
-              enum: ["GRIS", "ROUGE", "ROSE", "BLEU_AQUA", "VERT", "ORANGE", "JAUNE"]
 
     MalfaconOiAmontPm:
       allOf:
@@ -918,9 +915,6 @@ components:
                 - FD27
             pm:
               $ref: "#/components/schemas/PM"
-            garterColour:
-              type: string
-              enum: ["GRIS", "ROUGE", "ROSE", "BLEU_AQUA", "VERT", "ORANGE", "JAUNE"]
 
     MalfaconOiPbo:
       allOf:
@@ -985,6 +979,8 @@ components:
                 - FD47
             pbo:
               $ref: "#/components/schemas/PBO"
+            pm:
+              $ref: "#/components/schemas/PM"
             opticalRoute:
               type: array
               items:
@@ -992,13 +988,15 @@ components:
             referencePrestationPrise:
               description: Référence Prestation Prise
               type: string
-
     MalfaconOiCcf:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
         - required:
             - codeFault
             - localizationDetails
+            - refPrestationPrise
+            - pbo
+            - pto
           properties:
             localization:
               type: string
@@ -1057,7 +1055,7 @@ components:
                 - FD45
                 - FD49
                 - FD51
-            refOrder:
+            refPrestationPrise:
               description: Référence de la commande
               type: string
             geographicLocation: # Localisation GPS du câble
