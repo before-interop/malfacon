@@ -446,7 +446,7 @@ paths:
                   description: The file to upload
                   type: string
                 metadata:
-                  $ref: "#/components/schemas/Chunk"
+                  $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Chunk"
       responses:
         "200":
           description: The chunk has been uploaded
