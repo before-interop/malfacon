@@ -1257,7 +1257,7 @@ components:
                 - LD11
             codeFault:
               type: string
-               description: |
+              description: |
                 Code du défaut de la malfacon.
 
                 Liste des valeurs possibles:
