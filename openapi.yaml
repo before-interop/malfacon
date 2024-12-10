@@ -365,13 +365,16 @@ paths:
         description: The attachment to create
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              allOf:
-                - $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment"
+              type: object
               required:
-                - size
-                - sha256
+                - attachment
+              properties:
+                attachment:
+                  $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment"
+                file:
+                  $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentFormData"
       responses:
         "200":
           description: |
@@ -430,6 +433,7 @@ paths:
         - OI
       summary: upload a chunk of the content of an attachment
       description: This method allows to upload a chunk of the content of an attachment.
+      operationId: putAttachmentByChunk
       requestBody:
         description: The chunk of the content of the attachment
         required: true
@@ -438,15 +442,9 @@ paths:
             schema:
               type: object
               required:
-                - file
-                - metadata
-              properties:
-                file:
-                  format: binary
-                  description: The file to upload
-                  type: string
-                metadata:
-                  $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Chunk"
+                - data
+                - chunk
+              $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentChunkForm"
       responses:
         "200":
           description: The chunk has been uploaded
@@ -465,6 +463,17 @@ paths:
 
         The server will aggregate all the chunks uploaded and validate the content of the attachment
         in an asynchronous way.
+      operationId: finalizeAttachmentCreationByChunk
+      requestBody:
+        description: The metadata of the Attachment
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - metadata
+              $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMultipart"
       responses:
         "200":
           description: The chunk has been uploaded
