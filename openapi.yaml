@@ -470,7 +470,7 @@ paths:
           description: The chunk has been uploaded
         "404": *response404
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/V1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
   /malfacon/event:
     get:
       tags:
