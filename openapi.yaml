@@ -365,16 +365,10 @@ paths:
         description: The attachment to create
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
-              type: object
-              required:
-                - attachment
-              properties:
-                attachment:
-                  $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment"
-                file:
-                  $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentFormData"
+              allOf:
+                - $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMultipart"
       responses:
         "200":
           description: |
@@ -465,15 +459,8 @@ paths:
         in an asynchronous way.
       operationId: finalizeAttachmentCreationByChunk
       requestBody:
-        description: The metadata of the Attachment
-        required: true
         content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - metadata
-              $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMultipart"
+          application/json: {}
       responses:
         "200":
           description: The chunk has been uploaded
