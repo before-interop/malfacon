@@ -829,8 +829,8 @@ components:
                 | Code | valeur                                                                                 |
                 | ---- | -------------------------------------------------------------------------------------- |
                 | FD06 | bouchon absent                                                                         |
-                | FD10 | caractéristiques non conformes aux STAS                                                |
-                | FD13 | cheminement non conforme surplomb domaine privé, …                                     |
+                | FD09 | cheminement non conforme aux STAS…                                         |
+                | FD12 | cheminement non conforme surplomb domaine privé, …                                     |
                 | FD14 | cordon non conforme aux STAS caractéristiques techniques                               |
                 | FD17 | dégradation majeure                                                                    |
                 | FD18 | dégradation porte                                                                      |
@@ -846,8 +846,8 @@ components:
                 | FD50 | dégradation autres                                                                     |
               enum:
                 - FD06
-                - FD10
-                - FD13
+                - FD09
+                - FD12
                 - FD14
                 - FD17
                 - FD18
@@ -1033,8 +1033,8 @@ components:
                 | Code | valeur                                                                                 |
                 | ---- | -------------------------------------------------------------------------------------- |
                 | FD02 | absence protection obligatoire gaine fendue, demi-lune, …                              |
-                | FD09 | caractéristiques tiroir non conforme aux STAS                                          |
-                | FD12 | cheminement non conforme aux STAS                                                      |
+                | FD10 | caractéristiques non conformes aux STAS                                                |
+                | FD13 | cheminement non conforme surplomb domaine privé, …                                     |
                 | FD15 | dégradation                                                                            |
                 | FD25 | étiquetage non conforme aux STAS                                                       |
                 | FD33 | modularité du câble CCF non conforme                                                   |
@@ -1046,8 +1046,8 @@ components:
                 | FD51 | entrée cable pbo non conforme aux STAS                                                 |
               enum:
                 - FD02
-                - FD09
-                - FD12
+                - FD10
+                - FD13
                 - FD15
                 - FD25
                 - FD33
@@ -1319,14 +1319,14 @@ components:
                 | ---- | -------------------------------------------------------------------------------------- |
                 | FD02 | absence protection obligatoire gaine fendue, demi-lune, …                              |
                 | FD03 | bilan optique non conforme aux STAS                                                    |
-                | FD12 | cheminement non conforme aux STAS                                                      |
+                | FD13 | cheminement non conforme surplomb domaine privé, …                                     |
                 | FD37 | non utilisable pas d'autorisation de cheminement                                       |
                 | FD38 | non utilisable risque de surplomb, sécurisé                                            |
 
               enum:
                 - FD02
                 - FD03
-                - FD12
+                - FD13
                 - FD37
                 - FD38
             refOrder:
