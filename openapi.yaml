@@ -1595,6 +1595,13 @@ components:
           $ref: "#/components/schemas/MalfaconOpticalRouteFinal"
 
     OpticalRoute:
+      discriminator:
+            propertyName: "@type"
+            mapping:
+              "optical.route.planned": "#/components/schemas/MalfaconOpticalRoutePlanned"
+              "optical.route.observed.pbo": "#/components/schemas/MalfaconOpticalRouteObservedPBO"
+              "optical.route.observed.pm": "#/components/schemas/MalfaconOpticalRouteObservedPM"
+              "optical.route.final": "#/components/schemas/MalfaconOpticalRouteFinal"
       properties:
         "@baseType":
           type: string
@@ -1602,6 +1609,13 @@ components:
         "@type":
           type: string
           example: OpticalRoute
+          description: |
+            Les valeurs possibles sont :
+            * `optical.route.planned`: `#/components/schemas/MalfaconOpticalRoutePlanned`
+            * `optical.route.observed.pbo`: `#/components/schemas/MalfaconOpticalRouteObservedPBO`
+            * `optical.route.observed.pm`: `#/components/schemas/MalfaconOpticalRouteObservedPM`
+            * `optical.route.final`: `#/components/schemas/MalfaconOpticalRouteFinal`
+
         name:
           description: Nom du module PM
           type: string
