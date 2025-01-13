@@ -579,7 +579,7 @@ components:
             propertyName: "@type"
             mapping:
               "malfacon.pm.oi": "#/components/schemas/MalfaconOiPm"
-              "malfacon.oi.amontpm": "#/components/schemas/MalfaconOiAmontPm"
+              "malfacon.amontpm.oi": "#/components/schemas/MalfaconOiAmontPm"
               "malfacon.pbo.oi": "#/components/schemas/MalfaconOiPbo"
               "malfacon.ccf.oi": "#/components/schemas/MalfaconOiCcf"
               "malfacon.pm.oc": "#/components/schemas/MalfaconOcPm"
