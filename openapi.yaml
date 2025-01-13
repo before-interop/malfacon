@@ -1512,12 +1512,6 @@ components:
             "@type":
               type: string
               example: MalfaconOpticalRoutePlanned
-            referencePTO:
-              description: Référence du PTO
-              type: string
-            referencePrestationPrise:
-              description: Référence Prestation Prise
-              type: string
           required:
             - name
             - position
@@ -1582,6 +1576,12 @@ components:
           $ref: "#/components/schemas/MalfaconOpticalRouteObservedPM"
         final:
           $ref: "#/components/schemas/MalfaconOpticalRouteFinal"
+        referencePTO:
+          description: Référence du PTO
+          type: string
+        referencePrestationPrise:
+          description: Référence Prestation Prise
+          type: string
 
     MalfaconOpticalRoutePBO:
       description: Pour les routes optiques obligatoire, il faut mettre la valeur "UNKNOWN" pour les champs inconnus qui sont obligatoires.
@@ -1595,6 +1595,9 @@ components:
           $ref: "#/components/schemas/MalfaconOpticalRouteObservedPBO"
         final:
           $ref: "#/components/schemas/MalfaconOpticalRouteFinal"
+        referencePTO:
+          description: Référence du PTO
+          type: string
 
     OpticalRoute:
       properties:
