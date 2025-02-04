@@ -368,7 +368,7 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment"
+                - $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMultipart"
               required:
                 - size
                 - sha256
@@ -1428,13 +1428,6 @@ components:
               items:
                 allOf:
                   - $ref: "#/components/schemas/RelatedMalfacon"
-
-    AttachmentFormData:
-      allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData
-        - properties:
-            attachment:
-              $ref: "#/components/schemas/Attachment"
 
     Event:
       allOf:
