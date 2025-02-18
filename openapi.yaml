@@ -466,7 +466,7 @@ paths:
           description: The chunk has been uploaded
         "404": *response404
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/V1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
   /malfacon/event:
     get:
       tags:
@@ -575,7 +575,7 @@ components:
             propertyName: "@type"
             mapping:
               "malfacon.pm.oi": "#/components/schemas/MalfaconOiPm"
-              "malfacon.oi.amontpm": "#/components/schemas/MalfaconOiAmontPm"
+              "malfacon.amontpm.oi": "#/components/schemas/MalfaconOiAmontPm"
               "malfacon.pbo.oi": "#/components/schemas/MalfaconOiPbo"
               "malfacon.ccf.oi": "#/components/schemas/MalfaconOiCcf"
               "malfacon.pm.oc": "#/components/schemas/MalfaconOcPm"
@@ -825,8 +825,8 @@ components:
                 | Code | valeur                                                                                 |
                 | ---- | -------------------------------------------------------------------------------------- |
                 | FD06 | bouchon absent                                                                         |
-                | FD10 | caractéristiques non conformes aux STAS                                                |
-                | FD13 | cheminement non conforme surplomb domaine privé, …                                     |
+                | FD09 | cheminement non conforme aux STAS…                                         |
+                | FD12 | cheminement non conforme surplomb domaine privé, …                                     |
                 | FD14 | cordon non conforme aux STAS caractéristiques techniques                               |
                 | FD17 | dégradation majeure                                                                    |
                 | FD18 | dégradation porte                                                                      |
@@ -842,8 +842,8 @@ components:
                 | FD50 | dégradation autres                                                                     |
               enum:
                 - FD06
-                - FD10
-                - FD13
+                - FD09
+                - FD12
                 - FD14
                 - FD17
                 - FD18
@@ -863,9 +863,6 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/MalfaconOpticalRoutePM"
-            garterColour:
-              type: string
-              enum: ["GRIS", "ROUGE", "ROSE", "BLEU_AQUA", "VERT", "ORANGE", "JAUNE"]
 
     MalfaconOiAmontPm:
       allOf:
@@ -914,9 +911,6 @@ components:
                 - FD27
             pm:
               $ref: "#/components/schemas/PM"
-            garterColour:
-              type: string
-              enum: ["GRIS", "ROUGE", "ROSE", "BLEU_AQUA", "VERT", "ORANGE", "JAUNE"]
 
     MalfaconOiPbo:
       allOf:
@@ -981,6 +975,8 @@ components:
                 - FD47
             pbo:
               $ref: "#/components/schemas/PBO"
+            pm:
+              $ref: "#/components/schemas/PM"
             opticalRoute:
               type: array
               items:
@@ -988,13 +984,15 @@ components:
             referencePrestationPrise:
               description: Référence Prestation Prise
               type: string
-
     MalfaconOiCcf:
       allOf:
         - $ref: "#/components/schemas/MalfaconOiBase"
         - required:
             - codeFault
             - localizationDetails
+            - refPrestationPrise
+            - pbo
+            - pto
           properties:
             localization:
               type: string
@@ -1029,8 +1027,8 @@ components:
                 | Code | valeur                                                                                 |
                 | ---- | -------------------------------------------------------------------------------------- |
                 | FD02 | absence protection obligatoire gaine fendue, demi-lune, …                              |
-                | FD09 | caractéristiques tiroir non conforme aux STAS                                          |
-                | FD12 | cheminement non conforme aux STAS                                                      |
+                | FD10 | caractéristiques non conformes aux STAS                                                |
+                | FD13 | cheminement non conforme surplomb domaine privé, …                                     |
                 | FD15 | dégradation                                                                            |
                 | FD25 | étiquetage non conforme aux STAS                                                       |
                 | FD33 | modularité du câble CCF non conforme                                                   |
@@ -1042,8 +1040,8 @@ components:
                 | FD51 | entrée cable pbo non conforme aux STAS                                                 |
               enum:
                 - FD02
-                - FD09
-                - FD12
+                - FD10
+                - FD13
                 - FD15
                 - FD25
                 - FD33
@@ -1053,7 +1051,7 @@ components:
                 - FD45
                 - FD49
                 - FD51
-            refOrder:
+            refPrestationPrise:
               description: Référence de la commande
               type: string
             geographicLocation: # Localisation GPS du câble
@@ -1315,14 +1313,14 @@ components:
                 | ---- | -------------------------------------------------------------------------------------- |
                 | FD02 | absence protection obligatoire gaine fendue, demi-lune, …                              |
                 | FD03 | bilan optique non conforme aux STAS                                                    |
-                | FD12 | cheminement non conforme aux STAS                                                      |
+                | FD13 | cheminement non conforme surplomb domaine privé, …                                     |
                 | FD37 | non utilisable pas d'autorisation de cheminement                                       |
                 | FD38 | non utilisable risque de surplomb, sécurisé                                            |
 
               enum:
                 - FD02
                 - FD03
-                - FD12
+                - FD13
                 - FD37
                 - FD38
             refOrder:
@@ -1508,12 +1506,6 @@ components:
             "@type":
               type: string
               example: MalfaconOpticalRoutePlanned
-            referencePTO:
-              description: Référence du PTO
-              type: string
-            referencePrestationPrise:
-              description: Référence Prestation Prise
-              type: string
           required:
             - name
             - position
@@ -1578,6 +1570,12 @@ components:
           $ref: "#/components/schemas/MalfaconOpticalRouteObservedPM"
         final:
           $ref: "#/components/schemas/MalfaconOpticalRouteFinal"
+        referencePTO:
+          description: Référence du PTO
+          type: string
+        referencePrestationPrise:
+          description: Référence Prestation Prise
+          type: string
 
     MalfaconOpticalRoutePBO:
       description: Pour les routes optiques obligatoire, il faut mettre la valeur "UNKNOWN" pour les champs inconnus qui sont obligatoires.
@@ -1591,8 +1589,18 @@ components:
           $ref: "#/components/schemas/MalfaconOpticalRouteObservedPBO"
         final:
           $ref: "#/components/schemas/MalfaconOpticalRouteFinal"
+        referencePTO:
+          description: Référence du PTO
+          type: string
 
     OpticalRoute:
+      discriminator:
+            propertyName: "@type"
+            mapping:
+              "optical.route.planned": "#/components/schemas/MalfaconOpticalRoutePlanned"
+              "optical.route.observed.pbo": "#/components/schemas/MalfaconOpticalRouteObservedPBO"
+              "optical.route.observed.pm": "#/components/schemas/MalfaconOpticalRouteObservedPM"
+              "optical.route.final": "#/components/schemas/MalfaconOpticalRouteFinal"
       properties:
         "@baseType":
           type: string
@@ -1600,6 +1608,13 @@ components:
         "@type":
           type: string
           example: OpticalRoute
+          description: |
+            Les valeurs possibles sont :
+            * `optical.route.planned`: `#/components/schemas/MalfaconOpticalRoutePlanned`
+            * `optical.route.observed.pbo`: `#/components/schemas/MalfaconOpticalRouteObservedPBO`
+            * `optical.route.observed.pm`: `#/components/schemas/MalfaconOpticalRouteObservedPM`
+            * `optical.route.final`: `#/components/schemas/MalfaconOpticalRouteFinal`
+
         name:
           description: Nom du module PM
           type: string
