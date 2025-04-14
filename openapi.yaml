@@ -328,7 +328,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Attachment"
+                  $ref: "#/components/schemas/AttachmentMalfacon"
         "400": *response400
         "404": *response404
         default:
@@ -368,22 +368,21 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment"
+                - $ref: "#/components/schemas/AttachmentMalfacon"
               required:
                 - size
                 - sha256
       responses:
         "200":
           description: |
-            The attachment metadata.
-
-            You have to use the generated `id` to upload the content of the attachment with the `PUT /attachment/{id}/content` method
-            and finalize the creation of the attachment with the `PATCH /attachment/{id}/content` method.
+            The attachment multipart metadata.
+            You have to use the generated `id` to upload the content of the attachment with the `POST /attachment/{id}/content/{chunkIndex}` method,
+            and finalize the creation of the attachment with the `POST /attachment/{id}/finalize` method.
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment"
+                  - $ref: "#/components/schemas/AttachmentMalfaconMultiPart"
           headers:
             ETag:
               $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag"
@@ -424,37 +423,56 @@ paths:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
         "412":
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-412
-    put:
+
+  /malfacon/{malfaconId}/attachment/{attachmentId}/content/{chunkIndex}:
+    parameters:
+      - $ref: "#/components/parameters/malfaconId"
+      - $ref: "#/components/parameters/attachmentId"
+      - $ref: "#/components/parameters/chunkIndex"
+    post:
       tags:
         - Attachment
         - OI
-      summary: upload a chunk of the content of an attachment
-      description: This method allows to upload a chunk of the content of an attachment.
+      summary: upload a specific chunk of the content of an attachment
+      description: "This method allows to upload a specific chunk of the content of an attachment identified by its id (attachmentId) \
+        for a specific ticket identified by its id (malfaconId)."
+      operationId: uploadMalfaconAttachmentContentChunk
       requestBody:
-        description: The chunk of the content of the attachment
+        description: A chunk of the content of the attachment
         required: true
         content:
           multipart/form-data:
             schema:
               type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The chunk of the content of the attachment
+                metadata:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Chunk
               required:
                 - file
                 - metadata
-              properties:
-                file:
-                  format: binary
-                  description: The file to upload
-                  type: string
-                metadata:
-                  $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Chunk"
       responses:
         "200":
-          description: The chunk has been uploaded
+          description: The chunk has been uploaded (the property uploadChunks has been updated with the new chunk index)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AttachmentMalfaconMultiPart"
         "404": *response404
         "413":
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-413
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+
+  /malfacon/{malfaconId}/attachment/{attachmentId}/finalize:
+    parameters:
+      - $ref: "#/components/parameters/malfaconId"
+      - $ref: "#/components/parameters/attachmentId"
     post:
       tags:
         - Attachment
@@ -462,15 +480,25 @@ paths:
       summary: Finalize the creation of the content of an attachment
       description: |
         This method allows to finalize the creation of the content of an attachment.
-
         The server will aggregate all the chunks uploaded and validate the content of the attachment
         in an asynchronous way.
+        The status of the attachment should be set to UPLOADED.
+      operationId: finalizeMalfaconAttachmentCreation
+      requestBody:
+        description: finalize the content of the attachment. No body is required
+        content:
+          application/json: {}
       responses:
         "200":
-          description: The chunk has been uploaded
+          description: All the chunks have been uploaded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttachmentMalfaconMultiPart"
         "404": *response404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+
   /malfacon/event:
     get:
       tags:
@@ -1356,85 +1384,106 @@ components:
                 allOf:
                   - $ref: "#/components/schemas/RelatedMalfacon"
 
-    Attachment:
+    MalfaconMimeType:
+      properties:
+        mimeType:
+          type: string
+          enum:
+            - application/pdf
+            - application/vnd.oasis.opendocument.spreadsheet
+            - application/vnd.oasis.opendocument.text
+            - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+            - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+            - text/csv
+            - image/jpeg
+            - image/jpg
+            - image/png
+            - image/svg+xml
+
+    AttachmentMalfaconPreuve:
+      properties:
+        proofType:
+          type: string
+          enum:
+            - ISSUE
+            - RESOLUTION
+          default: ISSUE
+        primary:
+          type: boolean
+          description: Specify if this is the main attachment. There can only be one primary attachment for each type.
+          default: true
+      description: |
+        To solve the malfacon, a photo has to be sent and acts as proof.
+
+    MalfaconRelatedEntity:
+      properties:
+        relatedEntity:
+          type: array
+          description: Reference to the malfacon
+          minItems: 1
+          maxItems: 1
+          readOnly: true
+          items:
+            allOf:
+              - $ref: "#/components/schemas/RelatedMalfacon"
+
+    AttachmentMalfacon:
       allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
-        - description: |
-            An attachment is a file that is attached to an entity.
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentBase"
+        - $ref: "#/components/schemas/MalfaconRelatedEntity"
+      discriminator:
+        propertyName: "@type"
+        mapping:
+          "documentMonoPartStandard": "#/components/schemas/AttachmentMalfaconMonoPartStandard"
+          "documentMultiPartStandard": "#/components/schemas/AttachmentMalfaconMultiPartStandard"
+          "documentMonoPart": "#/components/schemas/AttachmentMalfaconMonoPart"
+          "documentMultiPart": "#/components/schemas/AttachmentMalfaconMultiPart"
 
-            Only JPEG images are allowed.
-
-            Extensions:
-
-            * `.csv`
-            * `.docx`
-            * `.jpeg`
-            * `.jpg`
-            * `.ods`
-            * `.odt`
-            * `.pdf`
-            * `.png`
-            * `.svg`
-            * `.xlsx`
-
-            Mime types:
-
-            * `application/pdf`
-            * `application/vnd.oasis.opendocument.spreadsheet`
-            * `application/vnd.oasis.opendocument.text`
-            * `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
-            * `application/vnd.openxmlformats-officedocument.wordprocessingml.document`
-            * `image/jpeg`
-            * `image/jpg`
-            * `image/png`
-            * `image/svg+xml`
-            * `test/csv`
-          properties:
-            proofType:
-              type: string
-              enum:
-                - ISSUE
-                - RESOLUTION
-              default: ISSUE
-            primary:
-              type: boolean
-              description: Specify if this is the main attachment. There can only be one primary attachment for each type.
-              default: true
-            mimeType:
-              type: string
-              enum:
-                - application/pdf
-                - application/vnd.oasis.opendocument.spreadsheet
-                - application/vnd.oasis.opendocument.text
-                - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-                - application/vnd.openxmlformats-officedocument.wordprocessingml.document
-                - image/jpeg
-                - image/jpg
-                - image/png
-                - image/svg+xml
-                - test/csv
-            status:
-              type: string
-              enum:
-                - PENDING
-                - VALIDATED
-                - REJECTED
-            relatedEntity:
-              type: array
-              description: Reference to the malfacon
-              minItems: 1
-              maxItems: 1
-              readOnly: true
-              items:
-                allOf:
-                  - $ref: "#/components/schemas/RelatedMalfacon"
-
-    AttachmentFormData:
+    AttachmentMalfaconMonoPart:
       allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData
-        - properties:
-            attachment:
-              $ref: "#/components/schemas/Attachment"
+        - $ref: "#/components/schemas/AttachmentMalfacon"
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMonoPart"
+      properties:
+        "@type":
+          type: string
+          default: "documentMonoPart"
+      required:
+        - "@type"
+
+    AttachmentMalfaconMultiPart:
+      allOf:
+        - $ref: "#/components/schemas/AttachmentMalfacon"
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMultiPart"
+      properties:
+        "@type":
+          type: string
+          default: "documentMultiPart"
+      required:
+        - "@type"
+
+    AttachmentMalfaconMonoPartStandard:
+      allOf:
+        - $ref: "#/components/schemas/AttachmentMalfaconMonoPart"
+        - $ref: "#/components/schemas/MalfaconMimeType"
+        - $ref: "#/components/schemas/AttachmentMalfaconPreuve"
+      properties:
+        "@type":
+          type: string
+          default: "documentMonoPartStandard"
+      required:
+        - "@type"
+
+    AttachmentMalfaconMultiPartStandard:
+      allOf:
+        - $ref: "#/components/schemas/AttachmentMalfaconMultiPart"
+        - $ref: "#/components/schemas/MalfaconMimeType"
+        - $ref: "#/components/schemas/AttachmentMalfaconPreuve"
+      properties:
+        "@type":
+          type: string
+          default: "documentMultiPartStandard"
+      required:
+        - "@type"
 
     Event:
       allOf:
@@ -1481,7 +1530,7 @@ components:
         - $ref: "#/components/schemas/Event"
         - properties:
             data:
-              $ref: "#/components/schemas/Attachment"
+              $ref: "#/components/schemas/AttachmentMalfacon"
 
     RelatedMalfacon:
       allOf:
@@ -1645,6 +1694,14 @@ components:
       name: attachmentId
       in: path
       description: The attachment id
+      required: true
+      schema:
+        type: string
+
+    chunkIndex:
+      name: chunkIndex
+      in: path
+      description: The chunk index
       required: true
       schema:
         type: string
