@@ -434,7 +434,8 @@ paths:
         - Attachment
         - OI
       summary: upload a specific chunk of the content of an attachment
-      description: "This method allows to upload a specific chunk of the content of an attachment identified by its id (attachmentId) \
+      description:
+        "This method allows to upload a specific chunk of the content of an attachment identified by its id (attachmentId) \
         for a specific ticket identified by its id (malfaconId)."
       operationId: uploadMalfaconAttachmentContentChunk
       requestBody:
@@ -1495,11 +1496,11 @@ components:
           discriminator:
             propertyName: type
             mapping:
-              "fr.interop.malfacon.create": "#/components/schemas/EventMalfacon"
-              "fr.interop.malfacon.update": "#/components/schemas/EventMalfacon"
+              "fr.interop.malfacon.create": "#/components/schemas/EventMalfaconCreate"
+              "fr.interop.malfacon.update": "#/components/schemas/EventMalfaconUpdate"
               "fr.interop.malfacon.note.create": "#/components/schemas/EventMalfaconNote"
-              "fr.interop.malfacon.attachment.create": "#/components/schemas/EventMalfaconAttachment"
-              "fr.interop.malfacon.attachment.update": "#/components/schemas/EventMalfaconAttachment"
+              "fr.interop.malfacon.attachment.create": "#/components/schemas/EventMalfaconAttachmentCreate"
+              "fr.interop.malfacon.attachment.update": "#/components/schemas/EventMalfaconAttachmentUpdate"
           properties:
             subject:
               description: Identifiant unique de la malfaçon.
@@ -1511,7 +1512,14 @@ components:
               type: string
               default: "application/json"
 
-    EventMalfacon:
+    EventMalfaconCreate:
+      allOf:
+        - $ref: "#/components/schemas/Event"
+        - properties:
+            data:
+              $ref: "#/components/schemas/MalfaconBase"
+
+    EventMalfaconUpdate:
       allOf:
         - $ref: "#/components/schemas/Event"
         - properties:
@@ -1525,7 +1533,14 @@ components:
             data:
               $ref: "#/components/schemas/Note"
 
-    EventMalfaconAttachment:
+    EventMalfaconAttachmentCreate:
+      allOf:
+        - $ref: "#/components/schemas/Event"
+        - properties:
+            data:
+              $ref: "#/components/schemas/AttachmentMalfacon"
+
+    EventMalfaconAttachmentUpdate:
       allOf:
         - $ref: "#/components/schemas/Event"
         - properties:
@@ -1648,12 +1663,12 @@ components:
 
     OpticalRoute:
       discriminator:
-            propertyName: "@type"
-            mapping:
-              "optical.route.planned": "#/components/schemas/MalfaconOpticalRoutePlanned"
-              "optical.route.observed.pbo": "#/components/schemas/MalfaconOpticalRouteObservedPBO"
-              "optical.route.observed.pm": "#/components/schemas/MalfaconOpticalRouteObservedPM"
-              "optical.route.final": "#/components/schemas/MalfaconOpticalRouteFinal"
+        propertyName: "@type"
+        mapping:
+          "optical.route.planned": "#/components/schemas/MalfaconOpticalRoutePlanned"
+          "optical.route.observed.pbo": "#/components/schemas/MalfaconOpticalRouteObservedPBO"
+          "optical.route.observed.pm": "#/components/schemas/MalfaconOpticalRouteObservedPM"
+          "optical.route.final": "#/components/schemas/MalfaconOpticalRouteFinal"
       properties:
         "@baseType":
           type: string
