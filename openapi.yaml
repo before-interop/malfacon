@@ -1028,8 +1028,6 @@ components:
             - codeFault
             - localizationDetails
             - refPrestationPrise
-            - pbo
-            - pto
           properties:
             localization:
               type: string
