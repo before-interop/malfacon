@@ -1570,15 +1570,19 @@ components:
     MalfaconOpticalRoutePlanned:
       allOf:
         - $ref: "#/components/schemas/OpticalRoute"
-        - properties:
-            "@type":
-              type: string
-              example: MalfaconOpticalRoutePlanned
-          required:
+        - required:
             - name
             - position
             - noteTube
             - noteFiber
+          properties:
+            "@type":
+              type: string
+              example: MalfaconOpticalRoutePlanned
+            referencePrestationPrise:
+              description: Référence Prestation Prise
+              type: string
+
 
     MalfaconOpticalRouteObservedPBO:
       allOf:
