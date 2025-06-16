@@ -1625,6 +1625,12 @@ components:
             note:
               description: explication des corrections apportées, ou blocage rencontré, par l’OC
               type: string
+            referencePTO:
+              description: Référence du PTO
+              type: string
+            referencePBO:
+              description: Référence du PBO
+              type: string
 
     MalfaconOpticalRoutePM:
       description: Pour les routes optiques obligatoires, il faut mettre la valeur "UNKNOWN" pour les champs inconnus qui sont obligatoires.
