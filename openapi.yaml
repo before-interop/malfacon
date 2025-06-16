@@ -701,6 +701,10 @@ components:
                 - REJECTED
                 - RESOLVED
               default: CREATING
+            acknowledgedDate:
+              type: string
+              format: date
+              description: Date de passage au status ACKNOWLEDGED.
 
     MalfaconOcBase:
       allOf:
