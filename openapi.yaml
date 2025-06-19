@@ -258,7 +258,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Note"
-        "400": *response400
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "404":
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
