@@ -488,7 +488,10 @@ paths:
       requestBody:
         description: finalize the content of the attachment. No body is required
         content:
-          application/json: {}
+          application/json:
+            schema:
+              type: object
+              nullable: true
       responses:
         "200":
           description: All the chunks have been uploaded
