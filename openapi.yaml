@@ -736,6 +736,10 @@ components:
                 - REJECTED
                 - RESOLVED
               default: CREATING
+            acknowledgedDate:
+              type: string
+              format: date
+              description: Date de passage au status ACKNOWLEDGED.
 
     MalfaconOcBase:
       allOf:
@@ -1059,8 +1063,6 @@ components:
             - codeFault
             - localizationDetails
             - refPrestationPrise
-            - pbo
-            - pto
           properties:
             localization:
               type: string
@@ -1659,6 +1661,12 @@ components:
               type: string
             note:
               description: explication des corrections apportées, ou blocage rencontré, par l’OC
+              type: string
+            referencePTO:
+              description: Référence du PTO
+              type: string
+            referencePBO:
+              description: Référence du PBO
               type: string
 
     MalfaconOpticalRoutePM:
