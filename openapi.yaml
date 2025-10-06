@@ -82,7 +82,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/MalfaconBase"
-        "400": &response400
+        "400":
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
@@ -102,9 +102,10 @@ paths:
           headers:
             X-Total-Count:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
-        "400": *response400
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Error.openapi.yaml#/components/schemas/Error
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
     post:
       tags:
@@ -130,8 +131,10 @@ paths:
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
-        "400": *response400
-        "403": &response403
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        "403":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-403
           description: |
             **Forbidden**
 
@@ -141,7 +144,7 @@ paths:
 
             * Le champ `reason` de la réponse d'erreur doit contenir la liste des tickets en conflit séparés par des virgules.
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Error.openapi.yaml#/components/schemas/Error
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
   /malfacon/{malfaconId}:
     parameters:
@@ -166,10 +169,10 @@ paths:
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
-        "404": &response404
+        "404":
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Error.openapi.yaml#/components/schemas/Error
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
     put:
       tags:
@@ -189,9 +192,12 @@ paths:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/parameters/If-Match
       responses:
         "200": *troubleTicket201
-        "400": *response400
-        "403": *response403
-        "404": *response404
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        "403":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-403
+        "404":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         "412":
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-412
         default:
@@ -215,9 +221,12 @@ paths:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/parameters/If-Match
       responses:
         "200": *troubleTicket201
-        "400": *response400
-        "403": *response403
-        "404": *response404
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        "403":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-403
+        "404":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         "412":
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-412
         default:
@@ -249,8 +258,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Note"
-        "400": *response400
-        "404": *response404
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        "404":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
@@ -269,8 +280,10 @@ paths:
           headers:
             X-Total-Count:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
-        "400": *response400
-        "404": *response404
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        "404":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
@@ -298,8 +311,10 @@ paths:
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
-        "400": *response400
-        "404": *response404
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        "404":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
@@ -329,8 +344,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/AttachmentMalfacon"
-        "400": *response400
-        "404": *response404
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        "404":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
@@ -349,8 +366,10 @@ paths:
           headers:
             X-Total-Count:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
-        "400": *response400
-        "404": *response404
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        "404":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
@@ -390,8 +409,10 @@ paths:
               description: The size max in octet allowed for a chunk
               schema:
                 type: integer
-        "400": *response400
-        "404": *response404
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        "404":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
@@ -417,8 +438,12 @@ paths:
         "200":
           description: The content of the attachment
           content:
-            application/octet-stream: {}
-        "404": *response404
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "404":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
         "412":
@@ -464,7 +489,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/AttachmentMalfaconMultiPart"
-        "404": *response404
+        "404":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         "413":
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-413
         default:
@@ -488,7 +514,10 @@ paths:
       requestBody:
         description: finalize the content of the attachment. No body is required
         content:
-          application/json: {}
+          application/json:
+            schema:
+              type: object
+              nullable: true
       responses:
         "200":
           description: All the chunks have been uploaded
@@ -496,7 +525,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AttachmentMalfaconMultiPart"
-        "404": *response404
+        "404":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
@@ -523,7 +553,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Event"
-        "400": *response400
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
@@ -542,7 +573,8 @@ paths:
           headers:
             X-Total-Count:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
-        "400": *response400
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
@@ -577,9 +609,12 @@ paths:
 
             La réponse n'a pas l'obligation de contenir un body.
             Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
-        "400": *response400
-        "403": *response403
-        "404": *response404
+        "400":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        "403":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-403
+        "404":
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
         "500":
           description: |
             **Internal Server Error**
