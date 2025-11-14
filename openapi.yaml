@@ -395,7 +395,7 @@ paths:
         "200":
           description: |
             The attachment multipart metadata.
-            You have to use the generated `id` to upload the content of the attachment with the `POST /attachment/{id}/content/{chunkIndex}` method,
+            You have to use the generated `id` to upload the content of the attachment with the `POST /attachment/{id}/content` method,
             and finalize the creation of the attachment with the `POST /attachment/{id}/finalize` method.
           content:
             application/json:
@@ -449,11 +449,10 @@ paths:
         "412":
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-412
 
-  /malfacon/{malfaconId}/attachment/{attachmentId}/content/{chunkIndex}:
+  /malfacon/{malfaconId}/attachment/{attachmentId}/content:
     parameters:
       - $ref: "#/components/parameters/malfaconId"
       - $ref: "#/components/parameters/attachmentId"
-      - $ref: "#/components/parameters/chunkIndex"
     post:
       tags:
         - Attachment
@@ -1754,14 +1753,6 @@ components:
       name: attachmentId
       in: path
       description: The attachment id
-      required: true
-      schema:
-        type: string
-
-    chunkIndex:
-      name: chunkIndex
-      in: path
-      description: The chunk index
       required: true
       schema:
         type: string
