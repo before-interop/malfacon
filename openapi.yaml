@@ -461,9 +461,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/AttachmentMalfaconMultiPart"
+                $ref: "#/components/schemas/AttachmentMalfaconMultiPart"
         "404": *response404
         "413":
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-413
