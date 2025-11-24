@@ -678,6 +678,9 @@ components:
                 C'est un entier qui doit être renseignée au moment du passage en Resolved, par l'OC ou par l'OI suivant le cas de gestion,
                 et donc la valeur doit être >= au champs quantity renseigné à l'initialisation du ticket.
               type: integer
+            name:
+              type: string
+              readOnly: true
             "@type":
               type: string
               readOnly: false
