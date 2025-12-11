@@ -744,9 +744,10 @@ components:
               type: string
               format: date
               description: Date de passage au status ACKNOWLEDGED.
-            lastUpdateBy:
-              type: string
+            ladtModificationBy:
+              required: true
               description: Identifiant du dernier auteur ayant mis à jour la malfaçon.
+              type: string
               enum:
                 - OI
                 - OC
