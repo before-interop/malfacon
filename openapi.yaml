@@ -744,7 +744,7 @@ components:
               type: string
               format: date
               description: Date de passage au status ACKNOWLEDGED.
-            ladtModificationBy:
+            lastModificationBy:
               required: true
               description: Identifiant du dernier auteur ayant mis à jour la malfaçon.
               type: string
