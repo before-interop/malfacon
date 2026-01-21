@@ -861,6 +861,8 @@ components:
             localization:
               type: string
               default: "PM"
+              enum:
+                - PM
             localizationDetails:
               type: string
               description: |
@@ -944,6 +946,8 @@ components:
             localization:
               type: string
               default: "AMONT_PM"
+              enum:
+                - AMONT_PM
             localizationDetails:
               type: string
               description: |
@@ -992,6 +996,8 @@ components:
             localization:
               type: string
               default: "PBO"
+              enum:
+                - PBO
             localizationDetails:
               type: string
               description: |
@@ -1064,6 +1070,8 @@ components:
             localization:
               type: string
               default: "CCF"
+              enum:
+                - CCF
             localizationDetails:
               type: string
               description: |
@@ -1139,6 +1147,8 @@ components:
             localization:
               type: string
               default: "PM"
+              enum:
+                - PM
             localizationDetails:
               type: string
               description: |
@@ -1203,6 +1213,8 @@ components:
             localization:
               type: string
               default: "AMONT_PM"
+              enum:
+                - AMONT_PM
             localizationDetails:
               type: string
               description: |
@@ -1256,6 +1268,8 @@ components:
             localization:
               type: string
               default: "PM_PBO"
+              enum:
+                - PM_PBO
             localizationDetails:
               type: string
               description: |
@@ -1299,6 +1313,8 @@ components:
             localization:
               type: string
               default: "PBO"
+              enum:
+                - PBO
             localizationDetails:
               type: string
               description: |
@@ -1356,6 +1372,8 @@ components:
             localization:
               type: string
               default: "CCF"
+              enum:
+                - CCF
             localizationDetails:
               type: string
               description: |
