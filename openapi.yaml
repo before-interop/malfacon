@@ -2,7 +2,7 @@ openapi: 3.0.3
 
 info:
   title: Malfacon API
-  version: 2.0.0
+  version: 1.0.0
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
@@ -63,19 +63,19 @@ paths:
       description: Get all trouble tickets
       operationId: getMalfacons
       parameters: &searchAndPaginateParameters
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/limit
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/offset
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/sort
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/fields.openapi.yaml#/components/parameters/fields
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/parameters/limit
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/parameters/offset
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/parameters/sort
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/fields.openapi.yaml#/components/parameters/fields
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/filters.openapi.yaml#/components/parameters/filters
       responses:
         "200":
           description: The list of trouble tickets
           headers:
             X-Total-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
             X-Result-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
           content:
             application/json:
               schema:
@@ -83,9 +83,9 @@ paths:
                 items:
                   $ref: "#/components/schemas/MalfaconBase"
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
     head:
       tags:
@@ -95,17 +95,17 @@ paths:
       description: Count the number of trouble tickets matching the given criteria.
       operationId: countMalfacons
       parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/filters.openapi.yaml#/components/parameters/filters
       responses:
         "200":
           description: The number of trouble tickets.
           headers:
             X-Total-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
     post:
       tags:
@@ -130,11 +130,11 @@ paths:
                 $ref: "#/components/schemas/MalfaconBase"
           headers:
             ETag:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/update.openapi.yaml#/components/headers/ETag
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "403":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-403
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-403
           description: |
             **Forbidden**
 
@@ -144,7 +144,7 @@ paths:
 
             * Le champ `reason` de la réponse d'erreur doit contenir la liste des tickets en conflit séparés par des virgules.
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
   /malfacon/{malfaconId}:
     parameters:
@@ -158,7 +158,7 @@ paths:
       description: Get a trouble ticket
       operationId: getMalfacon
       parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/fields.openapi.yaml#/components/parameters/fields
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/fields.openapi.yaml#/components/parameters/fields
       responses:
         "200":
           description: The malfacon
@@ -168,11 +168,11 @@ paths:
                 $ref: "#/components/schemas/MalfaconBase"
           headers:
             ETag:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/update.openapi.yaml#/components/headers/ETag
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
     put:
       tags:
@@ -189,19 +189,19 @@ paths:
             schema:
               $ref: "#/components/schemas/MalfaconBase"
       parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/parameters/If-Match
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/update.openapi.yaml#/components/parameters/If-Match
       responses:
         "200": *troubleTicket201
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "403":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-403
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-403
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         "412":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-412
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-412
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
     patch:
       tags:
@@ -218,19 +218,19 @@ paths:
             schema:
               $ref: "#/components/schemas/MalfaconBase"
       parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/parameters/If-Match
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/update.openapi.yaml#/components/parameters/If-Match
       responses:
         "200": *troubleTicket201
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "403":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-403
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-403
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         "412":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-412
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-412
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
   /malfacon/{malfaconId}/note:
     parameters:
@@ -249,9 +249,9 @@ paths:
           description: The list of notes
           headers:
             X-Total-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
             X-Result-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
           content:
             application/json:
               schema:
@@ -259,11 +259,11 @@ paths:
                 items:
                   $ref: "#/components/schemas/Note"
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
     head:
       tags:
@@ -273,19 +273,19 @@ paths:
       description: Count the number of notes of a trouble ticket matching the given criteria.
       operationId: countMalfaconNotes
       parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/filters.openapi.yaml#/components/parameters/filters
       responses:
         "200":
           description: The number of notes
           headers:
             X-Total-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
     post:
       tags:
@@ -310,13 +310,13 @@ paths:
                 $ref: "#/components/schemas/Note"
           headers:
             ETag:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/update.openapi.yaml#/components/headers/ETag
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
   /malfacon/{malfaconId}/attachment:
     parameters:
@@ -335,9 +335,9 @@ paths:
           description: The list of attachments
           headers:
             X-Total-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
             X-Result-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
           content:
             application/json:
               schema:
@@ -345,11 +345,11 @@ paths:
                 items:
                   $ref: "#/components/schemas/AttachmentMalfacon"
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
     head:
       tags:
@@ -359,19 +359,19 @@ paths:
       description: This method returns the number of attachments matching the criteria.
       operationId: countMalfaconAttachments
       parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/filters.openapi.yaml#/components/parameters/filters
       responses:
         "200":
           description: The number of attachments
           headers:
             X-Total-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
     post:
       tags:
@@ -404,17 +404,17 @@ paths:
                   - $ref: "#/components/schemas/AttachmentMalfaconMultiPart"
           headers:
             ETag:
-              $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag"
+              $ref: "https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/update.openapi.yaml#/components/headers/ETag"
             X-Chunk-Size:
               description: The size max in octet allowed for a chunk
               schema:
                 type: integer
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
   /malfacon/{malfaconId}/attachment/{attachmentId}/content:
     parameters:
@@ -429,11 +429,11 @@ paths:
       description: This method allows to download the content of an attachment.
       operationId: downloadMalfaconAttachment
       parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Match
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/parameters/If-None-Match
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Modified-Since
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Unmodified-Since
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/parameters/Range
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Match
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/tools/attachment/attachment.openapi.yaml#/components/parameters/If-None-Match
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Modified-Since
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Unmodified-Since
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/tools/attachment/attachment.openapi.yaml#/components/parameters/Range
       responses:
         "200":
           description: The content of the attachment
@@ -443,11 +443,11 @@ paths:
                 type: string
                 format: binary
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
         "412":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-412
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-412
 
     post:
       tags:
@@ -471,7 +471,7 @@ paths:
                   format: binary
                   description: The chunk of the content of the attachment
                 metadata:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Chunk
+                  $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Attachment.openapi.yaml#/components/schemas/Chunk
               required:
                 - file
                 - metadata
@@ -483,11 +483,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/AttachmentMalfaconMultiPart"
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         "413":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-413
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-413
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
   /malfacon/{malfaconId}/attachment/{attachmentId}/finalize:
     parameters:
@@ -519,9 +519,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/AttachmentMalfaconMultiPart"
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
   /malfacon/event:
     get:
@@ -537,9 +537,9 @@ paths:
           description: The list of events
           headers:
             X-Total-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
             X-Result-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
           content:
             application/json:
               schema:
@@ -547,9 +547,9 @@ paths:
                 items:
                   $ref: "#/components/schemas/Event"
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
     head:
       tags:
@@ -559,17 +559,17 @@ paths:
       description: Count the number of events of all trouble tickets matching the given criteria.
       operationId: countMalfaconEvents
       parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/filters.openapi.yaml#/components/parameters/filters
       responses:
         "200":
           description: The number of events
           headers:
             X-Total-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/default
 
     post:
       tags:
@@ -603,11 +603,11 @@ paths:
             La réponse n'a pas l'obligation de contenir un body.
             Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
         "400":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "403":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-403
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-403
         "404":
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+          $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-404
         "500":
           description: |
             **Internal Server Error**
@@ -618,7 +618,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-500
+                $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-500
         "501":
           description: |
             **Not Implemented**
@@ -631,7 +631,7 @@ components:
   schemas:
     MalfaconBase:
       allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
         - discriminator:
             propertyName: "@type"
             mapping:
@@ -654,9 +654,9 @@ components:
             - name
           properties:
             code_oi: #Code ARCEP de l'OI.
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
             code_oc: #Code ARCEP de l'OC.
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
+              $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
             externalId:
               description: Référence du ticket créé dans le système de l'OC
               type: string
@@ -738,7 +738,6 @@ components:
               format: date
               description: Date de passage au status ACKNOWLEDGED.
             lastModificationBy:
-              required: true
               description: Identifiant du dernier auteur ayant mis à jour la malfaçon.
               type: string
               enum:
@@ -1426,11 +1425,11 @@ components:
               $ref: "#/components/schemas/PTO"
 
     GeographicLocation:
-      $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
+      $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
 
     Note:
       allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Note.openapi.yaml#/components/schemas/Note
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Note.openapi.yaml#/components/schemas/Note
         - properties:
             relatedEntity:
               description: |
@@ -1489,7 +1488,7 @@ components:
 
     AttachmentMalfacon:
       allOf:
-        - $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentBase"
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentBase"
         - $ref: "#/components/schemas/MalfaconRelatedEntity"
       discriminator:
         propertyName: "@type"
@@ -1502,7 +1501,7 @@ components:
     AttachmentMalfaconMonoPart:
       allOf:
         - $ref: "#/components/schemas/AttachmentMalfacon"
-        - $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMonoPart"
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMonoPart"
       properties:
         "@type":
           type: string
@@ -1513,7 +1512,7 @@ components:
     AttachmentMalfaconMultiPart:
       allOf:
         - $ref: "#/components/schemas/AttachmentMalfacon"
-        - $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMultiPart"
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMultiPart"
       properties:
         "@type":
           type: string
@@ -1547,7 +1546,7 @@ components:
 
     Event:
       allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/CloudEvent.openapi.yaml#/components/schemas/CloudEvent
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/CloudEvent.openapi.yaml#/components/schemas/CloudEvent
         - required:
             - time
             - subject
@@ -1608,7 +1607,7 @@ components:
 
     RelatedMalfacon:
       allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
+        - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
         - properties:
             "@referredType":
               type: string
@@ -1618,13 +1617,13 @@ components:
               default: "troubleTicket"
 
     PM:
-      $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PM
+      $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Interop.openapi.yaml#/components/schemas/PM
 
     PBO:
-      $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
+      $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Interop.openapi.yaml#/components/schemas/PBO
 
     PTO:
-      $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
+      $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Interop.openapi.yaml#/components/schemas/PTO
 
     MalfaconOpticalRoutePlanned:
       allOf:
