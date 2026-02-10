@@ -24,6 +24,11 @@ info:
 
     * La valeur par défaut d'une page est `limit=50` et `offset=0`.
     * La valeur maximale de `limit` est `100`.
+
+    ## Spécialisation des objets
+
+    Les objets MalfaconBase, Event et OpticalRoute appelés dans chaques endpoints doivent être spécialisés en fonction du type de malfaçon du ticket.
+    
 servers:
   - url: "{protocol}://{host}:{port}{basePath}"
     variables:
