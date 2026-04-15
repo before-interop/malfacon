@@ -830,7 +830,7 @@ components:
             maxResolutionOcDuration:
               $ref: "#/components/schemas/MaxResolutionOcDuration"
             totalResolutionOcDuration:
-              description: The OC resolution duration in seconds. Calculated only as long as ResolutionOwner = OC
+              description: The OC resolution duration in days. Calculated only as long as ResolutionOwner = OC
               type: number
             expectedResolutionDate:
               description: The maximum OC resolution date, recalculated only during state changes taking into account the ticket creation date and successive pauses.
@@ -850,7 +850,7 @@ components:
       properties:
         value:
           type: integer
-          description: Duration in seconds
+          description: Duration in days
           readOnly: true
         reason:
           type: string
