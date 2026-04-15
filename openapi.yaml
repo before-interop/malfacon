@@ -756,6 +756,7 @@ components:
                 - ACKNOWLEDGED
                 - CLOSED
                 - CREATING
+                - TROUBLE_TICKET_NOT_USABLE
               default: CREATING
 
     MalfaconOiBase:
