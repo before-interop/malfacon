@@ -270,7 +270,8 @@ paths:
         - Note
         - OI
       summary: Count the number of notes of a trouble ticket
-      description: Count the number of notes of a trouble ticket matching the given criteria.
+      description: Count the number of notes of a trouble ticket matching the given
+        criteria.
       operationId: countMalfaconNotes
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/filters.openapi.yaml#/components/parameters/filters
@@ -405,10 +406,6 @@ paths:
           headers:
             ETag:
               $ref: "https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/update.openapi.yaml#/components/headers/ETag"
-            X-Chunk-Size:
-              description: The size max in octet allowed for a chunk
-              schema:
-                type: integer
         "400":
           $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "404":
@@ -454,9 +451,9 @@ paths:
         - Attachment
         - OI
       summary: upload a specific chunk of the content of an attachment
-      description:
-        "This method allows to upload a specific chunk of the content of an attachment identified by its id (attachmentId) \
-        for a specific ticket identified by its id (malfaconId)."
+      description: "This method allows to upload a specific chunk of the content of an
+        attachment identified by its id (attachmentId) for a specific ticket
+        identified by its id (malfaconId)."
       operationId: uploadMalfaconAttachmentContentChunk
       requestBody:
         description: A chunk of the content of the attachment
@@ -476,13 +473,15 @@ paths:
                     index:
                       type: integer
                       format: int32
-                      description: The index of the chunk (from 0 to n-1 where n is the uploadExpectedChunks)
+                      description: The index of the chunk (from 0 to n-1 where n is the
+                        uploadExpectedChunks)
               required:
                 - file
                 - metadata
       responses:
         "200":
-          description: The chunk has been uploaded (the property uploadChunks has been updated with the new chunk index)
+          description: The chunk has been uploaded (the property uploadChunks has been
+            updated with the new chunk index)
           content:
             application/json:
               schema:
@@ -561,7 +560,8 @@ paths:
         - Event
         - OI
       summary: Count the number of events of all trouble tickets
-      description: Count the number of events of all trouble tickets matching the given criteria.
+      description: Count the number of events of all trouble tickets matching the
+        given criteria.
       operationId: countMalfaconEvents
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/filters.openapi.yaml#/components/parameters/filters
@@ -658,9 +658,11 @@ components:
             - quantity
             - name
           properties:
-            code_oi: #Code ARCEP de l'OI.
+            code_oi:
+              #Code ARCEP de l'OI.
               $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
-            code_oc: #Code ARCEP de l'OC.
+            code_oc:
+              #Code ARCEP de l'OC.
               $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
             externalId:
               description: Référence du ticket créé dans le système de l'OC
@@ -782,7 +784,8 @@ components:
               readOnly: true
               minimum: 1
             activationRate:
-              description: Le taux d'activation est un pourcentage représentant la part de lignes activées par l'OC sur l'élément de réseau (PM ou PBO).
+              description: Le taux d'activation est un pourcentage représentant la part de
+                lignes activées par l'OC sur l'élément de réseau (PM ou PBO).
               type: number
               minimum: 0
               exclusiveMinimum: true
@@ -835,10 +838,13 @@ components:
             maxResolutionOcDuration:
               $ref: "#/components/schemas/MaxResolutionOcDuration"
             totalResolutionOcDuration:
-              description: The OC resolution duration in seconds. Calculated only as long as ResolutionOwner = OC
+              description: The OC resolution duration in seconds. Calculated only as long as
+                ResolutionOwner = OC
               type: number
             expectedResolutionDate:
-              description: The maximum OC resolution date, recalculated only during state changes taking into account the ticket creation date and successive pauses.
+              description: The maximum OC resolution date, recalculated only during state
+                changes taking into account the ticket creation date and
+                successive pauses.
               type: string
               format: date
             validationDueDate:
@@ -1140,7 +1146,8 @@ components:
             refPrestationPrise:
               description: Référence de la commande
               type: string
-            geographicLocation: # Localisation GPS du câble
+            geographicLocation:
+              # Localisation GPS du câble
               $ref: "#/components/schemas/GeographicLocation"
             pbo:
               $ref: "#/components/schemas/PBO"
@@ -1422,7 +1429,8 @@ components:
             refOrder:
               description: Référence de la commande
               type: string
-            geographicLocation: # Localisation GPS du câble
+            geographicLocation:
+              # Localisation GPS du câble
               $ref: "#/components/schemas/GeographicLocation"
             pbo:
               $ref: "#/components/schemas/PBO"
@@ -1450,7 +1458,9 @@ components:
 
     AttachmentMalfaconMultiPartStandard:
       allOf:
-        - $ref: "https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentBase"
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/\
+            common/schemas/Attachment.openapi.yaml#/components/schemas/Attachme\
+            ntBase"
       properties:
         "@type":
           type: string
@@ -1489,18 +1499,22 @@ components:
             - image/svg+xml
         sha256:
           type: string
-          description: SHA-256 hash of the attachment file. This field is used to verify the integrity of the file during the upload process.
+          description: SHA-256 hash of the attachment file. This field is used to verify
+            the integrity of the file during the upload process.
         uploadExpectedChunks:
           type: integer
           minimum: 1
-          description: Number of expected chunks for the upload of the attachment. This field is used to track the progress of the upload and avoid unlimited uploads.
+          description: Number of expected chunks for the upload of the attachment. This
+            field is used to track the progress of the upload and avoid
+            unlimited uploads.
         uploadedChunks:
           readOnly: true
           uniqueItems: true
           type: array
           description: The chunks uploaded
           items:
-            $ref: "https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/schemas/Attachment.openapi.yaml#/components/schemas/Chunk"
+            $ref: "https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/\
+              common/schemas/Attachment.openapi.yaml#/components/schemas/Chunk"
         proofType:
           type: string
           enum:
@@ -1508,11 +1522,13 @@ components:
             - RESOLUTION
         primary:
           type: boolean
-          description: Specify if this is the main attachment. There can only be one primary attachment for each proof type.
+          description: Specify if this is the main attachment. There can only be one
+            primary attachment for each proof type.
         author:
           readOnly: true
           type: string
-          description: The author of the attachment. This field is used for traceability purposes.
+          description: The author of the attachment. This field is used for traceability
+            purposes.
       required:
         - name
         - mimeType
@@ -1657,7 +1673,8 @@ components:
               description: n° de décharge issue de la demande de mutation
               type: string
             note:
-              description: explication des corrections apportées, ou blocage rencontré, par l’OC
+              description: explication des corrections apportées, ou blocage rencontré, par
+                l’OC
               type: string
             referencePTO:
               description: Référence du PTO
@@ -1667,7 +1684,8 @@ components:
               type: string
 
     MalfaconOpticalRoutePM:
-      description: Pour les routes optiques obligatoires, il faut mettre la valeur "UNKNOWN" pour les champs inconnus qui sont obligatoires.
+      description: Pour les routes optiques obligatoires, il faut mettre la valeur
+        "UNKNOWN" pour les champs inconnus qui sont obligatoires.
       required:
         - observed
         - planned
@@ -1686,7 +1704,8 @@ components:
           type: string
 
     MalfaconOpticalRoutePBO:
-      description: Pour les routes optiques obligatoire, il faut mettre la valeur "UNKNOWN" pour les champs inconnus qui sont obligatoires.
+      description: Pour les routes optiques obligatoire, il faut mettre la valeur
+        "UNKNOWN" pour les champs inconnus qui sont obligatoires.
       required:
         - observed
         - planned
