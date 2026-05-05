@@ -405,7 +405,8 @@ paths:
                   - $ref: "#/components/schemas/AttachmentMalfaconMultiPartStandard"
           headers:
             ETag:
-              $ref: "https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/utils/update.openapi.yaml#/components/headers/ETag"
+              $ref: "https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/\
+                common/utils/update.openapi.yaml#/components/headers/ETag"
         "400":
           $ref: https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/common/responses/errors.openapi.yaml#/components/responses/Error-400
         "404":
@@ -840,7 +841,8 @@ components:
             maxResolutionOcDuration:
               $ref: "#/components/schemas/MaxResolutionOcDuration"
             totalResolutionOcDuration:
-              description: The OC resolution duration in days. Calculated only as long as ResolutionOwner = OC
+              description: The OC resolution duration in days. Calculated only as long as
+                ResolutionOwner = OC
               type: number
             expectedResolutionDate:
               description: The maximum OC resolution date, recalculated only during state
@@ -1475,6 +1477,24 @@ components:
           type: string
           readOnly: true
           description: The status of the attachment
+        statusChangeReason:
+          type: string
+          enum:
+            - UPLOAD_INITIALIZED
+            - FINALIZED_UPLOAD
+            - VALIDATED
+            - MISSING_CHUNK
+            - CHUNK_INDEX_OUT_OF_BOUNDS
+            - SIZE_MISMATCH
+            - SHA256_MISMATCH
+            - INFECTED
+            - OTHER
+          description: The reason for the status change
+          readOnly: true
+        statusChangeDetails:
+          type: string
+          description: Additional details about the status change
+          readOnly: true
         relatedEntity:
           type: array
           description: Reference to the malfacon
