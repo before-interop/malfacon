@@ -1519,6 +1519,11 @@ components:
             - image/jpg
             - image/png
             - image/svg+xml
+        size:
+          description: The size of the attachment in bytes. Limited to 50MB.
+          type: integer
+          format: int64
+          maximum: 52428800 #50MB
         sha256:
           type: string
           description: SHA-256 hash of the attachment file. This field is used to verify
@@ -1526,14 +1531,15 @@ components:
         uploadExpectedChunks:
           type: integer
           minimum: 1
+          maximum: 15
           description: Number of expected chunks for the upload of the attachment. This
             field is used to track the progress of the upload and avoid
-            unlimited uploads.
+            unlimited uploads. It can be deleted after the upload is complete.
         uploadedChunks:
           readOnly: true
           uniqueItems: true
           type: array
-          description: The chunks uploaded
+          description: The chunks uploaded. It can be deleted after the upload is complete.
           items:
             $ref: "https://raw.githubusercontent.com/before-interop/common/refs/tags/1.0.0/\
               common/schemas/Attachment.openapi.yaml#/components/schemas/Chunk"
